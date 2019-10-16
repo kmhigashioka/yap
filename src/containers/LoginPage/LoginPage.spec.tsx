@@ -5,11 +5,11 @@ import LoginPage from './LoginPage';
 
 describe('<LoginPage />', () => {
   it('should navigate to /', () => {
-    const { getByText, debug } = render(<Component />);
+    const { getByText } = render(<Component />);
 
     const loginButton = getByText(/Login/);
-    fireEvent.click(loginButton);
-    debug();
+    fireEvent.submit(loginButton);
+
     expect(loginButton).not.toBeInTheDocument();
   });
 
