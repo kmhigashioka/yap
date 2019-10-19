@@ -3,15 +3,15 @@ import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import App from './App';
 
-jest.mock('../HomePage/Loadable', () => (): string => 'MockHomePage');
+jest.mock('../LoginPage/Loadable', () => (): string => 'MockLoginPage');
 
 jest.mock('../NotFoundPage/Loadable', () => (): string => 'MockNotFoundPage');
 
 describe('<App />', () => {
-  it('should able to navigate to /', () => {
-    const { getByText } = render(<Component initialEntries={['/']} />);
+  it('should able to navigate to /login', () => {
+    const { getByText } = render(<Component initialEntries={['/login']} />);
 
-    expect(getByText('MockHomePage')).toBeInTheDocument();
+    expect(getByText('MockLoginPage')).toBeInTheDocument();
   });
 
   it('should redirect to Not Found when access an unable route', () => {
