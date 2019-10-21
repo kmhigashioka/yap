@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { AppProps } from './types';
 import AppContext from './AppContext';
 
+import HomePage from '../HomePage/Loadable';
 import LoginPage from '../LoginPage/Loadable';
 import NotFoundPage from '../NotFoundPage/Loadable';
 
@@ -23,6 +24,7 @@ const App: React.FC<AppProps> = () => (
     </Helmet>
     <Wrapper>
       <Switch>
+        <Route path="/" exact component={HomePage} />
         <Route path="/login" exact component={LoginPage} />
         <Route component={NotFoundPage} />
       </Switch>
