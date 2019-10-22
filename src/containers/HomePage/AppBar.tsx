@@ -85,10 +85,10 @@ const AppBar: React.FC<IAppBarProps> = ({
             onClick={handleClick}
           >
             <Avatar classes={{ root: classes.avatarContainer }}>
-              {activeAccount ? activeAccount.abbreviation : 'All'}
+              {activeAccount ? activeAccount.abbreviation : 'A'}
             </Avatar>
             <Typography noWrap variant="body1" color="inherit">
-              {activeAccount ? activeAccount.name : 'All'}
+              {activeAccount ? activeAccount.name : 'ALL'}
             </Typography>
             <KeyboardArrowDown />
           </Button>
@@ -113,9 +113,7 @@ const AppBar: React.FC<IAppBarProps> = ({
                   className={classes.accountContainer}
                   onClick={(): void => setActiveAccount(null)}
                 >
-                  <Avatar classes={{ root: classes.avatarContainer }}>
-                    ALL
-                  </Avatar>
+                  <Avatar classes={{ root: classes.avatarContainer }}>A</Avatar>
                   <Typography noWrap>ALL</Typography>
                 </Button>
                 <Divider />
