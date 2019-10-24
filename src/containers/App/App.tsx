@@ -7,6 +7,7 @@ import AppContext from './AppContext';
 
 import LoginPage from '../LoginPage';
 import RegisterPage from '../RegisterPage';
+import HomePage from '../HomePage/Loadable';
 import NotFoundPage from '../NotFoundPage/Loadable';
 
 const Wrapper = styled.div`
@@ -24,6 +25,7 @@ const App: React.FC<AppProps> = () => (
     </Helmet>
     <Wrapper>
       <Switch>
+        <Route path="/" exact component={HomePage} />
         <Route path="/login" exact component={LoginPage} />
         <Route path="/register" exact component={RegisterPage} />
         <Route component={NotFoundPage} />
