@@ -181,11 +181,7 @@ const ExpensesPage: React.FC<IExpensesPageProps> = (): React.ReactElement => {
                     </IconButton>
                   </div>
                   <div>
-                    <Typography>
-                      {selectedExpense === null
-                        ? '--'
-                        : selectedExpense.category}
-                    </Typography>
+                    <Typography>{selectedExpense.category}</Typography>
                   </div>
                 </>
               )}
@@ -199,6 +195,7 @@ const ExpensesPage: React.FC<IExpensesPageProps> = (): React.ReactElement => {
                     label="Amount"
                     fullWidth
                     disabled
+                    placeholder="Amount"
                     // eslint-disable-next-line react/jsx-props-no-spreading
                     {...text('amount')}
                   />
@@ -208,6 +205,7 @@ const ExpensesPage: React.FC<IExpensesPageProps> = (): React.ReactElement => {
                     label="Description"
                     fullWidth
                     disabled
+                    placeholder="Description"
                     // eslint-disable-next-line react/jsx-props-no-spreading
                     {...text('description')}
                   />
@@ -217,6 +215,7 @@ const ExpensesPage: React.FC<IExpensesPageProps> = (): React.ReactElement => {
                     label="Date"
                     fullWidth
                     disabled
+                    placeholder="Date"
                     // eslint-disable-next-line react/jsx-props-no-spreading
                     {...text('date')}
                   />
