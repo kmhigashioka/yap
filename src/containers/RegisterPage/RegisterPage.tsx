@@ -1,10 +1,10 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Typography, makeStyles, TextField, Button } from '@material-ui/core';
+import { makeStyles, Typography, TextField, Button } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import LoginPageContext from './LoginPageContext';
-import { LoginPageProps } from './types';
-import Welcome from './Welcome';
+import RegisterPageContext from './RegisterPageContext';
+import Welcome from '../LoginPage/Welcome';
+import { RegisterPageProps } from './types';
 
 const useStyles = makeStyles(theme => ({
   loginWrapper: {
@@ -36,7 +36,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const LoginPage: React.FC<LoginPageProps> = ({
+const RegisterPage: React.FC<RegisterPageProps> = ({
   history,
 }): React.ReactElement => {
   const classes = useStyles();
@@ -48,15 +48,29 @@ const LoginPage: React.FC<LoginPageProps> = ({
 
   return (
     <div className={classes.loginWrapper}>
-      <LoginPageContext.Provider value={{}}>
+      <RegisterPageContext.Provider value={{}}>
         <Helmet>
-          <title>Login</title>
+          <title>Register</title>
           <meta name="description" content="" />
         </Helmet>
         <Welcome />
         <div className={classes.formContainer}>
-          <Typography variant="h6">LOGIN TO YOUR ACCOUNT</Typography>
+          <Typography variant="h6">CREATE AN ACCOUNT</Typography>
           <form className={classes.form} onSubmit={handleSubmit}>
+            <TextField
+              name="fullName"
+              label="Full Name"
+              margin="dense"
+              variant="outlined"
+              fullWidth
+            />
+            <TextField
+              name="emailAddress"
+              label="Email Address"
+              margin="dense"
+              variant="outlined"
+              fullWidth
+            />
             <TextField
               name="username"
               label="Username"
@@ -72,6 +86,14 @@ const LoginPage: React.FC<LoginPageProps> = ({
               variant="outlined"
               fullWidth
             />
+            <TextField
+              name="confirmPassword"
+              label="Confirm Password"
+              type="password"
+              margin="dense"
+              variant="outlined"
+              fullWidth
+            />
             <Button
               className={classes.submitButton}
               color="primary"
@@ -79,17 +101,17 @@ const LoginPage: React.FC<LoginPageProps> = ({
               type="submit"
               fullWidth
             >
-              Login
+              Register
             </Button>
           </form>
-          <Typography variant="body1">Don&#39;t have an account?</Typography>
-          <Link className={classes.link} to="/register">
-            <Typography variant="body2">Create Account</Typography>
+          <Typography variant="body1">Already have an account?</Typography>
+          <Link className={classes.link} to="/login">
+            <Typography variant="body2">Login</Typography>
           </Link>
         </div>
-      </LoginPageContext.Provider>
+      </RegisterPageContext.Provider>
     </div>
   );
 };
 
-export default LoginPage;
+export default RegisterPage;
