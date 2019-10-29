@@ -6,7 +6,7 @@ import { Account } from './types';
 describe('<AppBar />', () => {
   it('should select an account', () => {
     const accounts: Account[] = [
-      { id: 5001, name: 'Acc #1', abbreviation: 'A' },
+      { id: 5001, name: 'Acc #1', abbreviation: 'A', balance: 0 },
     ];
     const { getByText } = render(<Component accounts={accounts} />);
 
@@ -21,7 +21,7 @@ describe('<AppBar />', () => {
 
   it('should able to select All', () => {
     const accounts: Account[] = [
-      { id: 5001, name: 'Acc #1', abbreviation: 'A' },
+      { id: 5001, name: 'Acc #1', abbreviation: 'A', balance: 0 },
     ];
     const { getByText } = render(
       <Component accounts={accounts} defaultActiveAccount={accounts[0]} />,
@@ -65,6 +65,7 @@ function Component({
       accounts={accounts}
       activeAccount={activeAccount}
       setActiveAccount={setActiveAccount}
+      addAccount={(): void => {}}
     />
   );
 }
