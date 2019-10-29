@@ -15,17 +15,21 @@ const useStyle = makeStyles({
 });
 
 const HomePage = (): React.ReactElement => {
-  const [accounts] = React.useState<Account[]>([
-    { id: 1, name: 'Bank Developer Option', abbreviation: 'BDO' },
+  const [accounts, setAccounts] = React.useState<Account[]>([
+    { id: 1, name: 'Bank Developer Option', abbreviation: 'BDO', balance: 0 },
     {
       id: 2,
       name: 'Bank of the Personal Information',
       abbreviation: 'BPI',
+      balance: 0,
     },
   ]);
   const [activeAccount, setActiveAccount] = React.useState<Account | null>(
     null,
   );
+  const addAccount = (account: Account): void => {
+    setAccounts([...accounts, account]);
+  };
   const classes = useStyle();
 
   return (
@@ -38,6 +42,7 @@ const HomePage = (): React.ReactElement => {
         accounts={accounts}
         activeAccount={activeAccount}
         setActiveAccount={setActiveAccount}
+        addAccount={addAccount}
       />
       <div className={classes.contentContainer}>
         <Switch>

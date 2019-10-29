@@ -12,6 +12,7 @@ import LibraryBooks from '@material-ui/icons/LibraryBooks';
 import Create from '@material-ui/icons/Create';
 
 import { IAppBarProps } from './types';
+import CreateNewAccountDialog from './CreateNewAccountDialog';
 
 const useStyle = makeStyles({
   toolbarContainer: {
@@ -52,12 +53,17 @@ const AppBar: React.FC<IAppBarProps> = ({
   accounts,
   setActiveAccount,
   activeAccount,
+  addAccount,
 }) => {
   const classes = useStyle();
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null,
   );
   const open = Boolean(anchorEl);
+  const [
+    openCreateNewAccountDialog,
+    setOpenCreateNewAccountDialog,
+  ] = React.useState<boolean>(false);
 
   const handleClick = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -67,6 +73,15 @@ const AppBar: React.FC<IAppBarProps> = ({
 
   const handleClose = (): void => {
     setAnchorEl(null);
+  };
+
+  const handleCreateNewAccount = (): void => {
+    setAnchorEl(null);
+    setOpenCreateNewAccountDialog(true);
+  };
+
+  const handleCloseDialog = (): void => {
+    setOpenCreateNewAccountDialog(false);
   };
 
   return (
@@ -137,7 +152,7 @@ const AppBar: React.FC<IAppBarProps> = ({
             <Button
               fullWidth
               className={classes.createAccountContainer}
-              onClick={handleClose}
+              onClick={handleCreateNewAccount}
             >
               <Create className={classes.createIcon} />
               <Typography variant="subtitle2">CREATE NEW ACCOUNT</Typography>
@@ -145,6 +160,11 @@ const AppBar: React.FC<IAppBarProps> = ({
           </Popover>
         </div>
       </Toolbar>
+      <CreateNewAccountDialog
+        open={openCreateNewAccountDialog}
+        onClose={handleCloseDialog}
+        addAccount={addAccount}
+      />
     </MuiAppBar>
   );
 };
