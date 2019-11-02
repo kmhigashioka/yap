@@ -17,7 +17,8 @@ import DeleteOutline from '@material-ui/icons/DeleteOutline';
 import EditOutlined from '@material-ui/icons/EditOutlined';
 import { useFormState } from 'react-use-form-state';
 import ExpensesPageContext from './ExpensesPageContext';
-import { IExpensesPageProps, TExpense } from './types';
+import { IExpensesPageProps } from './types';
+import { Expense } from '../HomePage/types';
 
 const useStyle = makeStyles(theme => ({
   actionsContainer: {
@@ -72,10 +73,12 @@ const useStyle = makeStyles(theme => ({
   },
 }));
 
-const ExpensesPage: React.FC<IExpensesPageProps> = (): React.ReactElement => {
+const ExpensesPage: React.FC<IExpensesPageProps> = ({
+  expenses,
+}): React.ReactElement => {
   const classes = useStyle();
   const [formState, { text }] = useFormState();
-  const [selectedExpense, setSelectedExpense] = React.useState<TExpense | null>(
+  const [selectedExpense, setSelectedExpense] = React.useState<Expense | null>(
     null,
   );
   React.useEffect(() => {
@@ -87,26 +90,6 @@ const ExpensesPage: React.FC<IExpensesPageProps> = (): React.ReactElement => {
     setField('date', selectedExpense.date);
     setField('description', selectedExpense.description);
   }, [selectedExpense, formState]);
-
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  function createData(
-    name: string,
-    category: string,
-    amount: number,
-    description: string,
-    date: string,
-    id: number,
-  ) {
-    return { name, category, amount, description, date, id };
-  }
-
-  const rows = [
-    createData('', 'Charges', 350.0, '', '10/22/2019', 1),
-    createData('', 'Withdrawal', 1500, '', '10/22/2019', 2),
-    createData('', 'Charges', 187, '', '10/20/2019', 3),
-    createData('', 'Charges', 200, '', '09/30/2019', 4),
-    createData('', 'Charges', 20, '', '09/30/2019', 5),
-  ];
 
   return (
     <ExpensesPageContext.Provider value={{}}>
@@ -143,25 +126,25 @@ const ExpensesPage: React.FC<IExpensesPageProps> = (): React.ReactElement => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map(row => (
+              {expenses.map(expense => (
                 <TableRow
-                  key={row.id}
+                  key={expense.id}
                   hover
                   classes={{ root: classes.hoverable }}
                   onClick={(): void => {
-                    setSelectedExpense(row);
+                    setSelectedExpense(expense);
                   }}
                   selected={
                     selectedExpense !== null
-                      ? selectedExpense.id === row.id
+                      ? selectedExpense.id === expense.id
                       : false
                   }
                 >
                   <TableCell component="th" scope="row" />
-                  <TableCell>{row.category}</TableCell>
-                  <TableCell>{row.amount}</TableCell>
-                  <TableCell>{row.description}</TableCell>
-                  <TableCell>{row.date}</TableCell>
+                  <TableCell>{expense.category}</TableCell>
+                  <TableCell>{expense.amount}</TableCell>
+                  <TableCell>{expense.description}</TableCell>
+                  <TableCell>{expense.date}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
