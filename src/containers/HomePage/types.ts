@@ -18,4 +18,13 @@ export type Account = {
   name: string;
   abbreviation: string;
   balance: number;
+  expenses: Expense[];
+};
+
+export type Expense = {
+  category: string;
+  amount: number;
+  description: string;
+  date: string;
+  id: number;
 };
