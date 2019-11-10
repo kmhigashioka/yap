@@ -1,10 +1,18 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Typography, makeStyles, TextField, Button } from '@material-ui/core';
+import {
+  Typography,
+  makeStyles,
+  TextField,
+  Button,
+  Snackbar,
+} from '@material-ui/core';
 import { Link } from 'react-router-dom';
+import { useFormState } from 'react-use-form-state';
 import LoginPageContext from './LoginPageContext';
 import { LoginPageProps } from './types';
 import Welcome from './Welcome';
+import request from '../../utils/request';
 
 const useStyles = makeStyles(theme => ({
   loginWrapper: {
@@ -40,10 +48,25 @@ const LoginPage: React.FC<LoginPageProps> = ({
   history,
 }): React.ReactElement => {
   const classes = useStyles();
+  const [formState, { text, password }] = useFormState();
+  const [snackbarMessage, setSnackbarMessage] = React.useState('');
 
   const handleSubmit = (event: React.SyntheticEvent): void => {
     event.preventDefault();
-    history.push('/');
+    const body = `grant_type=client_credentials&client_id=${formState.values.username}&client_secret=${formState.values.password}`;
+    request('https://demo.identityserver.io/connect/token', {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      method: 'post',
+      body,
+    })
+      .then(() => history.push('/'))
+      .catch(() => setSnackbarMessage('Invalid username or password.'));
+  };
+
+  const handleCloseSnackbar = (): void => {
+    setSnackbarMessage('');
   };
 
   return (
@@ -63,6 +86,7 @@ const LoginPage: React.FC<LoginPageProps> = ({
               margin="dense"
               variant="outlined"
               fullWidth
+              {...text('username')}
             />
             <TextField
               name="password"
@@ -71,6 +95,7 @@ const LoginPage: React.FC<LoginPageProps> = ({
               margin="dense"
               variant="outlined"
               fullWidth
+              {...password('password')}
             />
             <Button
               className={classes.submitButton}
@@ -87,6 +112,12 @@ const LoginPage: React.FC<LoginPageProps> = ({
             <Typography variant="body2">Create Account</Typography>
           </Link>
         </div>
+        <Snackbar
+          autoHideDuration={6000}
+          message={snackbarMessage}
+          open={snackbarMessage !== ''}
+          onClose={handleCloseSnackbar}
+        />
       </LoginPageContext.Provider>
     </div>
   );
