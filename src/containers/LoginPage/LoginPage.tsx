@@ -83,6 +83,7 @@ const LoginPage: React.FC<LoginPageProps> = ({
             <TextField
               name="username"
               label="Username"
+              placeholder="Username"
               margin="dense"
               variant="outlined"
               fullWidth
@@ -91,6 +92,7 @@ const LoginPage: React.FC<LoginPageProps> = ({
             <TextField
               name="password"
               label="Password"
+              placeholder="Password"
               type="password"
               margin="dense"
               variant="outlined"
