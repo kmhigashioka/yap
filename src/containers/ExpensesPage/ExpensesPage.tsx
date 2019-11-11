@@ -9,6 +9,7 @@ import {
   TableCell,
   TableBody,
   TextField,
+  Snackbar,
 } from '@material-ui/core';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
@@ -19,6 +20,7 @@ import { useFormState } from 'react-use-form-state';
 import ExpensesPageContext from './ExpensesPageContext';
 import { IExpensesPageProps } from './types';
 import { Expense } from '../HomePage/types';
+import DeleteExpenseDialog from './DeleteExpenseDialog';
 
 const useStyle = makeStyles(theme => ({
   actionsContainer: {
@@ -75,12 +77,15 @@ const useStyle = makeStyles(theme => ({
 
 const ExpensesPage: React.FC<IExpensesPageProps> = ({
   expenses,
+  deleteExpense,
 }): React.ReactElement => {
   const classes = useStyle();
   const [formState, { text }] = useFormState();
   const [selectedExpense, setSelectedExpense] = React.useState<Expense | null>(
     null,
   );
+  const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
+  const [snackbarMessage, setSnackbarMessage] = React.useState('');
   React.useEffect(() => {
     if (selectedExpense === null) {
       return;
@@ -90,6 +95,28 @@ const ExpensesPage: React.FC<IExpensesPageProps> = ({
     setField('date', selectedExpense.date);
     setField('description', selectedExpense.description);
   }, [selectedExpense, formState]);
+
+  const handleOnDelete = (): void => {
+    setOpenDeleteDialog(true);
+  };
+
+  const handleCloseDeleteDialog = (): void => {
+    setOpenDeleteDialog(false);
+  };
+
+  const handleProceedDeleteDialog = (): void => {
+    if (selectedExpense === null) {
+      return;
+    }
+    deleteExpense(selectedExpense.accountId, selectedExpense.id);
+    setOpenDeleteDialog(false);
+    setSelectedExpense(null);
+    setSnackbarMessage('Expense successfully deleted.');
+  };
+
+  const handleCloseSnackbar = (): void => {
+    setSnackbarMessage('');
+  };
 
   return (
     <ExpensesPageContext.Provider value={{}}>
@@ -156,7 +183,12 @@ const ExpensesPage: React.FC<IExpensesPageProps> = ({
               {selectedExpense === null ? null : (
                 <>
                   <div className={classes.actionsContainer}>
-                    <IconButton>
+                    <DeleteExpenseDialog
+                      open={openDeleteDialog}
+                      onClose={handleCloseDeleteDialog}
+                      onProceed={handleProceedDeleteDialog}
+                    />
+                    <IconButton onClick={handleOnDelete}>
                       <DeleteOutline />
                     </IconButton>
                     <IconButton>
@@ -179,7 +211,6 @@ const ExpensesPage: React.FC<IExpensesPageProps> = ({
                     fullWidth
                     disabled
                     placeholder="Amount"
-                    // eslint-disable-next-line react/jsx-props-no-spreading
                     {...text('amount')}
                   />
                   <TextField
@@ -189,7 +220,6 @@ const ExpensesPage: React.FC<IExpensesPageProps> = ({
                     fullWidth
                     disabled
                     placeholder="Description"
-                    // eslint-disable-next-line react/jsx-props-no-spreading
                     {...text('description')}
                   />
                   <TextField
@@ -199,7 +229,6 @@ const ExpensesPage: React.FC<IExpensesPageProps> = ({
                     fullWidth
                     disabled
                     placeholder="Date"
-                    // eslint-disable-next-line react/jsx-props-no-spreading
                     {...text('date')}
                   />
                 </>
@@ -208,6 +237,11 @@ const ExpensesPage: React.FC<IExpensesPageProps> = ({
           </form>
         </div>
       </div>
+      <Snackbar
+        open={snackbarMessage !== ''}
+        message={snackbarMessage}
+        onClose={handleCloseSnackbar}
+      />
     </ExpensesPageContext.Provider>
   );
 };

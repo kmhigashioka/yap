@@ -28,6 +28,7 @@ const HomePage = (): React.ReactElement => {
           category: 'Charges',
           description: '',
           date: '11/2/2019',
+          accountId: 1,
         },
         {
           amount: 500,
@@ -35,6 +36,7 @@ const HomePage = (): React.ReactElement => {
           category: 'Withdrawal',
           description: '',
           date: '11/2/2019',
+          accountId: 1,
         },
       ],
     },
@@ -50,6 +52,7 @@ const HomePage = (): React.ReactElement => {
           category: 'Withdrawal',
           description: '',
           date: '11/2/2019',
+          accountId: 2,
         },
       ],
     },
@@ -64,6 +67,20 @@ const HomePage = (): React.ReactElement => {
   const getAllExpenses = (): Expense[] =>
     accounts.reduce((prev: Expense[], curr) => [...prev, ...curr.expenses], []);
   const expenses = activeAccount ? activeAccount.expenses : getAllExpenses();
+  const deleteExpense = (accountId: number, expenseId: number): void => {
+    const newAccounts = accounts.map(account => {
+      if (accountId === account.id) {
+        return {
+          ...account,
+          expenses: account.expenses.filter(
+            expense => expense.id !== expenseId,
+          ),
+        };
+      }
+      return account;
+    });
+    setAccounts(newAccounts);
+  };
 
   return (
     <HomePageContext.Provider value={{}}>
@@ -85,6 +102,7 @@ const HomePage = (): React.ReactElement => {
                 // eslint-disable-next-line react/jsx-props-no-spreading
                 {...props}
                 expenses={expenses}
+                deleteExpense={deleteExpense}
               />
             )}
           />

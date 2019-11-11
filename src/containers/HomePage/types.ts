@@ -27,4 +27,5 @@ export type Expense = {
   description: string;
   date: string;
   id: number;
+  accountId: number;
 };
