@@ -83,6 +83,7 @@ const useStyle = makeStyles(theme => ({
 const ExpensesPage: React.FC<IExpensesPageProps> = ({
   expenses,
   deleteExpense,
+  editExpense,
 }): React.ReactElement => {
   const classes = useStyle();
   const [formState, { text }] = useFormState();
@@ -137,6 +138,19 @@ const ExpensesPage: React.FC<IExpensesPageProps> = ({
     setField('amount', selectedExpense.amount);
     setField('date', selectedExpense.date);
     setField('description', selectedExpense.description);
+  };
+
+  const handleFormSubmit = (event: React.SyntheticEvent): void => {
+    event.preventDefault();
+    if (selectedExpense === null) {
+      return;
+    }
+    editExpense(selectedExpense.accountId, selectedExpense.id, {
+      ...selectedExpense,
+      ...formState.values,
+    });
+    setSnackbarMessage('Expense successfully updated.');
+    setIsEditing(false);
   };
 
   return (
@@ -199,7 +213,7 @@ const ExpensesPage: React.FC<IExpensesPageProps> = ({
           </Table>
         </div>
         <div className={classes.expenseViewerContainer}>
-          <form>
+          <form onSubmit={handleFormSubmit}>
             <div className={classes.expenseViewerBannerContainer}>
               {selectedExpense === null ? null : (
                 <>
@@ -266,6 +280,7 @@ const ExpensesPage: React.FC<IExpensesPageProps> = ({
                       color="primary"
                       fullWidth
                       className={classes.submitEditButton}
+                      type="submit"
                     >
                       Save
                     </Button>
@@ -277,6 +292,7 @@ const ExpensesPage: React.FC<IExpensesPageProps> = ({
         </div>
       </div>
       <Snackbar
+        autoHideDuration={6000}
         open={snackbarMessage !== ''}
         message={snackbarMessage}
         onClose={handleCloseSnackbar}
