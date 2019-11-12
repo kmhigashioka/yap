@@ -10,12 +10,14 @@ import {
   TableBody,
   TextField,
   Snackbar,
+  Button,
 } from '@material-ui/core';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteOutline from '@material-ui/icons/DeleteOutline';
 import EditOutlined from '@material-ui/icons/EditOutlined';
+import Close from '@material-ui/icons/Close';
 import { useFormState } from 'react-use-form-state';
 import ExpensesPageContext from './ExpensesPageContext';
 import { IExpensesPageProps } from './types';
@@ -73,6 +75,9 @@ const useStyle = makeStyles(theme => ({
     padding: '0 0 0 80px',
     position: 'relative',
   },
+  submitEditButton: {
+    margin: '20px 0 0 0',
+  },
 }));
 
 const ExpensesPage: React.FC<IExpensesPageProps> = ({
@@ -86,6 +91,7 @@ const ExpensesPage: React.FC<IExpensesPageProps> = ({
   );
   const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
   const [snackbarMessage, setSnackbarMessage] = React.useState('');
+  const [isEditing, setIsEditing] = React.useState(false);
   React.useEffect(() => {
     if (selectedExpense === null) {
       return;
@@ -116,6 +122,21 @@ const ExpensesPage: React.FC<IExpensesPageProps> = ({
 
   const handleCloseSnackbar = (): void => {
     setSnackbarMessage('');
+  };
+
+  const handleOnEdit = (): void => {
+    setIsEditing(true);
+  };
+
+  const handleOnCancelEdit = (): void => {
+    if (selectedExpense === null) {
+      return;
+    }
+    setIsEditing(false);
+    const { setField } = formState;
+    setField('amount', selectedExpense.amount);
+    setField('date', selectedExpense.date);
+    setField('description', selectedExpense.description);
   };
 
   return (
@@ -188,12 +209,20 @@ const ExpensesPage: React.FC<IExpensesPageProps> = ({
                       onClose={handleCloseDeleteDialog}
                       onProceed={handleProceedDeleteDialog}
                     />
-                    <IconButton onClick={handleOnDelete}>
-                      <DeleteOutline />
-                    </IconButton>
-                    <IconButton>
-                      <EditOutlined />
-                    </IconButton>
+                    {isEditing ? (
+                      <IconButton onClick={handleOnCancelEdit}>
+                        <Close />
+                      </IconButton>
+                    ) : (
+                      <>
+                        <IconButton onClick={handleOnDelete}>
+                          <DeleteOutline />
+                        </IconButton>
+                        <IconButton onClick={handleOnEdit}>
+                          <EditOutlined />
+                        </IconButton>
+                      </>
+                    )}
                   </div>
                   <div>
                     <Typography>{selectedExpense.category}</Typography>
@@ -209,7 +238,7 @@ const ExpensesPage: React.FC<IExpensesPageProps> = ({
                     margin="dense"
                     label="Amount"
                     fullWidth
-                    disabled
+                    disabled={!isEditing}
                     placeholder="Amount"
                     {...text('amount')}
                   />
@@ -218,7 +247,7 @@ const ExpensesPage: React.FC<IExpensesPageProps> = ({
                     margin="dense"
                     label="Description"
                     fullWidth
-                    disabled
+                    disabled={!isEditing}
                     placeholder="Description"
                     {...text('description')}
                   />
@@ -227,10 +256,20 @@ const ExpensesPage: React.FC<IExpensesPageProps> = ({
                     margin="dense"
                     label="Date"
                     fullWidth
-                    disabled
+                    disabled={!isEditing}
                     placeholder="Date"
                     {...text('date')}
                   />
+                  {isEditing ? (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      fullWidth
+                      className={classes.submitEditButton}
+                    >
+                      Save
+                    </Button>
+                  ) : null}
                 </>
               )}
             </div>
