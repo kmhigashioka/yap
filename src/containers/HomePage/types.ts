@@ -3,14 +3,11 @@ export type THomePageContext = {
   deleteExpense: (accountId: number, expenseId: number) => void;
   addAccount: (account: Account) => void;
   setActiveAccount: (account: Account | null) => void;
-};
-
-export interface IAppBarProps {
   accounts: Account[];
   activeAccount: Account | null;
-  setActiveAccount: (account: Account | null) => void;
-  addAccount: (account: Account) => void;
-}
+};
+
+export interface IAppBarProps {}
 
 export interface IFormDialogProps {
   open: boolean;

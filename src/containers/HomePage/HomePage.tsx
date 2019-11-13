@@ -84,18 +84,20 @@ const HomePage = (): React.ReactElement => {
 
   return (
     <HomePageContext.Provider
-      value={{ expenses, deleteExpense, addAccount, setActiveAccount }}
+      value={{
+        expenses,
+        deleteExpense,
+        addAccount,
+        setActiveAccount,
+        accounts,
+        activeAccount,
+      }}
     >
       <Helmet>
         <title>Home</title>
         <meta name="description" content="Description of Home" />
       </Helmet>
-      <AppBar
-        accounts={accounts}
-        activeAccount={activeAccount}
-        setActiveAccount={setActiveAccount}
-        addAccount={addAccount}
-      />
+      <AppBar />
       <div className={classes.contentContainer}>
         <Switch>
           <Route
