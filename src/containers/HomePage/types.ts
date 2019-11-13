@@ -1,4 +1,9 @@
-export type THomePageContext = {};
+export type THomePageContext = {
+  expenses: Expense[];
+  deleteExpense: (accountId: number, expenseId: number) => void;
+  addAccount: (account: Account) => void;
+  setActiveAccount: (account: Account | null) => void;
+};
 
 export interface IAppBarProps {
   accounts: Account[];

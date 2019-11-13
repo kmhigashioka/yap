@@ -83,7 +83,9 @@ const HomePage = (): React.ReactElement => {
   };
 
   return (
-    <HomePageContext.Provider value={{}}>
+    <HomePageContext.Provider
+      value={{ expenses, deleteExpense, addAccount, setActiveAccount }}
+    >
       <Helmet>
         <title>Home</title>
         <meta name="description" content="Description of Home" />
