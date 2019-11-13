@@ -103,8 +103,6 @@ const HomePage = (): React.ReactElement => {
               <ExpensesPage
                 // eslint-disable-next-line react/jsx-props-no-spreading
                 {...props}
-                expenses={expenses}
-                deleteExpense={deleteExpense}
               />
             )}
           />
