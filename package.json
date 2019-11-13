@@ -17,11 +17,12 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "start-server-and-test start http://localhost:3000 cy:run",
     "eject": "react-scripts eject",
     "generate": "plop --plopfile ./internals/generators/index.js",
     "lint": "eslint src/**/*.{ts,tsx}",
-    "cy:open": "cypress open"
+    "cy:open": "cypress open",
+    "cy:run": "cypress run"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -52,6 +53,7 @@
     "eslint-plugin-react": "7.16.0",
     "plop": "2.4.0",
     "prettier": "1.18.2",
+    "start-server-and-test": "^1.10.6",
     "typescript": "3.6.4"
   },
   "jest": {

@@ -23,7 +23,9 @@ const DeleteExpenseDialog: React.FC<DeleteExpenseDialogProps> = ({
       <Button color="primary" onClick={onClose}>
         No
       </Button>
-      <Button color="primary" onClick={onProceed}>Yes</Button>
+      <Button color="primary" onClick={onProceed}>
+        Yes
+      </Button>
     </DialogActions>
   </Dialog>
 );
