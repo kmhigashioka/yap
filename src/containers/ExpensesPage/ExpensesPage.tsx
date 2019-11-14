@@ -8,28 +8,17 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  TextField,
   Snackbar,
-  Button,
 } from '@material-ui/core';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
-import IconButton from '@material-ui/core/IconButton';
-import DeleteOutline from '@material-ui/icons/DeleteOutline';
-import EditOutlined from '@material-ui/icons/EditOutlined';
-import Close from '@material-ui/icons/Close';
-import { useFormState } from 'react-use-form-state';
 import ExpensesPageContext from './ExpensesPageContext';
 import { IExpensesPageProps } from './types';
 import { Expense } from '../HomePage/types';
-import DeleteExpenseDialog from './DeleteExpenseDialog';
 import useHomePageState from '../HomePage/useHomePageState';
+import ExpenseForm from './ExpenseForm';
 
 const useStyle = makeStyles(theme => ({
-  actionsContainer: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-  },
   bannerContainer: {
     backgroundColor: theme.palette.grey[200],
     boxSizing: 'border-box',
@@ -44,22 +33,6 @@ const useStyle = makeStyles(theme => ({
   expensesContainer: {
     display: 'flex',
     height: 'inherit',
-  },
-  expenseViewerBannerContainer: {
-    backgroundColor: theme.palette.grey[300],
-    boxSizing: 'border-box',
-    display: 'flex',
-    flexDirection: 'column',
-    height: '160px',
-    padding: '12px',
-    justifyContent: 'space-between',
-  },
-  expenseViewerContainer: {
-    borderLeft: `1px solid ${theme.palette.grey[500]}`,
-    width: '320px',
-  },
-  expenseViewerDetailsContainer: {
-    padding: '12px',
   },
   fabContainer: {
     position: 'absolute',
@@ -76,79 +49,18 @@ const useStyle = makeStyles(theme => ({
     padding: '0 0 0 80px',
     position: 'relative',
   },
-  submitEditButton: {
-    margin: '20px 0 0 0',
-  },
 }));
 
 const ExpensesPage: React.FC<IExpensesPageProps> = (): React.ReactElement => {
   const { expenses, deleteExpense, editExpense } = useHomePageState();
   const classes = useStyle();
-  const [formState, { text }] = useFormState();
   const [selectedExpense, setSelectedExpense] = React.useState<Expense | null>(
     null,
   );
-  const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
   const [snackbarMessage, setSnackbarMessage] = React.useState('');
-  const [isEditing, setIsEditing] = React.useState(false);
-  React.useEffect(() => {
-    if (selectedExpense === null) {
-      return;
-    }
-    const { setField } = formState;
-    setField('amount', selectedExpense.amount);
-    setField('date', selectedExpense.date);
-    setField('description', selectedExpense.description);
-  }, [selectedExpense, formState]);
-
-  const handleOnDelete = (): void => {
-    setOpenDeleteDialog(true);
-  };
-
-  const handleCloseDeleteDialog = (): void => {
-    setOpenDeleteDialog(false);
-  };
-
-  const handleProceedDeleteDialog = (): void => {
-    if (selectedExpense === null) {
-      return;
-    }
-    deleteExpense(selectedExpense.accountId, selectedExpense.id);
-    setOpenDeleteDialog(false);
-    setSelectedExpense(null);
-    setSnackbarMessage('Expense successfully deleted.');
-  };
 
   const handleCloseSnackbar = (): void => {
     setSnackbarMessage('');
-  };
-
-  const handleOnEdit = (): void => {
-    setIsEditing(true);
-  };
-
-  const handleOnCancelEdit = (): void => {
-    if (selectedExpense === null) {
-      return;
-    }
-    setIsEditing(false);
-    const { setField } = formState;
-    setField('amount', selectedExpense.amount);
-    setField('date', selectedExpense.date);
-    setField('description', selectedExpense.description);
-  };
-
-  const handleFormSubmit = (event: React.SyntheticEvent): void => {
-    event.preventDefault();
-    if (selectedExpense === null) {
-      return;
-    }
-    editExpense(selectedExpense.accountId, selectedExpense.id, {
-      ...selectedExpense,
-      ...formState.values,
-    });
-    setSnackbarMessage('Expense successfully updated.');
-    setIsEditing(false);
   };
 
   return (
@@ -210,84 +122,13 @@ const ExpensesPage: React.FC<IExpensesPageProps> = (): React.ReactElement => {
             </TableBody>
           </Table>
         </div>
-        <div className={classes.expenseViewerContainer}>
-          <form onSubmit={handleFormSubmit}>
-            <div className={classes.expenseViewerBannerContainer}>
-              {selectedExpense === null ? null : (
-                <>
-                  <div className={classes.actionsContainer}>
-                    <DeleteExpenseDialog
-                      open={openDeleteDialog}
-                      onClose={handleCloseDeleteDialog}
-                      onProceed={handleProceedDeleteDialog}
-                    />
-                    {isEditing ? (
-                      <IconButton onClick={handleOnCancelEdit}>
-                        <Close />
-                      </IconButton>
-                    ) : (
-                      <>
-                        <IconButton onClick={handleOnDelete}>
-                          <DeleteOutline />
-                        </IconButton>
-                        <IconButton onClick={handleOnEdit}>
-                          <EditOutlined />
-                        </IconButton>
-                      </>
-                    )}
-                  </div>
-                  <div>
-                    <Typography>{selectedExpense.category}</Typography>
-                  </div>
-                </>
-              )}
-            </div>
-            <div className={classes.expenseViewerDetailsContainer}>
-              {selectedExpense === null ? null : (
-                <>
-                  <TextField
-                    type="number"
-                    margin="dense"
-                    label="Amount"
-                    fullWidth
-                    disabled={!isEditing}
-                    placeholder="Amount"
-                    {...text('amount')}
-                  />
-                  <TextField
-                    type="text"
-                    margin="dense"
-                    label="Description"
-                    fullWidth
-                    disabled={!isEditing}
-                    placeholder="Description"
-                    {...text('description')}
-                  />
-                  <TextField
-                    type="text"
-                    margin="dense"
-                    label="Date"
-                    fullWidth
-                    disabled={!isEditing}
-                    placeholder="Date"
-                    {...text('date')}
-                  />
-                  {isEditing ? (
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      fullWidth
-                      className={classes.submitEditButton}
-                      type="submit"
-                    >
-                      Save
-                    </Button>
-                  ) : null}
-                </>
-              )}
-            </div>
-          </form>
-        </div>
+        <ExpenseForm
+          selectedExpense={selectedExpense}
+          deleteExpense={deleteExpense}
+          editExpense={editExpense}
+          setSelectedExpense={setSelectedExpense}
+          setSnackbarMessage={setSnackbarMessage}
+        />
       </div>
       <Snackbar
         autoHideDuration={6000}
