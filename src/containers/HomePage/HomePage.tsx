@@ -81,6 +81,30 @@ const HomePage = (): React.ReactElement => {
     });
     setAccounts(newAccounts);
   };
+  const editExpense = (
+    accountId: number,
+    expenseId: number,
+    newExpense: Expense,
+  ): void => {
+    const newAccounts = accounts.map(account => {
+      if (accountId === account.id) {
+        return {
+          ...account,
+          expenses: account.expenses.map(expense => {
+            if (expense.id === expenseId) {
+              return {
+                ...expense,
+                ...newExpense,
+              };
+            }
+            return expense;
+          }),
+        };
+      }
+      return account;
+    });
+    setAccounts(newAccounts);
+  };
 
   return (
     <HomePageContext.Provider
@@ -105,6 +129,7 @@ const HomePage = (): React.ReactElement => {
               <ExpensesPage
                 // eslint-disable-next-line react/jsx-props-no-spreading
                 {...props}
+                editExpense={editExpense}
               />
             )}
           />
