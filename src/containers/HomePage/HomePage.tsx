@@ -115,6 +115,7 @@ const HomePage = (): React.ReactElement => {
         setActiveAccount,
         accounts,
         activeAccount,
+        editExpense,
       }}
     >
       <Helmet>
@@ -129,7 +130,6 @@ const HomePage = (): React.ReactElement => {
               <ExpensesPage
                 // eslint-disable-next-line react/jsx-props-no-spreading
                 {...props}
-                editExpense={editExpense}
               />
             )}
           />

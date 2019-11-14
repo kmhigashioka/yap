@@ -5,6 +5,11 @@ export type THomePageContext = {
   setActiveAccount: (account: Account | null) => void;
   accounts: Account[];
   activeAccount: Account | null;
+  editExpense: (
+    accountId: number,
+    expenseId: number,
+    newExpense: Expense,
+  ) => void;
 };
 
 export interface IAppBarProps {}

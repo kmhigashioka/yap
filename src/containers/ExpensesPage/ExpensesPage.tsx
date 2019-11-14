@@ -81,10 +81,8 @@ const useStyle = makeStyles(theme => ({
   },
 }));
 
-const ExpensesPage: React.FC<IExpensesPageProps> = ({
-  editExpense,
-}): React.ReactElement => {
-  const { expenses, deleteExpense } = useHomePageState();
+const ExpensesPage: React.FC<IExpensesPageProps> = (): React.ReactElement => {
+  const { expenses, deleteExpense, editExpense } = useHomePageState();
   const classes = useStyle();
   const [formState, { text }] = useFormState();
   const [selectedExpense, setSelectedExpense] = React.useState<Expense | null>(
