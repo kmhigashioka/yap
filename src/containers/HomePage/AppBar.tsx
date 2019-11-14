@@ -13,6 +13,7 @@ import Create from '@material-ui/icons/Create';
 
 import { IAppBarProps } from './types';
 import CreateNewAccountDialog from './CreateNewAccountDialog';
+import useHomePageState from './useHomePageState';
 
 const useStyle = makeStyles({
   toolbarContainer: {
@@ -49,12 +50,7 @@ const useStyle = makeStyles({
   },
 });
 
-const AppBar: React.FC<IAppBarProps> = ({
-  accounts,
-  setActiveAccount,
-  activeAccount,
-  addAccount,
-}) => {
+const AppBar: React.FC<IAppBarProps> = () => {
   const classes = useStyle();
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null,
@@ -64,6 +60,12 @@ const AppBar: React.FC<IAppBarProps> = ({
     openCreateNewAccountDialog,
     setOpenCreateNewAccountDialog,
   ] = React.useState<boolean>(false);
+  const {
+    addAccount,
+    setActiveAccount,
+    activeAccount,
+    accounts,
+  } = useHomePageState();
 
   const handleClick = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,

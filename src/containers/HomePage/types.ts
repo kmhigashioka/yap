@@ -1,11 +1,18 @@
-export type THomePageContext = {};
-
-export interface IAppBarProps {
+export type THomePageContext = {
+  expenses: Expense[];
+  deleteExpense: (accountId: number, expenseId: number) => void;
+  addAccount: (account: Account) => void;
+  setActiveAccount: (account: Account | null) => void;
   accounts: Account[];
   activeAccount: Account | null;
-  setActiveAccount: (account: Account | null) => void;
-  addAccount: (account: Account) => void;
-}
+  editExpense: (
+    accountId: number,
+    expenseId: number,
+    newExpense: Expense,
+  ) => void;
+};
+
+export interface IAppBarProps {}
 
 export interface IFormDialogProps {
   open: boolean;

@@ -23,6 +23,7 @@ import ExpensesPageContext from './ExpensesPageContext';
 import { IExpensesPageProps } from './types';
 import { Expense } from '../HomePage/types';
 import DeleteExpenseDialog from './DeleteExpenseDialog';
+import useHomePageState from '../HomePage/useHomePageState';
 
 const useStyle = makeStyles(theme => ({
   actionsContainer: {
@@ -80,11 +81,8 @@ const useStyle = makeStyles(theme => ({
   },
 }));
 
-const ExpensesPage: React.FC<IExpensesPageProps> = ({
-  expenses,
-  deleteExpense,
-  editExpense,
-}): React.ReactElement => {
+const ExpensesPage: React.FC<IExpensesPageProps> = (): React.ReactElement => {
+  const { expenses, deleteExpense, editExpense } = useHomePageState();
   const classes = useStyle();
   const [formState, { text }] = useFormState();
   const [selectedExpense, setSelectedExpense] = React.useState<Expense | null>(

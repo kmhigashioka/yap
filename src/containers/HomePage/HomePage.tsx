@@ -107,17 +107,22 @@ const HomePage = (): React.ReactElement => {
   };
 
   return (
-    <HomePageContext.Provider value={{}}>
+    <HomePageContext.Provider
+      value={{
+        expenses,
+        deleteExpense,
+        addAccount,
+        setActiveAccount,
+        accounts,
+        activeAccount,
+        editExpense,
+      }}
+    >
       <Helmet>
         <title>Home</title>
         <meta name="description" content="Description of Home" />
       </Helmet>
-      <AppBar
-        accounts={accounts}
-        activeAccount={activeAccount}
-        setActiveAccount={setActiveAccount}
-        addAccount={addAccount}
-      />
+      <AppBar />
       <div className={classes.contentContainer}>
         <Switch>
           <Route
@@ -125,9 +130,6 @@ const HomePage = (): React.ReactElement => {
               <ExpensesPage
                 // eslint-disable-next-line react/jsx-props-no-spreading
                 {...props}
-                expenses={expenses}
-                deleteExpense={deleteExpense}
-                editExpense={editExpense}
               />
             )}
           />
