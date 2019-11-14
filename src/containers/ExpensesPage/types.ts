@@ -21,3 +21,9 @@ export interface ExpenseFormProps {
   setSelectedExpense: (expense: Expense | null) => void;
   setSnackbarMessage: (message: string) => void;
 }
+
+export interface ExpenseListProps {
+  expenses: Expense[];
+  setSelectedExpense: (expense: Expense | null) => void;
+  selectedExpense: Expense | null;
+}
