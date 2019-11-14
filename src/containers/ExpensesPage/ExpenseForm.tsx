@@ -11,6 +11,7 @@ import { useFormState } from 'react-use-form-state';
 
 import { ExpenseFormProps } from './types';
 import DeleteExpenseDialog from './DeleteExpenseDialog';
+import useHomePageState from '../HomePage/useHomePageState';
 
 const useStyles = makeStyles(theme => ({
   expenseViewerContainer: {
@@ -40,12 +41,11 @@ const useStyles = makeStyles(theme => ({
 
 const ExpenseForm: React.FC<ExpenseFormProps> = ({
   selectedExpense,
-  deleteExpense,
-  editExpense,
   setSelectedExpense,
   setSnackbarMessage,
 }): React.ReactElement => {
   const classes = useStyles();
+  const { deleteExpense, editExpense } = useHomePageState();
   const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
   const [isEditing, setIsEditing] = React.useState(false);
   const [formState, { text }] = useFormState();

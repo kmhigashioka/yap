@@ -12,18 +12,11 @@ export interface DeleteExpenseDialogProps {
 
 export interface ExpenseFormProps {
   selectedExpense: Expense | null;
-  deleteExpense: (accountId: number, expenseId: number) => void;
-  editExpense: (
-    accountId: number,
-    expenseId: number,
-    newExpense: Expense,
-  ) => void;
   setSelectedExpense: (expense: Expense | null) => void;
   setSnackbarMessage: (message: string) => void;
 }
 
 export interface ExpenseListProps {
-  expenses: Expense[];
   setSelectedExpense: (expense: Expense | null) => void;
   selectedExpense: Expense | null;
 }

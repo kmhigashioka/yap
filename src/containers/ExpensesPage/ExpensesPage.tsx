@@ -4,7 +4,6 @@ import { makeStyles, Snackbar } from '@material-ui/core';
 import ExpensesPageContext from './ExpensesPageContext';
 import { IExpensesPageProps } from './types';
 import { Expense } from '../HomePage/types';
-import useHomePageState from '../HomePage/useHomePageState';
 import ExpenseForm from './ExpenseForm';
 import ExpenseList from './ExpenseList';
 
@@ -17,7 +16,6 @@ const useStyle = makeStyles({
 });
 
 const ExpensesPage: React.FC<IExpensesPageProps> = (): React.ReactElement => {
-  const { expenses, deleteExpense, editExpense } = useHomePageState();
   const classes = useStyle();
   const [selectedExpense, setSelectedExpense] = React.useState<Expense | null>(
     null,
@@ -36,14 +34,11 @@ const ExpensesPage: React.FC<IExpensesPageProps> = (): React.ReactElement => {
       </Helmet>
       <div className={classes.expensesContainer}>
         <ExpenseList
-          expenses={expenses}
           selectedExpense={selectedExpense}
           setSelectedExpense={setSelectedExpense}
         />
         <ExpenseForm
           selectedExpense={selectedExpense}
-          deleteExpense={deleteExpense}
-          editExpense={editExpense}
           setSelectedExpense={setSelectedExpense}
           setSnackbarMessage={setSnackbarMessage}
         />
