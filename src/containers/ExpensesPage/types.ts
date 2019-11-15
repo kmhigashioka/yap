@@ -10,13 +10,13 @@ export interface DeleteExpenseDialogProps {
   onProceed: () => void;
 }
 
-export interface ExpenseFormProps {
-  selectedExpense: Expense | null;
-  setSelectedExpense: (expense: Expense | null) => void;
+export interface ExpenseFormProps extends ExpensesPageState {
   setSnackbarMessage: (message: string) => void;
 }
 
-export interface ExpenseListProps {
+export interface ExpenseListProps extends ExpensesPageState {}
+
+interface ExpensesPageState {
   setSelectedExpense: (expense: Expense | null) => void;
   selectedExpense: Expense | null;
 }
