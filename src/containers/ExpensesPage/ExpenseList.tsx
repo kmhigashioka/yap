@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core';
 
 import { ExpenseListProps } from './types';
-import useHomePageState from '../HomePage/useHomePageState';
+import useHomePageContext from '../HomePage/useHomePageContext';
 
 const useStyles = makeStyles(theme => ({
   bannerContainer: {
@@ -47,7 +47,7 @@ const ExpenseList: React.FC<ExpenseListProps> = ({
   selectedExpense,
 }): React.ReactElement => {
   const classes = useStyles();
-  const { expenses } = useHomePageState();
+  const { expenses } = useHomePageContext();
 
   return (
     <div>
