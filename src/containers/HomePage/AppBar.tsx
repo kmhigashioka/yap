@@ -13,7 +13,7 @@ import Create from '@material-ui/icons/Create';
 
 import { IAppBarProps } from './types';
 import CreateNewAccountDialog from './CreateNewAccountDialog';
-import useHomePageState from './useHomePageState';
+import useHomePageContext from './useHomePageContext';
 
 const useStyle = makeStyles({
   toolbarContainer: {
@@ -65,7 +65,7 @@ const AppBar: React.FC<IAppBarProps> = () => {
     setActiveAccount,
     activeAccount,
     accounts,
-  } = useHomePageState();
+  } = useHomePageContext();
 
   const handleClick = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
