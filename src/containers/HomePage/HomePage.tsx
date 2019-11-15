@@ -125,14 +125,7 @@ const HomePage = (): React.ReactElement => {
       <AppBar />
       <div className={classes.contentContainer}>
         <Switch>
-          <Route
-            render={(props): React.ReactElement => (
-              <ExpensesPage
-                // eslint-disable-next-line react/jsx-props-no-spreading
-                {...props}
-              />
-            )}
-          />
+          <Route component={ExpensesPage} />
         </Switch>
       </div>
     </HomePageContext.Provider>
