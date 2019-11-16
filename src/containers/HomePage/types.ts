@@ -37,4 +37,5 @@ export type UseHomePageState = {
     expenseId: number,
     newExpense: Expense,
   ) => void;
+  addExpense: (accountId: number, newExpense: Expense) => void;
 };

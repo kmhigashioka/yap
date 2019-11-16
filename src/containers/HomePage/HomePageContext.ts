@@ -9,6 +9,7 @@ const HomePageContext = React.createContext<THomePageContext>({
   accounts: [],
   activeAccount: null,
   editExpense: () => {},
+  addExpense: () => {},
 });
 
 HomePageContext.displayName = 'HomePageContext';

@@ -98,6 +98,19 @@ const useHomePageState = (): UseHomePageState => {
     setAccounts(newAccounts);
   };
 
+  const addExpense = (accountId: number, newExpense: Expense): void => {
+    const newAccounts = accounts.map(account => {
+      if (account.id === accountId) {
+        return {
+          ...account,
+          expenses: [...account.expenses, newExpense],
+        };
+      }
+      return { ...account };
+    });
+    setAccounts(newAccounts);
+  };
+
   return {
     expenses,
     deleteExpense,
@@ -106,6 +119,7 @@ const useHomePageState = (): UseHomePageState => {
     accounts,
     activeAccount,
     editExpense,
+    addExpense,
   };
 };
 

@@ -24,6 +24,7 @@ const HomePage = (): React.ReactElement => {
     accounts,
     activeAccount,
     editExpense,
+    addExpense,
   } = useHomePageState();
 
   return (
@@ -36,6 +37,7 @@ const HomePage = (): React.ReactElement => {
         accounts,
         activeAccount,
         editExpense,
+        addExpense,
       }}
     >
       <Helmet>
