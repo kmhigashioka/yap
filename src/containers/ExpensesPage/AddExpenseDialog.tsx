@@ -9,6 +9,8 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import { useFormState } from 'react-use-form-state';
 import { makeStyles, FormControl, InputLabel } from '@material-ui/core';
+import { KeyboardDatePicker } from '@material-ui/pickers';
+import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { AddExpenseDialogProps } from './types';
 import useHomePageContext from '../HomePage/useHomePageContext';
 import { Expense } from '../HomePage/types';
@@ -19,7 +21,7 @@ const useStyles = makeStyles({
     flexDirection: 'column',
     width: '400px',
   },
-  selectRoot: {
+  fieldRoot: {
     margin: '8px 0 4px 0',
   },
 });
@@ -30,15 +32,13 @@ const AddExpenseDialog: React.FC<AddExpenseDialogProps> = ({
   setSnackbarMessage,
 }): React.ReactElement => {
   const { activeAccount, addExpense } = useHomePageContext();
-  const initialState = {
+  const [formState, { text }] = useFormState({
     category: '',
     amount: 0,
     description: '',
-    date: new Date().toISOString(),
+    date: new Date(),
     accountId: activeAccount === null ? 0 : activeAccount.id,
-  };
-
-  const [formState, { text }] = useFormState(initialState);
+  });
   const classes = useStyles();
   const { accounts } = useHomePageContext();
   const { values } = formState;
@@ -77,6 +77,10 @@ const AddExpenseDialog: React.FC<AddExpenseDialogProps> = ({
     formState.reset();
   };
 
+  const handleChangeDate = (date: MaterialUiPickersDate | null): void => {
+    formState.setField('date', date);
+  };
+
   return (
     <Dialog open={open} onClose={onClose}>
       <form onSubmit={handleOnSubmit}>
@@ -101,13 +105,17 @@ const AddExpenseDialog: React.FC<AddExpenseDialogProps> = ({
               placeholder="Description"
               {...text('description')}
             />
-            <TextField
-              margin="dense"
+            <KeyboardDatePicker
+              className={classes.fieldRoot}
+              value={values.date}
+              onChange={handleChangeDate}
+              disableToolbar
+              variant="inline"
+              format="MM/DD/YYYY"
               label="Date"
               placeholder="Date"
-              {...text('date')}
             />
-            <FormControl classes={{ root: classes.selectRoot }}>
+            <FormControl classes={{ root: classes.fieldRoot }}>
               <InputLabel>Account</InputLabel>
               <Select
                 placeholder="Account"
