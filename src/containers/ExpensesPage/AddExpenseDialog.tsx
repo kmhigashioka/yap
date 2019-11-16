@@ -48,7 +48,7 @@ const AddExpenseDialog: React.FC<AddExpenseDialogProps> = ({
       return;
     }
     formState.setField('accountId', activeAccount.id);
-  }, [activeAccount]);
+  }, [activeAccount, formState]);
 
   const handleOnSubmit = (event: React.SyntheticEvent): void => {
     event.preventDefault();
