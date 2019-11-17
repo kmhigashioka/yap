@@ -17,27 +17,27 @@ const useStyle = makeStyles({
 const HomePage = (): React.ReactElement => {
   const classes = useStyle();
   const {
-    expenses,
-    deleteExpense,
+    transactions,
+    deleteTransaction,
     addAccount,
     setActiveAccount,
     accounts,
     activeAccount,
-    editExpense,
-    addExpense,
+    editTransaction,
+    addTransaction,
   } = useHomePageState();
 
   return (
     <HomePageContext.Provider
       value={{
-        expenses,
-        deleteExpense,
+        transactions,
+        deleteTransaction,
         addAccount,
         setActiveAccount,
         accounts,
         activeAccount,
-        editExpense,
-        addExpense,
+        editTransaction,
+        addTransaction,
       }}
     >
       <Helmet>

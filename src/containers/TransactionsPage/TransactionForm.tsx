@@ -15,11 +15,11 @@ import DeleteTransactionDialog from './DeleteTransactionDialog';
 import useHomePageContext from '../HomePage/useHomePageContext';
 
 const useStyles = makeStyles(theme => ({
-  expenseViewerContainer: {
+  transactionViewerContainer: {
     borderLeft: `1px solid ${theme.palette.grey[500]}`,
     width: '320px',
   },
-  expenseViewerBannerContainer: {
+  transactionViewerBannerContainer: {
     backgroundColor: theme.palette.grey[300],
     boxSizing: 'border-box',
     display: 'flex',
@@ -32,7 +32,7 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     justifyContent: 'flex-end',
   },
-  expenseViewerDetailsContainer: {
+  transactionViewerDetailsContainer: {
     padding: '12px',
   },
   submitEditButton: {
@@ -49,7 +49,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   setSnackbarMessage,
 }): React.ReactElement => {
   const classes = useStyles();
-  const { deleteExpense, editExpense } = useHomePageContext();
+  const { deleteTransaction, editTransaction } = useHomePageContext();
   const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
   const [isEditing, setIsEditing] = React.useState(false);
   const [formState, { text, raw }] = useFormState({
@@ -68,10 +68,10 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     if (selectedTransaction === null) {
       return;
     }
-    deleteExpense(selectedTransaction.accountId, selectedTransaction.id);
+    deleteTransaction(selectedTransaction.accountId, selectedTransaction.id);
     setOpenDeleteDialog(false);
     setSelectedTransaction(null);
-    setSnackbarMessage('Expense successfully deleted.');
+    setSnackbarMessage('Transaction successfully deleted.');
   };
 
   const handleOnEdit = (): void => {
@@ -94,11 +94,11 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     if (selectedTransaction === null) {
       return;
     }
-    editExpense(selectedTransaction.accountId, selectedTransaction.id, {
+    editTransaction(selectedTransaction.accountId, selectedTransaction.id, {
       ...selectedTransaction,
       ...formState.values,
     });
-    setSnackbarMessage('Expense successfully updated.');
+    setSnackbarMessage('Transaction successfully updated.');
     setIsEditing(false);
   };
 
@@ -113,9 +113,9 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   }, [selectedTransaction, formState]);
 
   return (
-    <div className={classes.expenseViewerContainer}>
+    <div className={classes.transactionViewerContainer}>
       <form onSubmit={handleFormSubmit}>
-        <div className={classes.expenseViewerBannerContainer}>
+        <div className={classes.transactionViewerBannerContainer}>
           {selectedTransaction === null ? null : (
             <>
               <div className={classes.actionsContainer}>
@@ -145,7 +145,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
             </>
           )}
         </div>
-        <div className={classes.expenseViewerDetailsContainer}>
+        <div className={classes.transactionViewerDetailsContainer}>
           {selectedTransaction === null ? null : (
             <>
               <TextField

@@ -3,13 +3,13 @@ import { Helmet } from 'react-helmet-async';
 import { makeStyles, Snackbar } from '@material-ui/core';
 import TransactionsPageContext from './TransactionsPageContext';
 import { ITransactionPageProps } from './types';
-import { Expense } from '../HomePage/types';
+import { Transaction } from '../HomePage/types';
 import TransactionForm from './TransactionForm';
 import TransactionList from './TransactionList';
 
 const useStyle = makeStyles({
   dataContainer: {},
-  expensesContainer: {
+  transactionsContainer: {
     display: 'flex',
     height: 'inherit',
   },
@@ -17,7 +17,7 @@ const useStyle = makeStyles({
 
 const TransactionsPage: React.FC<ITransactionPageProps> = (): React.ReactElement => {
   const classes = useStyle();
-  const [selectedTransaction, setSelectedTransaction] = React.useState<Expense | null>(
+  const [selectedTransaction, setSelectedTransaction] = React.useState<Transaction | null>(
     null,
   );
   const [snackbarMessage, setSnackbarMessage] = React.useState('');
@@ -29,10 +29,10 @@ const TransactionsPage: React.FC<ITransactionPageProps> = (): React.ReactElement
   return (
     <TransactionsPageContext.Provider value={{}}>
       <Helmet>
-        <title>Expenses</title>
+        <title>Transactions</title>
         <meta name="description" content="" />
       </Helmet>
-      <div className={classes.expensesContainer}>
+      <div className={classes.transactionsContainer}>
         <TransactionList
           selectedTransaction={selectedTransaction}
           setSelectedTransaction={setSelectedTransaction}

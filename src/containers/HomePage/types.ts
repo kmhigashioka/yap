@@ -13,10 +13,10 @@ export type Account = {
   name: string;
   abbreviation: string;
   balance: number;
-  expenses: Expense[];
+  transactions: Transaction[];
 };
 
-export type Expense = {
+export type Transaction = {
   category: string;
   amount: number;
   description: string;
@@ -26,16 +26,16 @@ export type Expense = {
 };
 
 export type UseHomePageState = {
-  expenses: Expense[];
-  deleteExpense: (accountId: number, expenseId: number) => void;
+  transactions: Transaction[];
+  deleteTransaction: (accountId: number, transactionId: number) => void;
   addAccount: (account: Account) => void;
   setActiveAccount: (account: Account | null) => void;
   accounts: Account[];
   activeAccount: Account | null;
-  editExpense: (
+  editTransaction: (
     accountId: number,
-    expenseId: number,
-    newExpense: Expense,
+    transactionId: number,
+    newTransaction: Transaction,
   ) => void;
-  addExpense: (accountId: number, newExpense: Expense) => void;
+  addTransaction: (accountId: number, newTransaction: Transaction) => void;
 };

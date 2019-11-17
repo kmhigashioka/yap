@@ -49,15 +49,15 @@ const TransactionList: React.FC<TransactionListProps> = ({
   setSnackbarMessage,
 }): React.ReactElement => {
   const classes = useStyles();
-  const { expenses } = useHomePageContext();
-  const [openAddExpenseDialog, setOpenAddExpenseDialog] = React.useState(false);
+  const { transactions } = useHomePageContext();
+  const [openAddTransactionDialog, setOpenAddTransactionDialog] = React.useState(false);
 
-  const handleOpenAddExpenseDialog = (): void => {
-    setOpenAddExpenseDialog(true);
+  const handleOpenAddTransactionDialog = (): void => {
+    setOpenAddTransactionDialog(true);
   };
 
   const handleOnCloseDialog = (): void => {
-    setOpenAddExpenseDialog(false);
+    setOpenAddTransactionDialog(false);
   };
 
   return (
@@ -65,18 +65,18 @@ const TransactionList: React.FC<TransactionListProps> = ({
       <div className={classes.bannerContainer}>
         <div className={classes.titleContainer}>
           <AddTransactionDialog
-            open={openAddExpenseDialog}
+            open={openAddTransactionDialog}
             onClose={handleOnCloseDialog}
             setSnackbarMessage={setSnackbarMessage}
           />
           <Fab
             color="primary"
             classes={{ root: classes.fabContainer }}
-            onClick={handleOpenAddExpenseDialog}
+            onClick={handleOpenAddTransactionDialog}
           >
             <AddIcon />
           </Fab>
-          <Typography variant="h5">Expenses</Typography>
+          <Typography variant="h5">Transactions</Typography>
         </div>
       </div>
       <Table>
@@ -96,25 +96,25 @@ const TransactionList: React.FC<TransactionListProps> = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          {expenses.map(expense => (
+          {transactions.map(transaction => (
             <TableRow
-              key={expense.id}
+              key={transaction.id}
               hover
               classes={{ root: classes.hoverable }}
               onClick={(): void => {
-                setSelectedTransaction(expense);
+                setSelectedTransaction(transaction);
               }}
               selected={
                 selectedTransaction !== null
-                  ? selectedTransaction.id === expense.id
+                  ? selectedTransaction.id === transaction.id
                   : false
               }
             >
               <TableCell component="th" scope="row" />
-              <TableCell>{expense.category}</TableCell>
-              <TableCell>{expense.amount}</TableCell>
-              <TableCell>{expense.description}</TableCell>
-              <TableCell>{expense.date.toLocaleDateString()}</TableCell>
+              <TableCell>{transaction.category}</TableCell>
+              <TableCell>{transaction.amount}</TableCell>
+              <TableCell>{transaction.description}</TableCell>
+              <TableCell>{transaction.date.toLocaleDateString()}</TableCell>
             </TableRow>
           ))}
         </TableBody>

@@ -13,10 +13,10 @@ const DeleteTransactionDialog: React.FC<DeleteTransactionDialogProps> = ({
   onProceed,
 }) => (
   <Dialog open={open} onClose={onClose}>
-    <DialogTitle>Delete Expense?</DialogTitle>
+    <DialogTitle>Delete Transaction?</DialogTitle>
     <DialogContent>
       <DialogContentText>
-        Are you sure you want to delete this expense?
+        Are you sure you want to delete this transaction?
       </DialogContentText>
     </DialogContent>
     <DialogActions>

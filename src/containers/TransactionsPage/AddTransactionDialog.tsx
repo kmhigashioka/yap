@@ -12,7 +12,7 @@ import { makeStyles, FormControl, InputLabel } from '@material-ui/core';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import { AddTransactionDialogProps } from './types';
 import useHomePageContext from '../HomePage/useHomePageContext';
-import { Expense } from '../HomePage/types';
+import { Transaction } from '../HomePage/types';
 
 const useStyles = makeStyles({
   fieldContainer: {
@@ -30,7 +30,7 @@ const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
   onClose,
   setSnackbarMessage,
 }): React.ReactElement => {
-  const { activeAccount, addExpense } = useHomePageContext();
+  const { activeAccount, addTransaction } = useHomePageContext();
   const [formState, { text, raw }] = useFormState({
     category: '',
     amount: 0,
@@ -51,7 +51,7 @@ const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
 
   const handleOnSubmit = (event: React.SyntheticEvent): void => {
     event.preventDefault();
-    const expense: Expense = {
+    const transaction: Transaction = {
       accountId: values.accountId,
       amount: values.amount,
       category: values.category,
@@ -59,8 +59,8 @@ const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
       description: values.description,
       id: new Date().getUTCMilliseconds(),
     };
-    addExpense(values.accountId, expense);
-    setSnackbarMessage('Expense successfully created.');
+    addTransaction(values.accountId, transaction);
+    setSnackbarMessage('Transaction successfully created.');
     onClose();
     formState.reset();
   };
@@ -79,7 +79,7 @@ const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
   return (
     <Dialog open={open} onClose={onClose}>
       <form onSubmit={handleOnSubmit}>
-        <DialogTitle>Add Expense</DialogTitle>
+        <DialogTitle>Add Transaction</DialogTitle>
         <DialogContent>
           <div className={classes.fieldContainer}>
             <TextField
