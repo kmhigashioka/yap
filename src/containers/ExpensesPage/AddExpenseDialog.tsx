@@ -10,7 +10,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { useFormState } from 'react-use-form-state';
 import { makeStyles, FormControl, InputLabel } from '@material-ui/core';
 import { KeyboardDatePicker } from '@material-ui/pickers';
-import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { AddExpenseDialogProps } from './types';
 import useHomePageContext from '../HomePage/useHomePageContext';
 import { Expense } from '../HomePage/types';
@@ -32,7 +31,7 @@ const AddExpenseDialog: React.FC<AddExpenseDialogProps> = ({
   setSnackbarMessage,
 }): React.ReactElement => {
   const { activeAccount, addExpense } = useHomePageContext();
-  const [formState, { text }] = useFormState({
+  const [formState, { text, raw }] = useFormState({
     category: '',
     amount: 0,
     description: '',
@@ -77,13 +76,6 @@ const AddExpenseDialog: React.FC<AddExpenseDialogProps> = ({
     formState.reset();
   };
 
-  const handleChangeDate = (date: MaterialUiPickersDate | null): void => {
-    if (date === null) {
-      return;
-    }
-    formState.setField('date', date.toDate());
-  };
-
   return (
     <Dialog open={open} onClose={onClose}>
       <form onSubmit={handleOnSubmit}>
@@ -111,12 +103,17 @@ const AddExpenseDialog: React.FC<AddExpenseDialogProps> = ({
             <KeyboardDatePicker
               className={classes.fieldRoot}
               value={values.date}
-              onChange={handleChangeDate}
               disableToolbar
               variant="inline"
               format="MM/DD/YYYY"
               label="Date"
               placeholder="Date"
+              autoOk
+              {...raw({
+                name: 'date',
+                onChange: date => date && date.toDate(),
+                validate: () => true,
+              })}
             />
             <FormControl classes={{ root: classes.fieldRoot }}>
               <InputLabel>Account</InputLabel>
