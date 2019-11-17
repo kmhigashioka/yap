@@ -54,11 +54,19 @@ const useHomePageState = (): UseHomePageState => {
   };
 
   const getAllTransactions = (): Transaction[] =>
-    accounts.reduce((prev: Transaction[], curr) => [...prev, ...curr.transactions], []);
+    accounts.reduce(
+      (prev: Transaction[], curr) => [...prev, ...curr.transactions],
+      [],
+    );
 
-  const transactions = activeAccount ? activeAccount.transactions : getAllTransactions();
+  const transactions = activeAccount
+    ? activeAccount.transactions
+    : getAllTransactions();
 
-  const deleteTransaction = (accountId: number, transactionId: number): void => {
+  const deleteTransaction = (
+    accountId: number,
+    transactionId: number,
+  ): void => {
     const newAccounts = accounts.map(account => {
       if (accountId === account.id) {
         return {
@@ -98,7 +106,10 @@ const useHomePageState = (): UseHomePageState => {
     setAccounts(newAccounts);
   };
 
-  const addTransaction = (accountId: number, newTransaction: Transaction): void => {
+  const addTransaction = (
+    accountId: number,
+    newTransaction: Transaction,
+  ): void => {
     const newAccounts = accounts.map(account => {
       if (account.id === accountId) {
         return {

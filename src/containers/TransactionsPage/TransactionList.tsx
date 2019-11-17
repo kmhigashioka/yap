@@ -50,7 +50,10 @@ const TransactionList: React.FC<TransactionListProps> = ({
 }): React.ReactElement => {
   const classes = useStyles();
   const { transactions } = useHomePageContext();
-  const [openAddTransactionDialog, setOpenAddTransactionDialog] = React.useState(false);
+  const [
+    openAddTransactionDialog,
+    setOpenAddTransactionDialog,
+  ] = React.useState(false);
 
   const handleOpenAddTransactionDialog = (): void => {
     setOpenAddTransactionDialog(true);

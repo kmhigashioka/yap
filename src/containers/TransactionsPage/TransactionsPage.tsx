@@ -15,11 +15,14 @@ const useStyle = makeStyles({
   },
 });
 
-const TransactionsPage: React.FC<ITransactionPageProps> = (): React.ReactElement => {
+const TransactionsPage: React.FC<
+  ITransactionPageProps
+> = (): React.ReactElement => {
   const classes = useStyle();
-  const [selectedTransaction, setSelectedTransaction] = React.useState<Transaction | null>(
-    null,
-  );
+  const [
+    selectedTransaction,
+    setSelectedTransaction,
+  ] = React.useState<Transaction | null>(null);
   const [snackbarMessage, setSnackbarMessage] = React.useState('');
 
   const handleCloseSnackbar = (): void => {
