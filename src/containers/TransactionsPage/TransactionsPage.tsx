@@ -17,7 +17,7 @@ const useStyle = makeStyles({
 
 const TransactionsPage: React.FC<ITransactionPageProps> = (): React.ReactElement => {
   const classes = useStyle();
-  const [selectedExpense, setSelectedExpense] = React.useState<Expense | null>(
+  const [selectedTransaction, setSelectedTransaction] = React.useState<Expense | null>(
     null,
   );
   const [snackbarMessage, setSnackbarMessage] = React.useState('');
@@ -34,13 +34,13 @@ const TransactionsPage: React.FC<ITransactionPageProps> = (): React.ReactElement
       </Helmet>
       <div className={classes.expensesContainer}>
         <TransactionList
-          selectedExpense={selectedExpense}
-          setSelectedExpense={setSelectedExpense}
+          selectedTransaction={selectedTransaction}
+          setSelectedTransaction={setSelectedTransaction}
           setSnackbarMessage={setSnackbarMessage}
         />
         <TransactionForm
-          selectedExpense={selectedExpense}
-          setSelectedExpense={setSelectedExpense}
+          selectedTransaction={selectedTransaction}
+          setSelectedTransaction={setSelectedTransaction}
           setSnackbarMessage={setSnackbarMessage}
         />
       </div>

@@ -44,8 +44,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const TransactionList: React.FC<TransactionListProps> = ({
-  setSelectedExpense,
-  selectedExpense,
+  setSelectedTransaction,
+  selectedTransaction,
   setSnackbarMessage,
 }): React.ReactElement => {
   const classes = useStyles();
@@ -102,11 +102,11 @@ const TransactionList: React.FC<TransactionListProps> = ({
               hover
               classes={{ root: classes.hoverable }}
               onClick={(): void => {
-                setSelectedExpense(expense);
+                setSelectedTransaction(expense);
               }}
               selected={
-                selectedExpense !== null
-                  ? selectedExpense.id === expense.id
+                selectedTransaction !== null
+                  ? selectedTransaction.id === expense.id
                   : false
               }
             >

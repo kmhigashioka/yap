@@ -16,8 +16,8 @@ export interface TransactionFormProps extends TransactionsPageState {}
 export interface TransactionListProps extends TransactionsPageState {}
 
 interface TransactionsPageState {
-  setSelectedExpense: (expense: Expense | null) => void;
-  selectedExpense: Expense | null;
+  setSelectedTransaction: (expense: Expense | null) => void;
+  selectedTransaction: Expense | null;
   setSnackbarMessage: (message: string) => void;
 }
 

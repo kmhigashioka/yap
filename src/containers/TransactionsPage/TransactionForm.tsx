@@ -44,8 +44,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const TransactionForm: React.FC<TransactionFormProps> = ({
-  selectedExpense,
-  setSelectedExpense,
+  selectedTransaction,
+  setSelectedTransaction,
   setSnackbarMessage,
 }): React.ReactElement => {
   const classes = useStyles();
@@ -65,12 +65,12 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   };
 
   const handleProceedDeleteDialog = (): void => {
-    if (selectedExpense === null) {
+    if (selectedTransaction === null) {
       return;
     }
-    deleteExpense(selectedExpense.accountId, selectedExpense.id);
+    deleteExpense(selectedTransaction.accountId, selectedTransaction.id);
     setOpenDeleteDialog(false);
-    setSelectedExpense(null);
+    setSelectedTransaction(null);
     setSnackbarMessage('Expense successfully deleted.');
   };
 
@@ -79,23 +79,23 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   };
 
   const handleOnCancelEdit = (): void => {
-    if (selectedExpense === null) {
+    if (selectedTransaction === null) {
       return;
     }
     setIsEditing(false);
     const { setField } = formState;
-    setField('amount', selectedExpense.amount);
-    setField('date', selectedExpense.date);
-    setField('description', selectedExpense.description);
+    setField('amount', selectedTransaction.amount);
+    setField('date', selectedTransaction.date);
+    setField('description', selectedTransaction.description);
   };
 
   const handleFormSubmit = (event: React.SyntheticEvent): void => {
     event.preventDefault();
-    if (selectedExpense === null) {
+    if (selectedTransaction === null) {
       return;
     }
-    editExpense(selectedExpense.accountId, selectedExpense.id, {
-      ...selectedExpense,
+    editExpense(selectedTransaction.accountId, selectedTransaction.id, {
+      ...selectedTransaction,
       ...formState.values,
     });
     setSnackbarMessage('Expense successfully updated.');
@@ -103,20 +103,20 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   };
 
   React.useEffect(() => {
-    if (selectedExpense === null) {
+    if (selectedTransaction === null) {
       return;
     }
     const { setField } = formState;
-    setField('amount', selectedExpense.amount);
-    setField('date', selectedExpense.date);
-    setField('description', selectedExpense.description);
-  }, [selectedExpense, formState]);
+    setField('amount', selectedTransaction.amount);
+    setField('date', selectedTransaction.date);
+    setField('description', selectedTransaction.description);
+  }, [selectedTransaction, formState]);
 
   return (
     <div className={classes.expenseViewerContainer}>
       <form onSubmit={handleFormSubmit}>
         <div className={classes.expenseViewerBannerContainer}>
-          {selectedExpense === null ? null : (
+          {selectedTransaction === null ? null : (
             <>
               <div className={classes.actionsContainer}>
                 <DeleteTransactionDialog
@@ -140,13 +140,13 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                 )}
               </div>
               <div>
-                <Typography>{selectedExpense.category}</Typography>
+                <Typography>{selectedTransaction.category}</Typography>
               </div>
             </>
           )}
         </div>
         <div className={classes.expenseViewerDetailsContainer}>
-          {selectedExpense === null ? null : (
+          {selectedTransaction === null ? null : (
             <>
               <TextField
                 type="number"
