@@ -78,7 +78,10 @@ const AddExpenseDialog: React.FC<AddExpenseDialogProps> = ({
   };
 
   const handleChangeDate = (date: MaterialUiPickersDate | null): void => {
-    formState.setField('date', date);
+    if (date === null) {
+      return;
+    }
+    formState.setField('date', date.toDate());
   };
 
   return (

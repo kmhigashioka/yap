@@ -114,7 +114,7 @@ const ExpenseList: React.FC<ExpenseListProps> = ({
               <TableCell>{expense.category}</TableCell>
               <TableCell>{expense.amount}</TableCell>
               <TableCell>{expense.description}</TableCell>
-              <TableCell>{expense.date.toLocaleString()}</TableCell>
+              <TableCell>{expense.date.toLocaleDateString()}</TableCell>
             </TableRow>
           ))}
         </TableBody>

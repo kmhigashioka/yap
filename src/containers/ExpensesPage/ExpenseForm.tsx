@@ -7,7 +7,9 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Close from '@material-ui/icons/Close';
+import { KeyboardDatePicker } from '@material-ui/pickers';
 import { useFormState } from 'react-use-form-state';
+import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 
 import { ExpenseFormProps } from './types';
 import DeleteExpenseDialog from './DeleteExpenseDialog';
@@ -36,6 +38,9 @@ const useStyles = makeStyles(theme => ({
   },
   submitEditButton: {
     margin: '20px 0 0 0',
+  },
+  fieldRoot: {
+    margin: '8px 0 4px 0',
   },
 }));
 
@@ -94,6 +99,13 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
     });
     setSnackbarMessage('Expense successfully updated.');
     setIsEditing(false);
+  };
+
+  const handleChangeDate = (date: MaterialUiPickersDate | null): void => {
+    if (date === null) {
+      return;
+    }
+    formState.setField('date', date.toDate());
   };
 
   React.useEffect(() => {
@@ -160,14 +172,18 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
                 placeholder="Description"
                 {...text('description')}
               />
-              <TextField
-                type="text"
-                margin="dense"
+              <KeyboardDatePicker
+                className={classes.fieldRoot}
+                value={formState.values.date}
+                onChange={handleChangeDate}
+                disableToolbar
+                variant="inline"
+                format="MM/DD/YYYY"
                 label="Date"
+                placeholder="Date"
                 fullWidth
                 disabled={!isEditing}
-                placeholder="Date"
-                {...text('date')}
+                autoOk
               />
               {isEditing ? (
                 <Button
