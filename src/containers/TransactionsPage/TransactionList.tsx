@@ -11,7 +11,7 @@ import {
   TableBody,
 } from '@material-ui/core';
 
-import { ExpenseListProps } from './types';
+import { TransactionListProps } from './types';
 import useHomePageContext from '../HomePage/useHomePageContext';
 import AddTransactionDialog from './AddTransactionDialog';
 
@@ -43,7 +43,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const TransactionList: React.FC<ExpenseListProps> = ({
+const TransactionList: React.FC<TransactionListProps> = ({
   setSelectedExpense,
   selectedExpense,
   setSnackbarMessage,

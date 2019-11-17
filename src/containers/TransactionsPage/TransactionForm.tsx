@@ -10,7 +10,7 @@ import Close from '@material-ui/icons/Close';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import { useFormState } from 'react-use-form-state';
 
-import { ExpenseFormProps } from './types';
+import { TransactionFormProps } from './types';
 import DeleteTransactionDialog from './DeleteTransactionDialog';
 import useHomePageContext from '../HomePage/useHomePageContext';
 
@@ -43,7 +43,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const TransactionForm: React.FC<ExpenseFormProps> = ({
+const TransactionForm: React.FC<TransactionFormProps> = ({
   selectedExpense,
   setSelectedExpense,
   setSnackbarMessage,

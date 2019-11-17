@@ -1,27 +1,27 @@
 import { DialogProps } from '@material-ui/core/Dialog';
 import { Expense } from '../HomePage/types';
 
-export type TExpensesPageContext = {};
+export type TTransactionPageContext = {};
 
-export interface IExpensesPageProps {}
+export interface ITransactionPageProps {}
 
-export interface DeleteExpenseDialogProps {
+export interface DeleteTransactionDialogProps {
   open: boolean;
   onClose: () => void;
   onProceed: () => void;
 }
 
-export interface ExpenseFormProps extends ExpensesPageState {}
+export interface TransactionFormProps extends TransactionsPageState {}
 
-export interface ExpenseListProps extends ExpensesPageState {}
+export interface TransactionListProps extends TransactionsPageState {}
 
-interface ExpensesPageState {
+interface TransactionsPageState {
   setSelectedExpense: (expense: Expense | null) => void;
   selectedExpense: Expense | null;
   setSnackbarMessage: (message: string) => void;
 }
 
-export interface AddExpenseDialogProps extends DialogProps {
+export interface AddTransactionDialogProps extends DialogProps {
   onClose: () => void;
   setSnackbarMessage: (message: string) => void;
 }

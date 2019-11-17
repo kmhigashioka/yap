@@ -10,7 +10,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { useFormState } from 'react-use-form-state';
 import { makeStyles, FormControl, InputLabel } from '@material-ui/core';
 import { KeyboardDatePicker } from '@material-ui/pickers';
-import { AddExpenseDialogProps } from './types';
+import { AddTransactionDialogProps } from './types';
 import useHomePageContext from '../HomePage/useHomePageContext';
 import { Expense } from '../HomePage/types';
 
@@ -25,7 +25,7 @@ const useStyles = makeStyles({
   },
 });
 
-const AddTransactionDialog: React.FC<AddExpenseDialogProps> = ({
+const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
   open,
   onClose,
   setSnackbarMessage,

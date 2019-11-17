@@ -1,7 +1,7 @@
 import React from 'react';
-import { TExpensesPageContext } from './types';
+import { TTransactionPageContext } from './types';
 
-const TransactionsPageContext = React.createContext<TExpensesPageContext>({});
+const TransactionsPageContext = React.createContext<TTransactionPageContext>({});
 
 TransactionsPageContext.displayName = 'TransactionsPageContext';
 
