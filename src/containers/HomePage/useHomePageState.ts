@@ -111,6 +111,19 @@ const useHomePageState = (): UseHomePageState => {
     setAccounts(newAccounts);
   };
 
+  React.useEffect(() => {
+    if (activeAccount === null) {
+      return;
+    }
+    const newAccount = accounts.find(
+      account => account.id === activeAccount.id,
+    );
+    if (!newAccount) {
+      return;
+    }
+    setActiveAccount(newAccount);
+  }, [accounts, activeAccount]);
+
   return {
     expenses,
     deleteExpense,
