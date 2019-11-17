@@ -9,7 +9,6 @@ import Typography from '@material-ui/core/Typography';
 import Close from '@material-ui/icons/Close';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import { useFormState } from 'react-use-form-state';
-import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 
 import { ExpenseFormProps } from './types';
 import DeleteExpenseDialog from './DeleteExpenseDialog';
@@ -53,7 +52,9 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
   const { deleteExpense, editExpense } = useHomePageContext();
   const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
   const [isEditing, setIsEditing] = React.useState(false);
-  const [formState, { text }] = useFormState();
+  const [formState, { text, raw }] = useFormState({
+    date: new Date(),
+  });
 
   const handleOnDelete = (): void => {
     setOpenDeleteDialog(true);
@@ -99,13 +100,6 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
     });
     setSnackbarMessage('Expense successfully updated.');
     setIsEditing(false);
-  };
-
-  const handleChangeDate = (date: MaterialUiPickersDate | null): void => {
-    if (date === null) {
-      return;
-    }
-    formState.setField('date', date.toDate());
   };
 
   React.useEffect(() => {
@@ -175,7 +169,6 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
               <KeyboardDatePicker
                 className={classes.fieldRoot}
                 value={formState.values.date}
-                onChange={handleChangeDate}
                 disableToolbar
                 variant="inline"
                 format="MM/DD/YYYY"
@@ -184,6 +177,11 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
                 fullWidth
                 disabled={!isEditing}
                 autoOk
+                {...raw({
+                  name: 'date',
+                  onChange: date => date && date.toDate(),
+                  validate: () => true,
+                })}
               />
               {isEditing ? (
                 <Button
