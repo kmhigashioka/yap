@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { HelmetProvider, Helmet } from 'react-helmet-async';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import MomentUtils from '@date-io/moment';
 import App from './containers/App';
 import Language from './containers/Language';
 import * as serviceWorker from './serviceWorker';
@@ -14,7 +16,9 @@ ReactDOM.render(
         <Helmet>
           <meta name="description" content="" />
         </Helmet>
-        <App />
+        <MuiPickersUtilsProvider utils={MomentUtils}>
+          <App />
+        </MuiPickersUtilsProvider>
       </HelmetProvider>
     </Language>
   </Router>,

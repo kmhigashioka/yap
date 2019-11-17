@@ -14,7 +14,7 @@ const useHomePageState = (): UseHomePageState => {
           id: 1,
           category: 'Charges',
           description: '',
-          date: '11/2/2019',
+          date: new Date('11/2/2019'),
           accountId: 1,
         },
         {
@@ -22,7 +22,7 @@ const useHomePageState = (): UseHomePageState => {
           id: 2,
           category: 'Withdrawal',
           description: '',
-          date: '11/2/2019',
+          date: new Date('11/2/2019'),
           accountId: 1,
         },
       ],
@@ -38,7 +38,7 @@ const useHomePageState = (): UseHomePageState => {
           id: 3,
           category: 'Withdrawal',
           description: '',
-          date: '11/2/2019',
+          date: new Date('11/2/2019'),
           accountId: 2,
         },
       ],
@@ -98,6 +98,19 @@ const useHomePageState = (): UseHomePageState => {
     setAccounts(newAccounts);
   };
 
+  const addExpense = (accountId: number, newExpense: Expense): void => {
+    const newAccounts = accounts.map(account => {
+      if (account.id === accountId) {
+        return {
+          ...account,
+          expenses: [...account.expenses, newExpense],
+        };
+      }
+      return { ...account };
+    });
+    setAccounts(newAccounts);
+  };
+
   return {
     expenses,
     deleteExpense,
@@ -106,6 +119,7 @@ const useHomePageState = (): UseHomePageState => {
     accounts,
     activeAccount,
     editExpense,
+    addExpense,
   };
 };
 

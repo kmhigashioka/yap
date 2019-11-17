@@ -15,6 +15,9 @@ module.exports = {
     node: true,
     es6: true,
   },
+  globals: {
+    'unknown': true,
+  },
   parserOptions: {
     ecmaVersion: 6,
     sourceType: 'module',

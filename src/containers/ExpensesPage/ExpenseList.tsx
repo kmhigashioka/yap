@@ -13,6 +13,7 @@ import {
 
 import { ExpenseListProps } from './types';
 import useHomePageContext from '../HomePage/useHomePageContext';
+import AddExpenseDialog from './AddExpenseDialog';
 
 const useStyles = makeStyles(theme => ({
   bannerContainer: {
@@ -45,15 +46,34 @@ const useStyles = makeStyles(theme => ({
 const ExpenseList: React.FC<ExpenseListProps> = ({
   setSelectedExpense,
   selectedExpense,
+  setSnackbarMessage,
 }): React.ReactElement => {
   const classes = useStyles();
   const { expenses } = useHomePageContext();
+  const [openAddExpenseDialog, setOpenAddExpenseDialog] = React.useState(false);
+
+  const handleOpenAddExpenseDialog = (): void => {
+    setOpenAddExpenseDialog(true);
+  };
+
+  const handleOnCloseDialog = (): void => {
+    setOpenAddExpenseDialog(false);
+  };
 
   return (
     <div>
       <div className={classes.bannerContainer}>
         <div className={classes.titleContainer}>
-          <Fab color="primary" classes={{ root: classes.fabContainer }}>
+          <AddExpenseDialog
+            open={openAddExpenseDialog}
+            onClose={handleOnCloseDialog}
+            setSnackbarMessage={setSnackbarMessage}
+          />
+          <Fab
+            color="primary"
+            classes={{ root: classes.fabContainer }}
+            onClick={handleOpenAddExpenseDialog}
+          >
             <AddIcon />
           </Fab>
           <Typography variant="h5">Expenses</Typography>
@@ -94,7 +114,7 @@ const ExpenseList: React.FC<ExpenseListProps> = ({
               <TableCell>{expense.category}</TableCell>
               <TableCell>{expense.amount}</TableCell>
               <TableCell>{expense.description}</TableCell>
-              <TableCell>{expense.date}</TableCell>
+              <TableCell>{expense.date.toLocaleString()}</TableCell>
             </TableRow>
           ))}
         </TableBody>

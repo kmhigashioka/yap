@@ -36,6 +36,7 @@ const ExpensesPage: React.FC<IExpensesPageProps> = (): React.ReactElement => {
         <ExpenseList
           selectedExpense={selectedExpense}
           setSelectedExpense={setSelectedExpense}
+          setSnackbarMessage={setSnackbarMessage}
         />
         <ExpenseForm
           selectedExpense={selectedExpense}

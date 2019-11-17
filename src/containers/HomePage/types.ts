@@ -20,7 +20,7 @@ export type Expense = {
   category: string;
   amount: number;
   description: string;
-  date: string;
+  date: Date;
   id: number;
   accountId: number;
 };
@@ -37,4 +37,5 @@ export type UseHomePageState = {
     expenseId: number,
     newExpense: Expense,
   ) => void;
+  addExpense: (accountId: number, newExpense: Expense) => void;
 };
