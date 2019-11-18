@@ -16,6 +16,11 @@ export type Account = {
   transactions: Transaction[];
 };
 
+export enum TransactionType {
+  Expense,
+  Income,
+}
+
 export type Transaction = {
   category: string;
   amount: number;
@@ -23,6 +28,7 @@ export type Transaction = {
   date: Date;
   id: number;
   accountId: number;
+  type: TransactionType;
 };
 
 export type UseHomePageState = {

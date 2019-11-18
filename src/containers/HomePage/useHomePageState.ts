@@ -1,5 +1,10 @@
 import React from 'react';
-import { UseHomePageState, Account, Transaction } from './types';
+import {
+  UseHomePageState,
+  Account,
+  Transaction,
+  TransactionType,
+} from './types';
 
 const useHomePageState = (): UseHomePageState => {
   const [accounts, setAccounts] = React.useState<Account[]>([
@@ -16,6 +21,7 @@ const useHomePageState = (): UseHomePageState => {
           description: '',
           date: new Date('11/2/2019'),
           accountId: 1,
+          type: TransactionType.Expense,
         },
         {
           amount: 500,
@@ -24,6 +30,7 @@ const useHomePageState = (): UseHomePageState => {
           description: '',
           date: new Date('11/2/2019'),
           accountId: 1,
+          type: TransactionType.Expense,
         },
       ],
     },
@@ -40,6 +47,7 @@ const useHomePageState = (): UseHomePageState => {
           description: '',
           date: new Date('11/2/2019'),
           accountId: 2,
+          type: TransactionType.Expense,
         },
       ],
     },
