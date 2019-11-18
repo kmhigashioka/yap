@@ -28,7 +28,7 @@ const CreateNewAccountDialog: React.FC<IFormDialogProps> = ({
       name,
       abbreviation,
       balance: startingBalance,
-      expenses: [],
+      transactions: [],
     });
     formState.clear();
     onClose();

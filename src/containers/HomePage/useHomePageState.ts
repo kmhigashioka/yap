@@ -1,5 +1,5 @@
 import React from 'react';
-import { UseHomePageState, Account, Expense } from './types';
+import { UseHomePageState, Account, Transaction } from './types';
 
 const useHomePageState = (): UseHomePageState => {
   const [accounts, setAccounts] = React.useState<Account[]>([
@@ -8,7 +8,7 @@ const useHomePageState = (): UseHomePageState => {
       name: 'Bank Developer Option',
       abbreviation: 'BDO',
       balance: 0,
-      expenses: [
+      transactions: [
         {
           amount: 200,
           id: 1,
@@ -32,7 +32,7 @@ const useHomePageState = (): UseHomePageState => {
       name: 'Bank of the Personal Information',
       abbreviation: 'BPI',
       balance: 0,
-      expenses: [
+      transactions: [
         {
           amount: 1500,
           id: 3,
@@ -53,18 +53,26 @@ const useHomePageState = (): UseHomePageState => {
     setAccounts([...accounts, account]);
   };
 
-  const getAllExpenses = (): Expense[] =>
-    accounts.reduce((prev: Expense[], curr) => [...prev, ...curr.expenses], []);
+  const getAllTransactions = (): Transaction[] =>
+    accounts.reduce(
+      (prev: Transaction[], curr) => [...prev, ...curr.transactions],
+      [],
+    );
 
-  const expenses = activeAccount ? activeAccount.expenses : getAllExpenses();
+  const transactions = activeAccount
+    ? activeAccount.transactions
+    : getAllTransactions();
 
-  const deleteExpense = (accountId: number, expenseId: number): void => {
+  const deleteTransaction = (
+    accountId: number,
+    transactionId: number,
+  ): void => {
     const newAccounts = accounts.map(account => {
       if (accountId === account.id) {
         return {
           ...account,
-          expenses: account.expenses.filter(
-            expense => expense.id !== expenseId,
+          transactions: account.transactions.filter(
+            transaction => transaction.id !== transactionId,
           ),
         };
       }
@@ -73,23 +81,23 @@ const useHomePageState = (): UseHomePageState => {
     setAccounts(newAccounts);
   };
 
-  const editExpense = (
+  const editTransaction = (
     accountId: number,
-    expenseId: number,
-    newExpense: Expense,
+    transactionId: number,
+    newTransaction: Transaction,
   ): void => {
     const newAccounts = accounts.map(account => {
       if (accountId === account.id) {
         return {
           ...account,
-          expenses: account.expenses.map(expense => {
-            if (expense.id === expenseId) {
+          transactions: account.transactions.map(transaction => {
+            if (transaction.id === transactionId) {
               return {
-                ...expense,
-                ...newExpense,
+                ...transaction,
+                ...newTransaction,
               };
             }
-            return expense;
+            return transaction;
           }),
         };
       }
@@ -98,12 +106,15 @@ const useHomePageState = (): UseHomePageState => {
     setAccounts(newAccounts);
   };
 
-  const addExpense = (accountId: number, newExpense: Expense): void => {
+  const addTransaction = (
+    accountId: number,
+    newTransaction: Transaction,
+  ): void => {
     const newAccounts = accounts.map(account => {
       if (account.id === accountId) {
         return {
           ...account,
-          expenses: [...account.expenses, newExpense],
+          transactions: [...account.transactions, newTransaction],
         };
       }
       return { ...account };
@@ -125,14 +136,14 @@ const useHomePageState = (): UseHomePageState => {
   }, [accounts, activeAccount]);
 
   return {
-    expenses,
-    deleteExpense,
+    transactions,
+    deleteTransaction,
     addAccount,
     setActiveAccount,
     accounts,
     activeAccount,
-    editExpense,
-    addExpense,
+    editTransaction,
+    addTransaction,
   };
 };
 

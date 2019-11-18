@@ -90,7 +90,7 @@ const AppBar: React.FC<IAppBarProps> = () => {
     <MuiAppBar position="sticky">
       <Toolbar classes={{ root: classes.toolbarContainer }}>
         <div className={classes.toolbarLeftContent}>
-          <Tooltip title="Expenses">
+          <Tooltip title="Transactions">
             <IconButton className={classes.iconButton}>
               <LibraryBooks />
             </IconButton>

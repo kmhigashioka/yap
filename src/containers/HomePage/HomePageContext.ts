@@ -2,14 +2,14 @@ import React from 'react';
 import { THomePageContext } from './types';
 
 const HomePageContext = React.createContext<THomePageContext>({
-  expenses: [],
-  deleteExpense: () => {},
+  transactions: [],
+  deleteTransaction: () => {},
   addAccount: () => {},
   setActiveAccount: () => {},
   accounts: [],
   activeAccount: null,
-  editExpense: () => {},
-  addExpense: () => {},
+  editTransaction: () => {},
+  addTransaction: () => {},
 });
 
 HomePageContext.displayName = 'HomePageContext';
