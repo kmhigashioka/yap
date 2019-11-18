@@ -9,10 +9,15 @@ import Typography from '@material-ui/core/Typography';
 import Close from '@material-ui/icons/Close';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import { useFormState } from 'react-use-form-state';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
 
 import { TransactionFormProps } from './types';
 import DeleteTransactionDialog from './DeleteTransactionDialog';
 import useHomePageContext from '../HomePage/useHomePageContext';
+import { TransactionType } from '../HomePage/types';
 
 const useStyles = makeStyles(theme => ({
   transactionViewerContainer: {
@@ -52,7 +57,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   const { deleteTransaction, editTransaction } = useHomePageContext();
   const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
   const [isEditing, setIsEditing] = React.useState(false);
-  const [formState, { text, raw }] = useFormState({
+  const [formState, { text, raw, select }] = useFormState({
     date: new Date(),
   });
 
@@ -78,15 +83,20 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     setIsEditing(true);
   };
 
-  const handleOnCancelEdit = (): void => {
+  const resetForm = (): void => {
     if (selectedTransaction === null) {
       return;
     }
-    setIsEditing(false);
     const { setField } = formState;
     setField('amount', selectedTransaction.amount);
     setField('date', selectedTransaction.date);
     setField('description', selectedTransaction.description);
+    setField('type', selectedTransaction.type);
+  };
+
+  const handleOnCancelEdit = (): void => {
+    setIsEditing(false);
+    resetForm();
   };
 
   const handleFormSubmit = (event: React.SyntheticEvent): void => {
@@ -94,22 +104,22 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     if (selectedTransaction === null) {
       return;
     }
-    editTransaction(selectedTransaction.accountId, selectedTransaction.id, {
+    const editedTransaction = {
       ...selectedTransaction,
       ...formState.values,
-    });
+    };
+    editTransaction(
+      selectedTransaction.accountId,
+      selectedTransaction.id,
+      editedTransaction,
+    );
     setSnackbarMessage('Transaction successfully updated.');
     setIsEditing(false);
+    setSelectedTransaction(editedTransaction);
   };
 
   React.useEffect(() => {
-    if (selectedTransaction === null) {
-      return;
-    }
-    const { setField } = formState;
-    setField('amount', selectedTransaction.amount);
-    setField('date', selectedTransaction.date);
-    setField('description', selectedTransaction.description);
+    resetForm();
   }, [selectedTransaction, formState]);
 
   return (
@@ -148,6 +158,23 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         <div className={classes.transactionViewerDetailsContainer}>
           {selectedTransaction === null ? null : (
             <>
+              <FormControl fullWidth classes={{ root: classes.fieldRoot }}>
+                <InputLabel>Type</InputLabel>
+                <Select
+                  fullWidth
+                  disabled={!isEditing}
+                  placeholder="Type"
+                  value={formState.values.type}
+                  {...select({
+                    name: 'type',
+                    onChange: event => event.target.value,
+                    validate: () => true,
+                  })}
+                >
+                  <MenuItem value={TransactionType.Expense}>Expense</MenuItem>
+                  <MenuItem value={TransactionType.Income}>Income</MenuItem>
+                </Select>
+              </FormControl>
               <TextField
                 type="number"
                 margin="dense"
