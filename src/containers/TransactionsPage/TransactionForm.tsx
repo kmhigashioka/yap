@@ -83,7 +83,7 @@ const TransactionForm: React.FC<TransactionsPageState> = ({
     setIsEditing(true);
   };
 
-  const resetForm = (): void => {
+  const resetForm = React.useCallback(() => {
     if (selectedTransaction === null) {
       return;
     }
@@ -92,7 +92,7 @@ const TransactionForm: React.FC<TransactionsPageState> = ({
     setField('date', selectedTransaction.date);
     setField('description', selectedTransaction.description);
     setField('type', selectedTransaction.type);
-  };
+  }, [selectedTransaction, formState]);
 
   const handleOnCancelEdit = (): void => {
     setIsEditing(false);
@@ -120,7 +120,7 @@ const TransactionForm: React.FC<TransactionsPageState> = ({
 
   React.useEffect(() => {
     resetForm();
-  }, [selectedTransaction, formState]);
+  }, [resetForm]);
 
   return (
     <div className={classes.transactionViewerContainer}>
