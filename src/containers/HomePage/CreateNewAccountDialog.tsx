@@ -6,9 +6,9 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { useFormState } from 'react-use-form-state';
-import { IFormDialogProps } from './types';
+import { FormDialogProps } from './types';
 
-const CreateNewAccountDialog: React.FC<IFormDialogProps> = ({
+const CreateNewAccountDialog: React.FC<FormDialogProps> = ({
   open,
   onClose,
   addAccount,

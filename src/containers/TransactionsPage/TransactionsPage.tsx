@@ -2,7 +2,6 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { makeStyles, Snackbar } from '@material-ui/core';
 import TransactionsPageContext from './TransactionsPageContext';
-import { ITransactionPageProps } from './types';
 import { Transaction } from '../HomePage/types';
 import TransactionForm from './TransactionForm';
 import TransactionList from './TransactionList';
@@ -15,9 +14,7 @@ const useStyle = makeStyles({
   },
 });
 
-const TransactionsPage: React.FC<
-  ITransactionPageProps
-> = (): React.ReactElement => {
+const TransactionsPage: React.FC = (): React.ReactElement => {
   const classes = useStyle();
   const [
     selectedTransaction,

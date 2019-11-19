@@ -1,9 +1,8 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Typography, makeStyles, TextField, Button } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import LoginPageContext from './LoginPageContext';
-import { LoginPageProps } from './types';
 import Welcome from './Welcome';
 
 const useStyles = makeStyles(theme => ({
@@ -36,7 +35,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const LoginPage: React.FC<LoginPageProps> = ({
+const LoginPage: React.FC<RouteComponentProps> = ({
   history,
 }): React.ReactElement => {
   const classes = useStyles();

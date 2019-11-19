@@ -1,10 +1,9 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { makeStyles, Typography, TextField, Button } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import RegisterPageContext from './RegisterPageContext';
 import Welcome from '../LoginPage/Welcome';
-import { RegisterPageProps } from './types';
 
 const useStyles = makeStyles(theme => ({
   loginWrapper: {
@@ -36,7 +35,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const RegisterPage: React.FC<RegisterPageProps> = ({
+const RegisterPage: React.FC<RouteComponentProps> = ({
   history,
 }): React.ReactElement => {
   const classes = useStyles();
