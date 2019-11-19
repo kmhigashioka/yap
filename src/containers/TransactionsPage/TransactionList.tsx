@@ -11,7 +11,7 @@ import {
   TableBody,
 } from '@material-ui/core';
 
-import { TransactionListProps } from './types';
+import { TransactionsPageState } from './types';
 import useHomePageContext from '../HomePage/useHomePageContext';
 import AddTransactionDialog from './AddTransactionDialog';
 import { TransactionType } from '../HomePage/types';
@@ -44,7 +44,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const TransactionList: React.FC<TransactionListProps> = ({
+const TransactionList: React.FC<TransactionsPageState> = ({
   setSelectedTransaction,
   selectedTransaction,
   setSnackbarMessage,

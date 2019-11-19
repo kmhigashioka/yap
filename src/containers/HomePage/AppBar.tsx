@@ -11,7 +11,6 @@ import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
 import LibraryBooks from '@material-ui/icons/LibraryBooks';
 import Create from '@material-ui/icons/Create';
 
-import { IAppBarProps } from './types';
 import CreateNewAccountDialog from './CreateNewAccountDialog';
 import useHomePageContext from './useHomePageContext';
 
@@ -50,7 +49,7 @@ const useStyle = makeStyles({
   },
 });
 
-const AppBar: React.FC<IAppBarProps> = () => {
+const AppBar: React.FC = () => {
   const classes = useStyle();
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null,

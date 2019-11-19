@@ -46,6 +46,7 @@
     "@types/react-dom": "16.9.1",
     "@types/react-router-dom": "5.1.0",
     "@types/styled-components": "4.1.19",
+    "@typescript-eslint/parser": "2.8.0",
     "cypress": "3.6.1",
     "eslint": "6.5.1",
     "eslint-config-airbnb": "18.0.1",

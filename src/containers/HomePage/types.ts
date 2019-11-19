@@ -1,8 +1,6 @@
 export type THomePageContext = {} & UseHomePageState;
 
-export interface IAppBarProps {}
-
-export interface IFormDialogProps {
+export interface FormDialogProps {
   open: boolean;
   onClose: () => void;
   addAccount: (account: Account) => void;
