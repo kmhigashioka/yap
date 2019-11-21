@@ -12,7 +12,7 @@ import { makeStyles, FormControl, InputLabel } from '@material-ui/core';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import { AddTransactionDialogProps } from './types';
 import useHomePageContext from '../HomePage/useHomePageContext';
-import { Transaction } from '../HomePage/types';
+import { Transaction, TransactionType } from '../HomePage/types';
 
 const useStyles = makeStyles({
   fieldContainer: {
@@ -31,12 +31,13 @@ const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
   setSnackbarMessage,
 }): React.ReactElement => {
   const { activeAccount, addTransaction } = useHomePageContext();
-  const [formState, { text, raw }] = useFormState({
+  const [formState, { text, raw, select }] = useFormState({
     category: '',
     amount: 0,
     description: '',
     date: new Date(),
     accountId: activeAccount === null ? 0 : activeAccount.id,
+    type: TransactionType.Expense,
   });
   const classes = useStyles();
   const { accounts } = useHomePageContext();
@@ -58,6 +59,7 @@ const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
       date: values.date,
       description: values.description,
       id: new Date().getUTCMilliseconds(),
+      type: values.type,
     };
     addTransaction(values.accountId, transaction);
     setSnackbarMessage('Transaction successfully created.');
@@ -82,6 +84,21 @@ const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
         <DialogTitle>Add Transaction</DialogTitle>
         <DialogContent>
           <div className={classes.fieldContainer}>
+            <FormControl classes={{ root: classes.fieldRoot }}>
+              <InputLabel>Type</InputLabel>
+              <Select
+                placeholder="Type"
+                value={values.type}
+                {...select({
+                  name: 'type',
+                  onChange: event => event.target.value,
+                  validate: () => true,
+                })}
+              >
+                <MenuItem value={TransactionType.Expense}>Expense</MenuItem>
+                <MenuItem value={TransactionType.Income}>Income</MenuItem>
+              </Select>
+            </FormControl>
             <TextField
               margin="dense"
               label="Category"

@@ -14,6 +14,7 @@ import {
 import { TransactionsPageState } from './types';
 import useHomePageContext from '../HomePage/useHomePageContext';
 import AddTransactionDialog from './AddTransactionDialog';
+import { TransactionType } from '../HomePage/types';
 
 const useStyles = makeStyles(theme => ({
   bannerContainer: {
@@ -63,6 +64,11 @@ const TransactionList: React.FC<TransactionsPageState> = ({
     setOpenAddTransactionDialog(false);
   };
 
+  const typeDescription = {
+    [TransactionType.Expense]: 'Expense',
+    [TransactionType.Income]: 'Income',
+  };
+
   return (
     <div>
       <div className={classes.bannerContainer}>
@@ -86,6 +92,7 @@ const TransactionList: React.FC<TransactionsPageState> = ({
         <TableHead>
           <TableRow>
             <TableCell classes={{ root: classes.tableHeader }} />
+            <TableCell classes={{ root: classes.tableHeader }}>Type</TableCell>
             <TableCell classes={{ root: classes.tableHeader }}>
               Category
             </TableCell>
@@ -114,6 +121,7 @@ const TransactionList: React.FC<TransactionsPageState> = ({
               }
             >
               <TableCell component="th" scope="row" />
+              <TableCell>{typeDescription[transaction.type]}</TableCell>
               <TableCell>{transaction.category}</TableCell>
               <TableCell>{transaction.amount}</TableCell>
               <TableCell>{transaction.description}</TableCell>
