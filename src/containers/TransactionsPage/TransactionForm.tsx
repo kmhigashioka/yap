@@ -140,10 +140,15 @@ const TransactionForm: React.FC<TransactionsPageState> = ({
                   </IconButton>
                 ) : (
                   <>
-                    <IconButton onClick={handleOnDelete}>
+                    <IconButton
+                      onClick={handleOnDelete}
+                      data-testid="delete-transaction"
+                    >
                       <DeleteOutline />
                     </IconButton>
-                    <IconButton onClick={handleOnEdit}>
+                    <IconButton
+                      onClick={handleOnEdit}
+                      data-testid="edit-transaction">
                       <EditOutlined />
                     </IconButton>
                   </>
