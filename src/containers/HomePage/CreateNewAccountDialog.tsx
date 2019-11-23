@@ -46,6 +46,7 @@ const CreateNewAccountDialog: React.FC<FormDialogProps> = ({
             label="Name"
             required
             fullWidth
+            placeholder="Name"
           />
           <TextField
             {...text('abbreviation')}
@@ -54,12 +55,14 @@ const CreateNewAccountDialog: React.FC<FormDialogProps> = ({
             inputProps={{ maxLength: 3 }}
             required
             fullWidth
+            placeholder="Abbreviation (Maximum of 3 characters)"
           />
           <TextField
             {...number('startingBalance')}
             margin="dense"
             label="Starting Balance"
             fullWidth
+            placeholder="Starting Balance"
           />
         </DialogContent>
         <DialogActions>
