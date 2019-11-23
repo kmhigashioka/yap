@@ -148,7 +148,8 @@ const TransactionForm: React.FC<TransactionsPageState> = ({
                     </IconButton>
                     <IconButton
                       onClick={handleOnEdit}
-                      data-testid="edit-transaction">
+                      data-testid="edit-transaction"
+                    >
                       <EditOutlined />
                     </IconButton>
                   </>
