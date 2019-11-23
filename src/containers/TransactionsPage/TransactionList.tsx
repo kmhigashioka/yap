@@ -89,7 +89,7 @@ const TransactionList: React.FC<TransactionsPageState> = ({
           <Typography variant="h5">Transactions</Typography>
         </div>
       </div>
-      <Table data-testid="transactions-table">
+      <Table>
         <TableHead>
           <TableRow>
             <TableCell classes={{ root: classes.tableHeader }} />
