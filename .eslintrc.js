@@ -17,6 +17,7 @@ module.exports = {
   },
   globals: {
     'unknown': true,
+    'cy': true,
   },
   parserOptions: {
     ecmaVersion: 6,

@@ -82,6 +82,7 @@ const TransactionList: React.FC<TransactionsPageState> = ({
             color="primary"
             classes={{ root: classes.fabContainer }}
             onClick={handleOpenAddTransactionDialog}
+            data-testid="add-transaction"
           >
             <AddIcon />
           </Fab>
@@ -119,6 +120,7 @@ const TransactionList: React.FC<TransactionsPageState> = ({
                   ? selectedTransaction.id === transaction.id
                   : false
               }
+              data-testid={`transaction-row-id-${transaction.id}`}
             >
               <TableCell component="th" scope="row" />
               <TableCell>{typeDescription[transaction.type]}</TableCell>

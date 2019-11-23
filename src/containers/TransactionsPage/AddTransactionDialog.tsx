@@ -88,6 +88,7 @@ const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
               <InputLabel>Type</InputLabel>
               <Select
                 placeholder="Type"
+                data-testid="select-type"
                 value={values.type}
                 {...select({
                   name: 'type',
@@ -138,6 +139,7 @@ const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
                 placeholder="Account"
                 value={values.accountId === 0 ? '' : values.accountId}
                 onChange={handleChangeAccount}
+                data-testid="select-account"
               >
                 {accounts.map(account => (
                   <MenuItem key={account.id} value={account.id}>
