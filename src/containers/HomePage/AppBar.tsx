@@ -11,8 +11,8 @@ import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
 import LibraryBooks from '@material-ui/icons/LibraryBooks';
 import Create from '@material-ui/icons/Create';
 
-import { IAppBarProps } from './types';
 import CreateNewAccountDialog from './CreateNewAccountDialog';
+import useHomePageContext from './useHomePageContext';
 
 const useStyle = makeStyles({
   toolbarContainer: {
@@ -49,12 +49,7 @@ const useStyle = makeStyles({
   },
 });
 
-const AppBar: React.FC<IAppBarProps> = ({
-  accounts,
-  setActiveAccount,
-  activeAccount,
-  addAccount,
-}) => {
+const AppBar: React.FC = () => {
   const classes = useStyle();
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null,
@@ -64,6 +59,12 @@ const AppBar: React.FC<IAppBarProps> = ({
     openCreateNewAccountDialog,
     setOpenCreateNewAccountDialog,
   ] = React.useState<boolean>(false);
+  const {
+    addAccount,
+    setActiveAccount,
+    activeAccount,
+    accounts,
+  } = useHomePageContext();
 
   const handleClick = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -88,7 +89,7 @@ const AppBar: React.FC<IAppBarProps> = ({
     <MuiAppBar position="sticky">
       <Toolbar classes={{ root: classes.toolbarContainer }}>
         <div className={classes.toolbarLeftContent}>
-          <Tooltip title="Expenses">
+          <Tooltip title="Transactions">
             <IconButton className={classes.iconButton}>
               <LibraryBooks />
             </IconButton>

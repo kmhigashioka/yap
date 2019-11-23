@@ -6,7 +6,7 @@ const prettierOptions = JSON.parse(
 );
 
 module.exports = {
-  parser: 'babel-eslint',
+  parser: '@typescript-eslint/parser',
   extends: ['airbnb', 'prettier', 'prettier/react', 'plugin:@typescript-eslint/recommended'],
   plugins: ['prettier', 'react', 'react-hooks', 'jsx-a11y'],
   env: {
@@ -14,6 +14,9 @@ module.exports = {
     browser: true,
     node: true,
     es6: true,
+  },
+  globals: {
+    'unknown': true,
   },
   parserOptions: {
     ecmaVersion: 6,
@@ -69,7 +72,7 @@ module.exports = {
     'react/forbid-prop-types': 0,
     'react/jsx-first-prop-new-line': [2, 'multiline'],
     'react/jsx-filename-extension': 0,
-    'react/jsx-props-no-spreading': [2, { "html": "ignore", "exceptions": ["TextField"] }],
+    'react/jsx-props-no-spreading': [2, { "html": "ignore", "exceptions": ["TextField", "KeyboardDatePicker", "Select"] }],
     'react/jsx-no-target-blank': 0,
     'react/jsx-uses-vars': 2,
     'react/prop-types': 0,
