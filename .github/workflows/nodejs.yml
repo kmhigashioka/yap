@@ -34,3 +34,13 @@ jobs:
       env:
         CI: true
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+    - name: Archive integration test videos
+      uses: actions/upload-artifact@v1
+      with:
+        name: integration-test-videos
+        path: /home/runner/work/yap/yap/cypress/videos
+    - name: Archive code coverage results
+      uses: actions/upload-artifact@v1
+      with:
+        name: code-coverage
+        path: /home/runner/work/yap/yap/coverage
