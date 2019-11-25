@@ -27,5 +27,10 @@ jobs:
         npm run lint
         npm run build --if-present
         npm test
+    - name: send codecov
+      run: |
+        npm install -g codecov
+        codecov
       env:
         CI: true
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
