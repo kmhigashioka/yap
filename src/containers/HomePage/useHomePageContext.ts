@@ -3,8 +3,13 @@ import HomePageContext from './HomePageContext';
 import { THomePageContext } from './types';
 
 const useHomePageContext = (): THomePageContext => {
-  const state = React.useContext(HomePageContext);
-  return state;
+  const context = React.useContext(HomePageContext);
+  if (context === undefined) {
+    throw new Error(
+      'useHomePageContext must be used within a HomePageContextProvider',
+    );
+  }
+  return context;
 };
 
 export default useHomePageContext;
