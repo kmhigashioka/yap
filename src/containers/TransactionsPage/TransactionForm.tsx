@@ -16,7 +16,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 
 import { TransactionsPageState } from './types';
 import DeleteTransactionDialog from './DeleteTransactionDialog';
-import useHomePageContext from '../HomePage/useHomePageContext';
+import { useHomePageContext } from '../HomePage/HomePageContext';
 import { TransactionType } from '../HomePage/types';
 
 const useStyles = makeStyles(theme => ({
