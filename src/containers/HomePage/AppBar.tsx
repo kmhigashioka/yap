@@ -9,7 +9,9 @@ import Divider from '@material-ui/core/Divider';
 import { makeStyles, Typography, Popover } from '@material-ui/core';
 import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
 import LibraryBooks from '@material-ui/icons/LibraryBooks';
+import CategoryIcon from '@material-ui/icons/Category';
 import Create from '@material-ui/icons/Create';
+import { useHistory } from 'react-router-dom';
 
 import CreateNewAccountDialog from './CreateNewAccountDialog';
 import useHomePageContext from './useHomePageContext';
@@ -65,6 +67,7 @@ const AppBar: React.FC = () => {
     activeAccount,
     accounts,
   } = useHomePageContext();
+  const history = useHistory();
 
   const handleClick = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -85,13 +88,28 @@ const AppBar: React.FC = () => {
     setOpenCreateNewAccountDialog(false);
   };
 
+  const handleNavigateTo = (path: string): void => {
+    history.push(path);
+  };
+
   return (
     <MuiAppBar position="sticky">
       <Toolbar classes={{ root: classes.toolbarContainer }}>
         <div className={classes.toolbarLeftContent}>
           <Tooltip title="Transactions">
-            <IconButton className={classes.iconButton}>
+            <IconButton
+              className={classes.iconButton}
+              onClick={(): void => handleNavigateTo('/')}
+            >
               <LibraryBooks />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Category">
+            <IconButton
+              className={classes.iconButton}
+              onClick={(): void => handleNavigateTo('/category')}
+            >
+              <CategoryIcon />
             </IconButton>
           </Tooltip>
         </div>
