@@ -4,6 +4,7 @@ import { makeStyles, Fab } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import CategoryPageContext from './CategoryPageContext';
 import TitlePageWithSearch from './TitlePageWithSearch';
+import CategoryList from './CategoryList';
 
 const useStyles = makeStyles(() => ({
   fabContainer: {
@@ -23,6 +24,7 @@ const CategoryPage = (): React.ReactElement => {
         <meta name="description" content="Description of CategoryPage" />
       </Helmet>
       <TitlePageWithSearch onSearch={(): void => {}} />
+      <CategoryList />
       <Fab
         color="primary"
         classes={{ root: classes.fabContainer }}
