@@ -1,57 +1,8 @@
 import React from 'react';
-import {
-  UseHomePageState,
-  Account,
-  Transaction,
-  TransactionType,
-} from './types';
+import { UseHomePageState, Account, Transaction } from './types';
 
 const useHomePageState = (): UseHomePageState => {
-  const [accounts, setAccounts] = React.useState<Account[]>([
-    {
-      id: 1,
-      name: 'Bank Developer Option',
-      abbreviation: 'BDO',
-      balance: 0,
-      transactions: [
-        {
-          amount: 200,
-          id: 1,
-          category: 'Charges',
-          description: '',
-          date: new Date('11/2/2019'),
-          accountId: 1,
-          type: TransactionType.Expense,
-        },
-        {
-          amount: 500,
-          id: 2,
-          category: 'Withdrawal',
-          description: '',
-          date: new Date('11/2/2019'),
-          accountId: 1,
-          type: TransactionType.Expense,
-        },
-      ],
-    },
-    {
-      id: 2,
-      name: 'Bank of the Personal Information',
-      abbreviation: 'BPI',
-      balance: 0,
-      transactions: [
-        {
-          amount: 1500,
-          id: 3,
-          category: 'Withdrawal',
-          description: '',
-          date: new Date('11/2/2019'),
-          accountId: 2,
-          type: TransactionType.Expense,
-        },
-      ],
-    },
-  ]);
+  const [accounts, setAccounts] = React.useState<Account[]>([]);
 
   const [activeAccount, setActiveAccount] = React.useState<Account | null>(
     null,
@@ -152,6 +103,7 @@ const useHomePageState = (): UseHomePageState => {
     activeAccount,
     editTransaction,
     addTransaction,
+    setAccounts,
   };
 };
 

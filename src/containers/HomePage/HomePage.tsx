@@ -6,6 +6,8 @@ import HomePageContext from './HomePageContext';
 import AppBar from './AppBar';
 import TransactionsPage from '../TransactionsPage';
 import useHomePageState from './useHomePageState';
+import request from '../../utils/request';
+import { Account } from './types';
 
 const useStyle = makeStyles({
   contentContainer: {
@@ -25,7 +27,26 @@ const HomePage = (): React.ReactElement => {
     activeAccount,
     editTransaction,
     addTransaction,
+    setAccounts,
   } = useHomePageState();
+
+  React.useEffect(() => {
+    const fetchTransactions = async (): Promise<void> => {
+      const data = await request<Account[]>(
+        'http://localhost:8000/api/accounts',
+      );
+      setAccounts(
+        data.map(account => ({
+          ...account,
+          transactions: account.transactions.map(transaction => ({
+            ...transaction,
+            date: new Date(transaction.date),
+          })),
+        })),
+      );
+    };
+    fetchTransactions();
+  }, [setAccounts]);
 
   return (
     <HomePageContext.Provider
