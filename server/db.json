@@ -5,7 +5,7 @@
       "name": "Bank Developer Option",
       "abbreviation": "BDO",
       "balance": 0,
-      "expenses": [
+      "transactions": [
         {
           "amount": 200,
           "id": 1,
@@ -29,7 +29,7 @@
       "name": "Bank of the Personal Information",
       "abbreviation": "BPI",
       "balance": 0,
-      "expenses": [
+      "transactions": [
         {
           "amount": 1500,
           "id": 3,
