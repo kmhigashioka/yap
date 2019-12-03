@@ -12,7 +12,7 @@ import LibraryBooks from '@material-ui/icons/LibraryBooks';
 import Create from '@material-ui/icons/Create';
 
 import CreateNewAccountDialog from './CreateNewAccountDialog';
-import useHomePageContext from './useHomePageContext';
+import { useHomePageContext } from './HomePageContext';
 
 const useStyle = makeStyles({
   toolbarContainer: {
