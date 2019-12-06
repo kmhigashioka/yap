@@ -12,7 +12,8 @@
           "category": "Charges",
           "description": "",
           "date": "11/2/2019",
-          "accountId": 1
+          "accountId": 1,
+          "type": 0
         },
         {
           "amount": 500,
@@ -20,7 +21,8 @@
           "category": "Withdrawal",
           "description": "",
           "date": "11/2/2019",
-          "accountId": 1
+          "accountId": 1,
+          "type": 0
         }
       ]
     },
@@ -36,7 +38,8 @@
           "category": "Withdrawal",
           "description": "",
           "date": "11/2/2019",
-          "accountId": 2
+          "accountId": 2,
+          "type": 0
         }
       ]
     }
