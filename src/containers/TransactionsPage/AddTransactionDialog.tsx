@@ -11,7 +11,7 @@ import { useFormState } from 'react-use-form-state';
 import { makeStyles, FormControl, InputLabel } from '@material-ui/core';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import { AddTransactionDialogProps } from './types';
-import useHomePageContext from '../HomePage/useHomePageContext';
+import { useHomePageContext } from '../HomePage/HomePageContext';
 import { Transaction, TransactionType } from '../HomePage/types';
 
 const useStyles = makeStyles({

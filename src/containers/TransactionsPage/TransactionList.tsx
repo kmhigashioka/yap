@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core';
 
 import { TransactionsPageState } from './types';
-import useHomePageContext from '../HomePage/useHomePageContext';
+import { useHomePageContext } from '../HomePage/HomePageContext';
 import AddTransactionDialog from './AddTransactionDialog';
 import { TransactionType } from '../HomePage/types';
 
