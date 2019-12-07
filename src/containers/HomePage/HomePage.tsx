@@ -32,7 +32,7 @@ const HomePage = (): React.ReactElement => {
   React.useEffect(() => {
     const fetchAccounts = async (): Promise<void> => {
       const data = await request<Account[]>(
-        'http://localhost:8000/api/accounts',
+        `${process.env.REACT_APP_API_URL}/api/accounts`,
       );
       setAccounts(data);
     };

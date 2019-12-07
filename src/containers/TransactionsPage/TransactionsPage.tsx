@@ -31,7 +31,7 @@ const TransactionsPage: React.FC = (): React.ReactElement => {
       const query =
         activeAccount === null ? '' : `?accountId=${activeAccount.id}`;
       const data = await request<Transaction[]>(
-        `http://localhost:8000/api/transactions${query}`,
+        `${process.env.REACT_APP_API_URL}/api/transactions${query}`,
       );
       setTransactions(
         data.map(transaction => ({
