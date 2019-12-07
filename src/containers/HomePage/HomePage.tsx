@@ -19,7 +19,6 @@ const useStyle = makeStyles({
 const HomePage = (): React.ReactElement => {
   const classes = useStyle();
   const {
-    transactions,
     deleteTransaction,
     addAccount,
     setActiveAccount,
@@ -31,27 +30,18 @@ const HomePage = (): React.ReactElement => {
   } = useHomePageState();
 
   React.useEffect(() => {
-    const fetchTransactions = async (): Promise<void> => {
+    const fetchAccounts = async (): Promise<void> => {
       const data = await request<Account[]>(
         'http://localhost:8000/api/accounts',
       );
-      setAccounts(
-        data.map(account => ({
-          ...account,
-          transactions: account.transactions.map(transaction => ({
-            ...transaction,
-            date: new Date(transaction.date),
-          })),
-        })),
-      );
+      setAccounts(data);
     };
-    fetchTransactions();
+    fetchAccounts();
   }, [setAccounts]);
 
   return (
     <HomePageContext.Provider
       value={{
-        transactions,
         deleteTransaction,
         addAccount,
         setActiveAccount,

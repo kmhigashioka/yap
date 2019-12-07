@@ -1,5 +1,4 @@
 export type THomePageContext = {
-  transactions: Transaction[];
   deleteTransaction: (accountId: number, transactionId: number) => void;
   addAccount: (account: Account) => void;
   setActiveAccount: (account: Account | null) => void;

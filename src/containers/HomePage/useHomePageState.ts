@@ -12,16 +12,6 @@ const useHomePageState = (): UseHomePageState => {
     setAccounts([...accounts, account]);
   };
 
-  const getAllTransactions = (): Transaction[] =>
-    accounts.reduce(
-      (prev: Transaction[], curr) => [...prev, ...curr.transactions],
-      [],
-    );
-
-  const transactions = activeAccount
-    ? activeAccount.transactions
-    : getAllTransactions();
-
   const deleteTransaction = (
     accountId: number,
     transactionId: number,
@@ -95,7 +85,6 @@ const useHomePageState = (): UseHomePageState => {
   }, [accounts, activeAccount]);
 
   return {
-    transactions,
     deleteTransaction,
     addAccount,
     setActiveAccount,

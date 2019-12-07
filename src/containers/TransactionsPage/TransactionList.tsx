@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core';
 
 import { TransactionsPageState } from './types';
-import { useHomePageContext } from '../HomePage/HomePageContext';
+import { useTransactionsPageContext } from './TransactionsPageContext';
 import AddTransactionDialog from './AddTransactionDialog';
 import { TransactionType } from '../HomePage/types';
 
@@ -50,7 +50,7 @@ const TransactionList: React.FC<TransactionsPageState> = ({
   setSnackbarMessage,
 }): React.ReactElement => {
   const classes = useStyles();
-  const { transactions } = useHomePageContext();
+  const { transactions } = useTransactionsPageContext();
   const [
     openAddTransactionDialog,
     setOpenAddTransactionDialog,
