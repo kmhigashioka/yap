@@ -38,7 +38,7 @@ const HomePage = (): React.ReactElement => {
     if (data) {
       setAccounts(data);
     }
-  }, [data]);
+  }, [data, setAccounts]);
 
   return (
     <HomePageContext.Provider

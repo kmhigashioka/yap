@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 import request, { ResponseError } from './request';
 
@@ -8,7 +10,7 @@ interface UseRequest<T> {
 }
 
 const useRequest = <T>(
-  { url, ...options }: { url: string },
+  { url, options }: { url: string; options?: {} | undefined },
   dependencies: any[],
 ): UseRequest<T> => {
   const [data, setData] = React.useState<T>();
