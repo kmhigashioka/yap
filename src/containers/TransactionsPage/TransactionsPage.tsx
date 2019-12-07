@@ -6,7 +6,7 @@ import { Transaction } from '../HomePage/types';
 import TransactionForm from './TransactionForm';
 import TransactionList from './TransactionList';
 import { useHomePageContext } from '../HomePage/HomePageContext';
-import request from '../../utils/request';
+import useRequest from '../../utils/useRequest';
 
 const useStyle = makeStyles({
   dataContainer: {},
@@ -26,22 +26,22 @@ const TransactionsPage: React.FC = (): React.ReactElement => {
   const [snackbarMessage, setSnackbarMessage] = React.useState('');
   const { activeAccount } = useHomePageContext();
 
+  const query = activeAccount === null ? '' : `?accountId=${activeAccount.id}`;
+  const { data } = useRequest<Transaction[]>(
+    { url: `${process.env.REACT_APP_API_URL}/api/transactions${query}` },
+    [activeAccount],
+  );
+
   React.useEffect(() => {
-    const fetchTransactions = async (): Promise<void> => {
-      const query =
-        activeAccount === null ? '' : `?accountId=${activeAccount.id}`;
-      const data = await request<Transaction[]>(
-        `${process.env.REACT_APP_API_URL}/api/transactions${query}`,
-      );
+    if (data) {
       setTransactions(
         data.map(transaction => ({
           ...transaction,
           date: new Date(transaction.date),
         })),
       );
-    };
-    fetchTransactions();
-  }, [activeAccount]);
+    }
+  }, [data]);
 
   const handleCloseSnackbar = (): void => {
     setSnackbarMessage('');
