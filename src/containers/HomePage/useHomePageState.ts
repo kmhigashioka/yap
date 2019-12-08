@@ -55,22 +55,6 @@ const useHomePageState = (): UseHomePageState => {
     setAccounts(newAccounts);
   };
 
-  const addTransaction = (
-    accountId: number,
-    newTransaction: Transaction,
-  ): void => {
-    const newAccounts = accounts.map(account => {
-      if (account.id === accountId) {
-        return {
-          ...account,
-          transactions: [...account.transactions, newTransaction],
-        };
-      }
-      return { ...account };
-    });
-    setAccounts(newAccounts);
-  };
-
   React.useEffect(() => {
     if (activeAccount === null) {
       return;
@@ -91,7 +75,6 @@ const useHomePageState = (): UseHomePageState => {
     accounts,
     activeAccount,
     editTransaction,
-    addTransaction,
     setAccounts,
   };
 };

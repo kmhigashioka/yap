@@ -43,6 +43,10 @@ const TransactionsPage: React.FC = (): React.ReactElement => {
     }
   }, [data]);
 
+  const addTransaction = (newTransaction: Transaction): void => {
+    setTransactions([...transactions, newTransaction]);
+  };
+
   const handleCloseSnackbar = (): void => {
     setSnackbarMessage('');
   };
@@ -52,6 +56,7 @@ const TransactionsPage: React.FC = (): React.ReactElement => {
       value={{
         transactions,
         setTransactions,
+        addTransaction,
       }}
     >
       <Helmet>

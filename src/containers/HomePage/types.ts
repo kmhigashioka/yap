@@ -9,7 +9,6 @@ export type THomePageContext = {
     transactionId: number,
     newTransaction: Transaction,
   ) => void;
-  addTransaction: (accountId: number, newTransaction: Transaction) => void;
 };
 
 export interface FormDialogProps {

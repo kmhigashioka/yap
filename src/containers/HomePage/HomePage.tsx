@@ -25,7 +25,6 @@ const HomePage = (): React.ReactElement => {
     accounts,
     activeAccount,
     editTransaction,
-    addTransaction,
     setAccounts,
   } = useHomePageState();
 
@@ -49,7 +48,6 @@ const HomePage = (): React.ReactElement => {
         accounts,
         activeAccount,
         editTransaction,
-        addTransaction,
       }}
     >
       <Helmet>
