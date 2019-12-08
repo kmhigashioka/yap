@@ -47,6 +47,12 @@ const TransactionsPage: React.FC = (): React.ReactElement => {
     setTransactions([...transactions, newTransaction]);
   };
 
+  const deleteTransaction = (transactionId: number): void => {
+    setTransactions(
+      transactions.filter(transaction => transaction.id !== transactionId),
+    );
+  };
+
   const handleCloseSnackbar = (): void => {
     setSnackbarMessage('');
   };
@@ -57,6 +63,7 @@ const TransactionsPage: React.FC = (): React.ReactElement => {
         transactions,
         setTransactions,
         addTransaction,
+        deleteTransaction,
       }}
     >
       <Helmet>

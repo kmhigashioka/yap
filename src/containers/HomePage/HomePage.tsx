@@ -19,7 +19,6 @@ const useStyle = makeStyles({
 const HomePage = (): React.ReactElement => {
   const classes = useStyle();
   const {
-    deleteTransaction,
     addAccount,
     setActiveAccount,
     accounts,
@@ -42,7 +41,6 @@ const HomePage = (): React.ReactElement => {
   return (
     <HomePageContext.Provider
       value={{
-        deleteTransaction,
         addAccount,
         setActiveAccount,
         accounts,

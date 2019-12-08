@@ -5,6 +5,7 @@ export type TTransactionPageContext = {
   transactions: Transaction[];
   setTransactions: (transactions: Transaction[]) => void;
   addTransaction: (newTransaction: Transaction) => void;
+  deleteTransaction: (transactionId: number) => void;
 };
 
 export interface DeleteTransactionDialogProps {

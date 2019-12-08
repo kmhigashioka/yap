@@ -18,6 +18,8 @@ import { TransactionsPageState } from './types';
 import DeleteTransactionDialog from './DeleteTransactionDialog';
 import { useHomePageContext } from '../HomePage/HomePageContext';
 import { TransactionType } from '../HomePage/types';
+import { useTransactionsPageContext } from './TransactionsPageContext';
+import request from '../../utils/request';
 
 const useStyles = makeStyles(theme => ({
   transactionViewerContainer: {
@@ -54,7 +56,8 @@ const TransactionForm: React.FC<TransactionsPageState> = ({
   setSnackbarMessage,
 }): React.ReactElement => {
   const classes = useStyles();
-  const { deleteTransaction, editTransaction } = useHomePageContext();
+  const { editTransaction } = useHomePageContext();
+  const { deleteTransaction } = useTransactionsPageContext();
   const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
   const [isEditing, setIsEditing] = React.useState(false);
   const [formState, { text, raw, select }] = useFormState({
@@ -73,10 +76,19 @@ const TransactionForm: React.FC<TransactionsPageState> = ({
     if (selectedTransaction === null) {
       return;
     }
-    deleteTransaction(selectedTransaction.accountId, selectedTransaction.id);
-    setOpenDeleteDialog(false);
-    setSelectedTransaction(null);
-    setSnackbarMessage('Transaction successfully deleted.');
+    const requestDeleteTransaction = async (): Promise<void> => {
+      await request(
+        `${process.env.REACT_APP_API_URL}/api/transactions/${selectedTransaction.id}`,
+        {
+          method: 'delete',
+        },
+      );
+      deleteTransaction(selectedTransaction.id);
+      setOpenDeleteDialog(false);
+      setSelectedTransaction(null);
+      setSnackbarMessage('Transaction successfully deleted.');
+    };
+    requestDeleteTransaction();
   };
 
   const handleOnEdit = (): void => {

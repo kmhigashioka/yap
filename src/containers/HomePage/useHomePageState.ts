@@ -12,24 +12,6 @@ const useHomePageState = (): UseHomePageState => {
     setAccounts([...accounts, account]);
   };
 
-  const deleteTransaction = (
-    accountId: number,
-    transactionId: number,
-  ): void => {
-    const newAccounts = accounts.map(account => {
-      if (accountId === account.id) {
-        return {
-          ...account,
-          transactions: account.transactions.filter(
-            transaction => transaction.id !== transactionId,
-          ),
-        };
-      }
-      return account;
-    });
-    setAccounts(newAccounts);
-  };
-
   const editTransaction = (
     accountId: number,
     transactionId: number,
@@ -69,7 +51,6 @@ const useHomePageState = (): UseHomePageState => {
   }, [accounts, activeAccount]);
 
   return {
-    deleteTransaction,
     addAccount,
     setActiveAccount,
     accounts,
