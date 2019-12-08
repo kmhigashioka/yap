@@ -1,5 +1,5 @@
 import React from 'react';
-import { UseHomePageState, Account, Transaction } from './types';
+import { UseHomePageState, Account } from './types';
 
 const useHomePageState = (): UseHomePageState => {
   const [accounts, setAccounts] = React.useState<Account[]>([]);
@@ -10,31 +10,6 @@ const useHomePageState = (): UseHomePageState => {
 
   const addAccount = (account: Account): void => {
     setAccounts([...accounts, account]);
-  };
-
-  const editTransaction = (
-    accountId: number,
-    transactionId: number,
-    newTransaction: Transaction,
-  ): void => {
-    const newAccounts = accounts.map(account => {
-      if (accountId === account.id) {
-        return {
-          ...account,
-          transactions: account.transactions.map(transaction => {
-            if (transaction.id === transactionId) {
-              return {
-                ...transaction,
-                ...newTransaction,
-              };
-            }
-            return transaction;
-          }),
-        };
-      }
-      return account;
-    });
-    setAccounts(newAccounts);
   };
 
   React.useEffect(() => {
@@ -55,7 +30,6 @@ const useHomePageState = (): UseHomePageState => {
     setActiveAccount,
     accounts,
     activeAccount,
-    editTransaction,
     setAccounts,
   };
 };

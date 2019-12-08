@@ -3,11 +3,6 @@ export type THomePageContext = {
   setActiveAccount: (account: Account | null) => void;
   accounts: Account[];
   activeAccount: Account | null;
-  editTransaction: (
-    accountId: number,
-    transactionId: number,
-    newTransaction: Transaction,
-  ) => void;
 };
 
 export interface FormDialogProps {
