@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "name": "Bank Developer Option",
+    "abbreviation": "BDO",
+    "balance": 0
+  },
+  {
+    "id": 2,
+    "name": "Bank of the Personal Information",
+    "abbreviation": "BPI",
+    "balance": 0
+  }
+]
