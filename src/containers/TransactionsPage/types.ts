@@ -1,7 +1,13 @@
 import { DialogProps } from '@material-ui/core/Dialog';
 import { Transaction } from '../HomePage/types';
 
-export type TTransactionPageContext = {};
+export type TTransactionPageContext = {
+  transactions: Transaction[];
+  setTransactions: (transactions: Transaction[]) => void;
+  addTransaction: (newTransaction: Transaction) => void;
+  deleteTransaction: (transactionId: number) => void;
+  editTransaction: (transactionId: number, newTransaction: Transaction) => void;
+};
 
 export interface DeleteTransactionDialogProps {
   open: boolean;
