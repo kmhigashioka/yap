@@ -8,8 +8,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Switch from '@material-ui/core/Switch';
 
-import supportedCategories from './supportedCategory';
-import { Category } from './types';
+import { CategoryListProps } from './types';
 
 const useStyles = makeStyles({
   container: {
@@ -17,24 +16,11 @@ const useStyles = makeStyles({
   },
 });
 
-const CategoryList = (): React.ReactElement => {
+const CategoryList: React.FC<CategoryListProps> = ({
+  onToggleDisplay,
+  categories,
+}): React.ReactElement => {
   const classes = useStyles();
-
-  const [categories, setCategories] = React.useState(supportedCategories);
-
-  const handleSwitchChange = (category: Category, value: boolean): void => {
-    setCategories(
-      categories.map(mapCategory => {
-        if (mapCategory.name === category.name) {
-          return {
-            ...mapCategory,
-            display: value,
-          };
-        }
-        return mapCategory;
-      }),
-    );
-  };
 
   return (
     <div className={classes.container}>
@@ -53,9 +39,7 @@ const CategoryList = (): React.ReactElement => {
                 <TableCell>
                   <Switch
                     checked={row.display}
-                    onChange={(_, value): void =>
-                      handleSwitchChange(row, value)
-                    }
+                    onChange={(_, value): void => onToggleDisplay(row, value)}
                   />
                 </TableCell>
               </TableRow>
