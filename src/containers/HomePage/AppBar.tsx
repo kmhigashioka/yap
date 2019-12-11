@@ -14,7 +14,7 @@ import Create from '@material-ui/icons/Create';
 import { useHistory } from 'react-router-dom';
 
 import CreateNewAccountDialog from './CreateNewAccountDialog';
-import useHomePageContext from './useHomePageContext';
+import { useHomePageContext } from './HomePageContext';
 
 const useStyle = makeStyles({
   toolbarContainer: {

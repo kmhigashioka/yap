@@ -7,6 +7,8 @@ import AppBar from './AppBar';
 import TransactionsPage from '../TransactionsPage';
 import useHomePageState from './useHomePageState';
 import CategoryPage from '../CategoryPage';
+import { Account } from './types';
+import useRequest from '../../utils/useRequest';
 
 const useStyle = makeStyles({
   contentContainer: {
@@ -18,27 +20,31 @@ const useStyle = makeStyles({
 const HomePage = (): React.ReactElement => {
   const classes = useStyle();
   const {
-    transactions,
-    deleteTransaction,
     addAccount,
     setActiveAccount,
     accounts,
     activeAccount,
-    editTransaction,
-    addTransaction,
+    setAccounts,
   } = useHomePageState();
+
+  const { data } = useRequest<Account[]>(
+    { url: `${process.env.REACT_APP_API_URL}/api/accounts` },
+    [setAccounts],
+  );
+
+  React.useEffect(() => {
+    if (data) {
+      setAccounts(data);
+    }
+  }, [data, setAccounts]);
 
   return (
     <HomePageContext.Provider
       value={{
-        transactions,
-        deleteTransaction,
         addAccount,
         setActiveAccount,
         accounts,
         activeAccount,
-        editTransaction,
-        addTransaction,
       }}
     >
       <Helmet>

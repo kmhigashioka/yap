@@ -11,8 +11,10 @@ import { useFormState } from 'react-use-form-state';
 import { makeStyles, FormControl, InputLabel } from '@material-ui/core';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import { AddTransactionDialogProps } from './types';
-import useHomePageContext from '../HomePage/useHomePageContext';
+import { useHomePageContext } from '../HomePage/HomePageContext';
 import { Transaction, TransactionType } from '../HomePage/types';
+import { useTransactionsPageContext } from './TransactionsPageContext';
+import request from '../../utils/request';
 
 const useStyles = makeStyles({
   fieldContainer: {
@@ -30,7 +32,8 @@ const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
   onClose,
   setSnackbarMessage,
 }): React.ReactElement => {
-  const { activeAccount, addTransaction } = useHomePageContext();
+  const { activeAccount } = useHomePageContext();
+  const { addTransaction } = useTransactionsPageContext();
   const [formState, { text, raw, select }] = useFormState({
     category: '',
     amount: 0,
@@ -58,10 +61,24 @@ const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
       category: values.category,
       date: values.date,
       description: values.description,
-      id: new Date().getUTCMilliseconds(),
+      id: 0,
       type: values.type,
     };
-    addTransaction(values.accountId, transaction);
+    const pushTransaction = async (): Promise<void> => {
+      const data = await request<Transaction>(
+        `${process.env.REACT_APP_API_URL}/api/transactions`,
+        {
+          method: 'post',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(transaction),
+        },
+      );
+      data.date = new Date(data.date);
+      addTransaction(data);
+    };
+    pushTransaction();
     setSnackbarMessage('Transaction successfully created.');
     onClose();
     formState.reset();

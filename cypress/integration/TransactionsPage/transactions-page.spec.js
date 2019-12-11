@@ -1,9 +1,29 @@
 describe('Expenses', () => {
+  let polyfill;
+
+  before(() => {
+    const polyfillUrl = 'https://unpkg.com/unfetch/dist/unfetch.umd.js';
+    cy.request(polyfillUrl).then(response => {
+      polyfill = response.body;
+    });
+  });
+
   beforeEach(() => {
-    cy.visit('/');
+    cy.server();
+    cy.route('/api/accounts', 'fixture:accounts.json');
+    cy.route('/api/transactions', 'fixture:transactions.json');
+    cy.visit('/', {
+      onBeforeLoad(win) {
+        const winCopy = win;
+        delete winCopy.fetch;
+        winCopy.eval(polyfill);
+        winCopy.fetch = win.unfetch;
+      },
+    });
   });
 
   it('should add an expense', () => {
+    cy.route('post', '/api/transactions', {});
     cy.findByTestId('add-transaction').click();
     cy.findByPlaceholderText('Category').type('Charges');
     cy.findByPlaceholderText('Amount')
@@ -18,6 +38,7 @@ describe('Expenses', () => {
   });
 
   it('should add an income', () => {
+    cy.route('post', '/api/transactions', {});
     cy.findByTestId('add-transaction').click();
     cy.findByTestId('select-type').click();
     cy.findByText('Income').click();
@@ -53,6 +74,7 @@ describe('Expenses', () => {
   });
 
   it('should delete first transaction', () => {
+    cy.route('delete', '/api/transactions/1', {});
     cy.findByTestId('transaction-row-id-1').click();
     cy.findByTestId('delete-transaction').click();
     cy.findByText('Yes').click();
@@ -61,6 +83,7 @@ describe('Expenses', () => {
   });
 
   it('should edit first transaction', () => {
+    cy.route('put', '/api/transactions/1', {});
     const newTransaction = {
       type: 'Expense',
       amount: '5000',
