@@ -34,10 +34,16 @@ const CategoryList: React.FC<CategoryListProps> = ({
           </TableHead>
           <TableBody>
             {categories.map(row => (
-              <TableRow key={row.name}>
+              <TableRow
+                key={row.name}
+                data-testid={`category-row-name-${row.name}`}
+              >
                 <TableCell>{row.name}</TableCell>
                 <TableCell>
                   <Switch
+                    inputProps={{
+                      'aria-label': row.name,
+                    }}
                     checked={row.display}
                     onChange={(_, value): void => onToggleDisplay(row, value)}
                   />
