@@ -8,6 +8,7 @@ export interface CategoryListProps {
 }
 
 export type Category = {
+  id: number;
   name: string;
   display: boolean;
 };

@@ -5,8 +5,9 @@ import AddIcon from '@material-ui/icons/Add';
 import CategoryPageContext from './CategoryPageContext';
 import TitlePageWithSearch from './TitlePageWithSearch';
 import CategoryList from './CategoryList';
-import supportedCategories from './supportedCategory';
 import { Category } from './types';
+import useRequest from '../../utils/useRequest';
+import request from '../../utils/request';
 
 const useStyles = makeStyles(() => ({
   fabContainer: {
@@ -18,9 +19,20 @@ const useStyles = makeStyles(() => ({
 
 const CategoryPage = (): React.ReactElement => {
   const classes = useStyles();
-  const [categories, setCategories] = React.useState(supportedCategories);
+  const [categories, setCategories] = React.useState<Category[]>([]);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [queriedCategories, setQueriedCategories] = React.useState(categories);
+
+  const { data } = useRequest<Category[]>(
+    { url: `${process.env.REACT_APP_API_URL}/api/usercategories?userId=1` },
+    [],
+  );
+
+  React.useEffect(() => {
+    if (data) {
+      setCategories(data);
+    }
+  }, [data]);
 
   React.useEffect(() => {
     const newQueriedCategories = categories.filter(
@@ -53,6 +65,22 @@ const CategoryPage = (): React.ReactElement => {
         return mapCategory;
       }),
     );
+    const updateDisplay = async (): Promise<void> => {
+      const body = {
+        display: value,
+      };
+      await request(
+        `${process.env.REACT_APP_API_URL}/api/usercategories/${category.id}`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(body),
+        },
+      );
+    };
+    updateDisplay();
   };
 
   return (
