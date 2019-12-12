@@ -41,5 +41,31 @@
       "accountId": 2,
       "type": 0
     }
+  ],
+  "usercategories": [
+    {
+      "id": 1,
+      "name": "Charges",
+      "display": true,
+      "userId": 1
+    },
+    {
+      "id": 2,
+      "name": "Wage",
+      "display": true,
+      "userId": 1
+    },
+    {
+      "id": 3,
+      "name": "Withdraw",
+      "display": true,
+      "userId": 1
+    },
+    {
+      "id": 4,
+      "name": "Charges",
+      "display": true,
+      "userId": 2
+    }
   ]
 }
