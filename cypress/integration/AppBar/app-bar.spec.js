@@ -11,6 +11,7 @@ describe('AppBar', () => {
   beforeEach(() => {
     cy.server();
     cy.route('/api/accounts', 'fixture:accounts.json');
+    cy.route('/api/transactions', 'fixture:transactions.json');
     cy.visit('/', {
       onBeforeLoad(win) {
         const winCopy = win;
@@ -19,10 +20,10 @@ describe('AppBar', () => {
         winCopy.fetch = win.unfetch;
       },
     });
-    cy.findByText('ALL').click();
   });
 
   it("should able to select BPI account and display BPI's transaction", () => {
+    cy.findByText('ALL').click();
     cy.route('/api/transactions?accountId=2', [
       {
         amount: 1500,
@@ -39,6 +40,7 @@ describe('AppBar', () => {
   });
 
   it('should able to create new account', () => {
+    cy.findByText('ALL').click();
     cy.findByText('CREATE NEW ACCOUNT').click();
     cy.findByPlaceholderText('Name').type('New Account');
     cy.findByPlaceholderText(/Abbreviation/).type('NU');
@@ -48,5 +50,15 @@ describe('AppBar', () => {
     cy.findByText('Create').click();
     cy.findByText('ALL').click();
     cy.findByText('New Account').should('be.visible');
+  });
+
+  it('should navigate to Transactions page', () => {
+    cy.findByTestId('navigation-button-transactions').click();
+    cy.title().should('contain', 'Transactions');
+  });
+
+  it('should navigate to Category page', () => {
+    cy.findByTestId('navigation-button-category').click();
+    cy.title().should('contain', 'Category');
   });
 });
