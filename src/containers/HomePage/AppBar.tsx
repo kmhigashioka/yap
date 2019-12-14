@@ -100,6 +100,7 @@ const AppBar: React.FC = () => {
             <IconButton
               className={classes.iconButton}
               onClick={(): void => handleNavigateTo('/')}
+              data-testid="navigation-button-transactions"
             >
               <LibraryBooks />
             </IconButton>
@@ -108,6 +109,7 @@ const AppBar: React.FC = () => {
             <IconButton
               className={classes.iconButton}
               onClick={(): void => handleNavigateTo('/category')}
+              data-testid="navigation-button-category"
             >
               <CategoryIcon />
             </IconButton>
