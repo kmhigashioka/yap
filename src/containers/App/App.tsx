@@ -30,9 +30,9 @@ const App: React.FC<AppProps> = () => {
       </Helmet>
       <div className={styles.wrapper}>
         <Switch>
-          <Route path="/" exact component={HomePage} />
           <Route path="/login" exact component={LoginPage} />
           <Route path="/register" exact component={RegisterPage} />
+          <Route path="/" component={HomePage} />
           <Route component={NotFoundPage} />
         </Switch>
       </div>

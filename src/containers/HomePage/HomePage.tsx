@@ -6,6 +6,7 @@ import HomePageContext from './HomePageContext';
 import AppBar from './AppBar';
 import TransactionsPage from '../TransactionsPage';
 import useHomePageState from './useHomePageState';
+import CategoryPage from '../CategoryPage';
 import { Account } from './types';
 import useRequest from '../../utils/useRequest';
 
@@ -53,6 +54,7 @@ const HomePage = (): React.ReactElement => {
       <AppBar />
       <div className={classes.contentContainer}>
         <Switch>
+          <Route path="/category" component={CategoryPage} />
           <Route component={TransactionsPage} />
         </Switch>
       </div>
