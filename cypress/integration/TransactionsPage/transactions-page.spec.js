@@ -22,19 +22,22 @@ describe('Expenses', () => {
     });
   });
 
-  it('should add an expense', () => {
+  it.only('should add an expense', () => {
     cy.route('post', '/api/transactions', {});
     cy.findByTestId('add-transaction').click();
-    cy.findByPlaceholderText('Category').type('Charges');
-    cy.findByPlaceholderText('Amount')
-      .clear()
-      .type('200');
-    cy.findByPlaceholderText('Description').type('Load');
-    cy.findByPlaceholderText('Date').type('11/22/2019');
-    cy.findByTestId('select-account').click();
-    cy.findByText('Bank Developer Option').click();
-    cy.findByText('Save').click();
-    cy.findByText('Transaction successfully created.').should('be.visible');
+    cy.get('form[name="add-transaction-form"]').then(subject => {
+      cy.findByTestId('select-category').click();
+      cy.findByText('Charges', { container: subject }).click();
+      cy.findByPlaceholderText('Amount')
+        .clear()
+        .type('200');
+      cy.findByPlaceholderText('Description').type('Load');
+      cy.findByPlaceholderText('Date').type('11/22/2019');
+      cy.findByTestId('select-account').click();
+      cy.findByText('Bank Developer Option').click();
+      cy.findByText('Save').click();
+      cy.findByText('Transaction successfully created.').should('be.visible');
+    });
   });
 
   it('should add an income', () => {
