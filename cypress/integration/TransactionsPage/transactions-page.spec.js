@@ -12,6 +12,10 @@ describe('Expenses', () => {
     cy.server();
     cy.route('/api/accounts', 'fixture:accounts.json');
     cy.route('/api/transactions', 'fixture:transactions.json');
+    cy.route(
+      '/api/usercategories?userId=1&display=true&sort=name',
+      'fixture:usercategories.json',
+    );
     cy.visit('/', {
       onBeforeLoad(win) {
         const winCopy = win;
@@ -22,22 +26,22 @@ describe('Expenses', () => {
     });
   });
 
-  it.only('should add an expense', () => {
+  it('should add an expense', () => {
     cy.route('post', '/api/transactions', {});
     cy.findByTestId('add-transaction').click();
-    cy.get('form[name="add-transaction-form"]').then(subject => {
-      cy.findByTestId('select-category').click();
-      cy.findByText('Charges', { container: subject }).click();
-      cy.findByPlaceholderText('Amount')
-        .clear()
-        .type('200');
-      cy.findByPlaceholderText('Description').type('Load');
-      cy.findByPlaceholderText('Date').type('11/22/2019');
-      cy.findByTestId('select-account').click();
-      cy.findByText('Bank Developer Option').click();
-      cy.findByText('Save').click();
-      cy.findByText('Transaction successfully created.').should('be.visible');
-    });
+    cy.findByTestId('select-category').click();
+    cy.findAllByRole('option')
+      .contains('Charges')
+      .click();
+    cy.findByPlaceholderText('Amount')
+      .clear()
+      .type('200');
+    cy.findByPlaceholderText('Description').type('Load');
+    cy.findByPlaceholderText('Date').type('11/22/2019');
+    cy.findByTestId('select-account').click();
+    cy.findByText('Bank Developer Option').click();
+    cy.findByText('Save').click();
+    cy.findByText('Transaction successfully created.').should('be.visible');
   });
 
   it('should add an income', () => {
@@ -45,7 +49,10 @@ describe('Expenses', () => {
     cy.findByTestId('add-transaction').click();
     cy.findByTestId('select-type').click();
     cy.findByText('Income').click();
-    cy.findByPlaceholderText('Category').type('Wage');
+    cy.findByTestId('select-category').click();
+    cy.findAllByRole('option')
+      .contains('Wage')
+      .click();
     cy.findByPlaceholderText('Amount')
       .clear()
       .type('20000');
