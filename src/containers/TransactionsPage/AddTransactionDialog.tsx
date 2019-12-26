@@ -15,6 +15,8 @@ import { useHomePageContext } from '../HomePage/HomePageContext';
 import { Transaction, TransactionType } from '../HomePage/types';
 import { useTransactionsPageContext } from './TransactionsPageContext';
 import request from '../../utils/request';
+import useRequest from '../../utils/useRequest';
+import { Category } from '../CategoryPage/types';
 
 const useStyles = makeStyles({
   fieldContainer: {
@@ -45,6 +47,20 @@ const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
   const classes = useStyles();
   const { accounts } = useHomePageContext();
   const { values } = formState;
+  const [categories, setCategories] = React.useState<Category[]>([]);
+
+  const { data: supportedCategories } = useRequest<Category[]>(
+    {
+      url: `${process.env.REACT_APP_API_URL}/api/usercategories?userId=1&display=true&sort=name`,
+    },
+    [],
+  );
+
+  React.useEffect(() => {
+    if (supportedCategories) {
+      setCategories(supportedCategories);
+    }
+  }, [supportedCategories]);
 
   React.useEffect(() => {
     if (activeAccount === null) {
@@ -95,9 +111,15 @@ const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
     formState.reset();
   };
 
+  const handleChangeCategory = (
+    event: React.ChangeEvent<{ value: unknown }>,
+  ): void => {
+    formState.setField('category', event.target.value);
+  };
+
   return (
     <Dialog open={open} onClose={onClose}>
-      <form onSubmit={handleOnSubmit}>
+      <form name="add-transaction-form" onSubmit={handleOnSubmit}>
         <DialogTitle>Add Transaction</DialogTitle>
         <DialogContent>
           <div className={classes.fieldContainer}>
@@ -117,12 +139,21 @@ const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
                 <MenuItem value={TransactionType.Income}>Income</MenuItem>
               </Select>
             </FormControl>
-            <TextField
-              margin="dense"
-              label="Category"
-              placeholder="Category"
-              {...text('category')}
-            />
+            <FormControl classes={{ root: classes.fieldRoot }}>
+              <InputLabel>Category</InputLabel>
+              <Select
+                placeholder="Category"
+                onChange={handleChangeCategory}
+                data-testid="select-category"
+                value={values.category}
+              >
+                {categories.map(category => (
+                  <MenuItem key={category.name} value={category.name}>
+                    {category.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
             <TextField
               margin="dense"
               label="Amount"

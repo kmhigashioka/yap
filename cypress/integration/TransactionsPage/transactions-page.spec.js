@@ -12,6 +12,10 @@ describe('Expenses', () => {
     cy.server();
     cy.route('/api/accounts', 'fixture:accounts.json');
     cy.route('/api/transactions', 'fixture:transactions.json');
+    cy.route(
+      '/api/usercategories?userId=1&display=true&sort=name',
+      'fixture:usercategories.json',
+    );
     cy.visit('/', {
       onBeforeLoad(win) {
         const winCopy = win;
@@ -25,7 +29,10 @@ describe('Expenses', () => {
   it('should add an expense', () => {
     cy.route('post', '/api/transactions', {});
     cy.findByTestId('add-transaction').click();
-    cy.findByPlaceholderText('Category').type('Charges');
+    cy.findByTestId('select-category').click();
+    cy.findAllByRole('option')
+      .contains('Charges')
+      .click();
     cy.findByPlaceholderText('Amount')
       .clear()
       .type('200');
@@ -42,7 +49,10 @@ describe('Expenses', () => {
     cy.findByTestId('add-transaction').click();
     cy.findByTestId('select-type').click();
     cy.findByText('Income').click();
-    cy.findByPlaceholderText('Category').type('Wage');
+    cy.findByTestId('select-category').click();
+    cy.findAllByRole('option')
+      .contains('Wage')
+      .click();
     cy.findByPlaceholderText('Amount')
       .clear()
       .type('20000');

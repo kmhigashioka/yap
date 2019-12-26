@@ -58,6 +58,7 @@ describe('AppBar', () => {
   });
 
   it('should navigate to Category page', () => {
+    cy.route('/api/usercategories?userId=1', 'fixture:usercategories.json');
     cy.findByTestId('navigation-button-category').click();
     cy.title().should('contain', 'Category');
   });
