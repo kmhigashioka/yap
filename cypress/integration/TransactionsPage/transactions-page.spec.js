@@ -16,7 +16,7 @@ describe('Expenses', () => {
       '/api/usercategories?userId=1&display=true&sort=name',
       'fixture:usercategories.json',
     );
-    cy.visit('/', {
+    cy.visit('/transactions', {
       onBeforeLoad(win) {
         const winCopy = win;
         delete winCopy.fetch;

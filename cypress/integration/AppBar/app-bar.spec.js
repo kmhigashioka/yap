@@ -23,6 +23,14 @@ describe('AppBar', () => {
   });
 
   it("should able to select BPI account and display BPI's transaction", () => {
+    cy.visit('/transactions', {
+      onBeforeLoad(win) {
+        const winCopy = win;
+        delete winCopy.fetch;
+        winCopy.eval(polyfill);
+        winCopy.fetch = win.unfetch;
+      },
+    });
     cy.findByText('ALL').click();
     cy.route('/api/transactions?accountId=2', [
       {
@@ -48,7 +56,6 @@ describe('AppBar', () => {
       .clear()
       .type('500');
     cy.findByText('Create').click();
-    cy.findByText('ALL').click();
     cy.findByText('New Account').should('be.visible');
   });
 
