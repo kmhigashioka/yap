@@ -100,7 +100,7 @@ const AppBar: React.FC = () => {
           <Tooltip title="Dashboard">
             <IconButton
               className={classes.iconButton}
-              onClick={(): void => handleNavigateTo('/dashboard')}
+              onClick={(): void => handleNavigateTo('/')}
               data-testid="navigation-button-dashboard"
             >
               <DashboardIcon />
@@ -109,7 +109,7 @@ const AppBar: React.FC = () => {
           <Tooltip title="Transactions">
             <IconButton
               className={classes.iconButton}
-              onClick={(): void => handleNavigateTo('/')}
+              onClick={(): void => handleNavigateTo('/transactions')}
               data-testid="navigation-button-transactions"
             >
               <LibraryBooks />

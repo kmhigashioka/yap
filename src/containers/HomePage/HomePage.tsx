@@ -56,8 +56,8 @@ const HomePage = (): React.ReactElement => {
       <div className={classes.contentContainer}>
         <Switch>
           <Route path="/category" component={CategoryPage} />
-          <Route path="/dashboard" component={DashboardPage} />
-          <Route component={TransactionsPage} />
+          <Route path="/transactions" component={TransactionsPage} />
+          <Route component={DashboardPage} />
         </Switch>
       </div>
     </HomePageContext.Provider>
