@@ -9,6 +9,7 @@ import useHomePageState from './useHomePageState';
 import CategoryPage from '../CategoryPage';
 import { Account } from './types';
 import useRequest from '../../utils/useRequest';
+import DashboardPage from '../DashboardPage';
 
 const useStyle = makeStyles({
   contentContainer: {
@@ -55,6 +56,7 @@ const HomePage = (): React.ReactElement => {
       <div className={classes.contentContainer}>
         <Switch>
           <Route path="/category" component={CategoryPage} />
+          <Route path="/dashboard" component={DashboardPage} />
           <Route component={TransactionsPage} />
         </Switch>
       </div>
