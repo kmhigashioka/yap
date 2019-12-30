@@ -1,5 +1,6 @@
 import React from 'react';
 import { makeStyles, Typography } from '@material-ui/core';
+import { DashboardAccountItemProps } from './types';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -25,16 +26,18 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const DashboardAccountItem = (): React.ReactElement => {
+const DashboardAccountItem: React.FC<DashboardAccountItemProps> = ({
+  account,
+}): React.ReactElement => {
   const classes = useStyles();
 
   return (
     <li className={classes.container}>
       <div className={classes.header}>
-        <Typography>Sample Account</Typography>
+        <Typography>{account.name}</Typography>
       </div>
       <div className={classes.body}>
-        <Typography>P 1,320.00</Typography>
+        <Typography>{account.balance}</Typography>
       </div>
     </li>
   );

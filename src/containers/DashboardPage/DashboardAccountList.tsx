@@ -1,6 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core';
 import DashboardAccountItem from './DashboardAccountItem';
+import { useHomePageContext } from '../HomePage/HomePageContext';
 
 const useStyles = makeStyles({
   container: {
@@ -14,11 +15,12 @@ const useStyles = makeStyles({
 
 const DashboardAccountList = (): React.ReactElement => {
   const classes = useStyles();
+  const { accounts } = useHomePageContext();
 
   return (
     <ul className={classes.container}>
-      {Array.from({ length: 5 }).map((_, i) => (
-        <DashboardAccountItem key={i} />
+      {accounts.map(account => (
+        <DashboardAccountItem key={account.id} account={account} />
       ))}
     </ul>
   );
