@@ -1,5 +1,6 @@
 import React from 'react';
 import { makeStyles, Typography } from '@material-ui/core';
+import { FormattedNumber } from 'react-intl';
 import { DashboardAccountItemProps } from './types';
 
 const useStyles = makeStyles(theme => ({
@@ -20,9 +21,14 @@ const useStyles = makeStyles(theme => ({
     padding: '0 24px',
   },
   body: {
-    alignItems: 'center',
     display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
     padding: '24px',
+  },
+  remainingBalanceText: {
+    fontSize: '24px',
+    fontWeight: 'bold',
   },
 }));
 
@@ -37,7 +43,12 @@ const DashboardAccountItem: React.FC<DashboardAccountItemProps> = ({
         <Typography>{account.name}</Typography>
       </div>
       <div className={classes.body}>
-        <Typography>{account.balance}</Typography>
+        <Typography variant="subtitle2" color="textSecondary">
+          Remaining Balance
+        </Typography>
+        <Typography className={classes.remainingBalanceText}>
+          ₱ <FormattedNumber value={account.balance} />
+        </Typography>
       </div>
     </li>
   );
