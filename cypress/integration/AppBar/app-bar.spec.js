@@ -59,6 +59,11 @@ describe('AppBar', () => {
     cy.findByText('New Account').should('be.visible');
   });
 
+  it('should navigate to Dashboard page', () => {
+    cy.findByTestId('navigation-button-dashboard').click();
+    cy.title().should('contain', 'Dashboard');
+  });
+
   it('should navigate to Transactions page', () => {
     cy.findByTestId('navigation-button-transactions').click();
     cy.title().should('contain', 'Transactions');
