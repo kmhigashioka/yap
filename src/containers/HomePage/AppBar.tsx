@@ -10,6 +10,7 @@ import { makeStyles, Typography, Popover } from '@material-ui/core';
 import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
 import LibraryBooks from '@material-ui/icons/LibraryBooks';
 import CategoryIcon from '@material-ui/icons/Category';
+import DashboardIcon from '@material-ui/icons/Dashboard';
 import Create from '@material-ui/icons/Create';
 import { useHistory } from 'react-router-dom';
 
@@ -96,10 +97,19 @@ const AppBar: React.FC = () => {
     <MuiAppBar position="sticky">
       <Toolbar classes={{ root: classes.toolbarContainer }}>
         <div className={classes.toolbarLeftContent}>
-          <Tooltip title="Transactions">
+          <Tooltip title="Dashboard">
             <IconButton
               className={classes.iconButton}
               onClick={(): void => handleNavigateTo('/')}
+              data-testid="navigation-button-dashboard"
+            >
+              <DashboardIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Transactions">
+            <IconButton
+              className={classes.iconButton}
+              onClick={(): void => handleNavigateTo('/transactions')}
               data-testid="navigation-button-transactions"
             >
               <LibraryBooks />
