@@ -1,0 +1,71 @@
+{
+  "accounts": [
+    {
+      "id": 1,
+      "name": "Bank Developer Option",
+      "abbreviation": "BDO",
+      "balance": 0
+    },
+    {
+      "id": 2,
+      "name": "Bank of the Personal Information",
+      "abbreviation": "BPI",
+      "balance": 0
+    }
+  ],
+  "transactions": [
+    {
+      "amount": 200,
+      "id": 1,
+      "category": "Charges",
+      "description": "",
+      "date": "11/2/2019",
+      "accountId": 1,
+      "type": 0
+    },
+    {
+      "amount": 500,
+      "id": 2,
+      "category": "Withdrawal",
+      "description": "",
+      "date": "11/2/2019",
+      "accountId": 1,
+      "type": 0
+    },
+    {
+      "amount": 1500,
+      "id": 3,
+      "category": "Withdrawal",
+      "description": "",
+      "date": "11/2/2019",
+      "accountId": 2,
+      "type": 0
+    }
+  ],
+  "usercategories": [
+    {
+      "id": 1,
+      "name": "Charges",
+      "display": true,
+      "userId": 1
+    },
+    {
+      "id": 2,
+      "name": "Wage",
+      "display": true,
+      "userId": 1
+    },
+    {
+      "id": 3,
+      "name": "Withdraw",
+      "display": true,
+      "userId": 1
+    },
+    {
+      "id": 4,
+      "name": "Charges",
+      "display": true,
+      "userId": 2
+    }
+  ]
+}

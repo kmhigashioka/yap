@@ -4,8 +4,12 @@ import { Route, Switch } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core';
 import HomePageContext from './HomePageContext';
 import AppBar from './AppBar';
-import ExpensesPage from '../ExpensesPage';
-import { Account, Expense } from './types';
+import TransactionsPage from '../TransactionsPage';
+import useHomePageState from './useHomePageState';
+import CategoryPage from '../CategoryPage';
+import { Account } from './types';
+import useRequest from '../../utils/useRequest';
+import DashboardPage from '../DashboardPage';
 
 const useStyle = makeStyles({
   contentContainer: {
@@ -15,79 +19,45 @@ const useStyle = makeStyles({
 });
 
 const HomePage = (): React.ReactElement => {
-  const [accounts, setAccounts] = React.useState<Account[]>([
-    {
-      id: 1,
-      name: 'Bank Developer Option',
-      abbreviation: 'BDO',
-      balance: 0,
-      expenses: [
-        {
-          amount: 200,
-          id: 1,
-          category: 'Charges',
-          description: '',
-          date: '11/2/2019',
-        },
-        {
-          amount: 500,
-          id: 2,
-          category: 'Withdrawal',
-          description: '',
-          date: '11/2/2019',
-        },
-      ],
-    },
-    {
-      id: 2,
-      name: 'Bank of the Personal Information',
-      abbreviation: 'BPI',
-      balance: 0,
-      expenses: [
-        {
-          amount: 1500,
-          id: 3,
-          category: 'Withdrawal',
-          description: '',
-          date: '11/2/2019',
-        },
-      ],
-    },
-  ]);
-  const [activeAccount, setActiveAccount] = React.useState<Account | null>(
-    null,
-  );
-  const addAccount = (account: Account): void => {
-    setAccounts([...accounts, account]);
-  };
   const classes = useStyle();
-  const getAllExpenses = (): Expense[] =>
-    accounts.reduce((prev: Expense[], curr) => [...prev, ...curr.expenses], []);
-  const expenses = activeAccount ? activeAccount.expenses : getAllExpenses();
+  const {
+    addAccount,
+    setActiveAccount,
+    accounts,
+    activeAccount,
+    setAccounts,
+  } = useHomePageState();
+
+  const { data } = useRequest<Account[]>(
+    { url: `${process.env.REACT_APP_API_URL}/api/accounts` },
+    [setAccounts],
+  );
+
+  React.useEffect(() => {
+    if (data) {
+      setAccounts(data);
+    }
+  }, [data, setAccounts]);
 
   return (
-    <HomePageContext.Provider value={{}}>
+    <HomePageContext.Provider
+      value={{
+        addAccount,
+        setActiveAccount,
+        accounts,
+        activeAccount,
+      }}
+    >
       <Helmet>
         <title>Home</title>
         <meta name="description" content="Description of Home" />
       </Helmet>
-      <AppBar
-        accounts={accounts}
-        activeAccount={activeAccount}
-        setActiveAccount={setActiveAccount}
-        addAccount={addAccount}
-      />
+      <AppBar />
       <div className={classes.contentContainer}>
         <Switch>
-          <Route
-            render={(props): React.ReactElement => (
-              <ExpensesPage
-                // eslint-disable-next-line react/jsx-props-no-spreading
-                {...props}
-                expenses={expenses}
-              />
-            )}
-          />
+          <Route path="/category" component={CategoryPage} />
+          <Route path="/transactions" component={TransactionsPage} />
+          <Route component={DashboardPage} />
         </Switch>
       </div>
     </HomePageContext.Provider>

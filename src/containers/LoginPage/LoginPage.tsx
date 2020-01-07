@@ -7,10 +7,9 @@ import {
   Button,
   Snackbar,
 } from '@material-ui/core';
-import { Link } from 'react-router-dom';
 import { useFormState } from 'react-use-form-state';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import LoginPageContext from './LoginPageContext';
-import { LoginPageProps } from './types';
 import Welcome from './Welcome';
 import request from '../../utils/request';
 
@@ -44,7 +43,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const LoginPage: React.FC<LoginPageProps> = ({
+const LoginPage: React.FC<RouteComponentProps> = ({
   history,
 }): React.ReactElement => {
   const classes = useStyles();

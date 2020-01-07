@@ -1,13 +1,11 @@
-export type THomePageContext = {};
-
-export interface IAppBarProps {
+export type THomePageContext = {
+  addAccount: (account: Account) => void;
+  setActiveAccount: (account: Account | null) => void;
   accounts: Account[];
   activeAccount: Account | null;
-  setActiveAccount: (account: Account | null) => void;
-  addAccount: (account: Account) => void;
-}
+};
 
-export interface IFormDialogProps {
+export interface FormDialogProps {
   open: boolean;
   onClose: () => void;
   addAccount: (account: Account) => void;
@@ -18,13 +16,24 @@ export type Account = {
   name: string;
   abbreviation: string;
   balance: number;
-  expenses: Expense[];
+  transactions: Transaction[];
 };
 
-export type Expense = {
+export enum TransactionType {
+  Expense,
+  Income,
+}
+
+export type Transaction = {
   category: string;
   amount: number;
   description: string;
-  date: string;
+  date: Date;
   id: number;
+  accountId: number;
+  type: TransactionType;
 };
+
+export type UseHomePageState = {
+  setAccounts: (accounts: Account[]) => void;
+} & THomePageContext;

@@ -1,7 +1,8 @@
-export default function request(
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export default function request<T>(
   url: string,
   options?: {} | undefined,
-): Promise<any> {
+): Promise<T> {
   return fetch(url, options)
     .then(checkStatus)
     .then(parseJSON);

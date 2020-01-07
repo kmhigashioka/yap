@@ -6,9 +6,9 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { useFormState } from 'react-use-form-state';
-import { IFormDialogProps } from './types';
+import { FormDialogProps } from './types';
 
-const CreateNewAccountDialog: React.FC<IFormDialogProps> = ({
+const CreateNewAccountDialog: React.FC<FormDialogProps> = ({
   open,
   onClose,
   addAccount,
@@ -28,7 +28,7 @@ const CreateNewAccountDialog: React.FC<IFormDialogProps> = ({
       name,
       abbreviation,
       balance: startingBalance,
-      expenses: [],
+      transactions: [],
     });
     formState.clear();
     onClose();
@@ -46,6 +46,7 @@ const CreateNewAccountDialog: React.FC<IFormDialogProps> = ({
             label="Name"
             required
             fullWidth
+            placeholder="Name"
           />
           <TextField
             {...text('abbreviation')}
@@ -54,12 +55,14 @@ const CreateNewAccountDialog: React.FC<IFormDialogProps> = ({
             inputProps={{ maxLength: 3 }}
             required
             fullWidth
+            placeholder="Abbreviation (Maximum of 3 characters)"
           />
           <TextField
             {...number('startingBalance')}
             margin="dense"
             label="Starting Balance"
             fullWidth
+            placeholder="Starting Balance"
           />
         </DialogContent>
         <DialogActions>
