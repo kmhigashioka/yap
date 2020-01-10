@@ -10,6 +10,8 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    env:
+      working-directory: ./src/WebUI/ClientApp
 
     strategy:
       matrix:
@@ -22,6 +24,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - name: npm ci, build, and test
+      working-directory: ${{env.working-directory}}
       run: |
         npm ci
         npm run lint
@@ -31,13 +34,14 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: integration-test-videos
-        path: /home/runner/work/yap/yap/cypress/videos
+        path: /home/runner/work/yap/yap/${{env.working-directory}}/cypress/videos
     - name: Archive code coverage results
       uses: actions/upload-artifact@v1
       with:
         name: code-coverage
-        path: /home/runner/work/yap/yap/coverage
+        path: /home/runner/work/yap/yap/${{env.working-directory}}/coverage
     - name: send codecov
+      working-directory: ${{env.working-directory}}
       run: |
         npm install -g codecov
         codecov
