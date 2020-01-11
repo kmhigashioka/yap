@@ -5,11 +5,13 @@ using Application.Common.Dtos;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using MediatR;
+using Omu.ValueInjecter;
 
 namespace Application.Users.Commands
 {
     public class NewUserCommand: IRequest<ApplicationUserDto>
     {
+        public string FullName { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
     }
@@ -25,7 +27,8 @@ namespace Application.Users.Commands
 
         public async Task<ApplicationUserDto> Handle(NewUserCommand request, CancellationToken cancellationToken)
         {
-            var (result, userId) = await _identityService.CreateUserAsync(request.UserName, request.Password);
+            var userDto = Mapper.Map<ApplicationUserDto>(request);
+            var (result, userId) = await _identityService.CreateUserAsync(userDto, request.Password);
             if (result.Errors.Any())
             {
                 var errorMessage = string.Join(",", result.Errors.Select(e => e));

@@ -23,16 +23,15 @@ namespace Infrastructure.Services
             return Mapper.Map<ApplicationUserDto>(user);
         }
 
-        public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password)
+        public async Task<(Result Result, string UserId)> CreateUserAsync(ApplicationUserDto userDto, string password)
         {
             var user = new ApplicationUser
             {
-                UserName = userName,
-                Email = userName
+                FullName = userDto.FullName,
+                Email = userDto.UserName,
+                UserName = userDto.UserName
             };
-
             var result = await _userManager.CreateAsync(user, password);
-
             return (result.ToApplicationResult(), user.Id);
         }
 
