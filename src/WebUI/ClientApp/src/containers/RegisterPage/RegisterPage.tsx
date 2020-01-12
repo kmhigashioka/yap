@@ -59,7 +59,8 @@ const RegisterPage: React.FC<RouteComponentProps> = ({
           body,
         });
       } catch (error) {
-        setSnackbarMessage(error.message);
+        const errorResponse = await error.response.json();
+        setSnackbarMessage(errorResponse.message);
       }
       setIsLoading(false);
     };
