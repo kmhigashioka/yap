@@ -1,9 +1,11 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { makeStyles, Typography, TextField, Button } from '@material-ui/core';
+import { makeStyles, Typography, TextField, Button, Snackbar } from '@material-ui/core';
 import { Link, RouteComponentProps } from 'react-router-dom';
+import { useFormState } from 'react-use-form-state';
 import RegisterPageContext from './RegisterPageContext';
 import Welcome from '../LoginPage/Welcome';
+import request from '../../utils/request';
 
 const useStyles = makeStyles(theme => ({
   loginWrapper: {
@@ -39,10 +41,34 @@ const RegisterPage: React.FC<RouteComponentProps> = ({
   history,
 }): React.ReactElement => {
   const classes = useStyles();
+  const [{ errors, values }, { text, password }] = useFormState();
+  const [snackbarMessage, setSnackbarMessage] = React.useState('');
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const handleSubmit = (event: React.SyntheticEvent): void => {
     event.preventDefault();
-    history.push('/');
+    const body = JSON.stringify(values);
+    const createUser = async (): Promise<void> => {
+      setIsLoading(true);
+      try {
+        await request('http://localhost:9340/api/users', {
+          method: 'post',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body,
+        });
+      } catch (error) {
+        setSnackbarMessage(error.message);
+      }
+      setIsLoading(false);
+    };
+    createUser();
+    // history.push('/');
+  };
+
+  const handleCloseSnackbar = (): void => {
+    setSnackbarMessage('');
   };
 
   return (
@@ -62,6 +88,8 @@ const RegisterPage: React.FC<RouteComponentProps> = ({
               margin="dense"
               variant="outlined"
               fullWidth
+              required
+              {...text('fullName')}
             />
             <TextField
               name="emailAddress"
@@ -69,6 +97,8 @@ const RegisterPage: React.FC<RouteComponentProps> = ({
               margin="dense"
               variant="outlined"
               fullWidth
+              required
+              {...text('email')}
             />
             <TextField
               name="username"
@@ -76,6 +106,8 @@ const RegisterPage: React.FC<RouteComponentProps> = ({
               margin="dense"
               variant="outlined"
               fullWidth
+              required
+              {...text('userName')}
             />
             <TextField
               name="password"
@@ -84,6 +116,8 @@ const RegisterPage: React.FC<RouteComponentProps> = ({
               margin="dense"
               variant="outlined"
               fullWidth
+              required
+              {...password('password')}
             />
             <TextField
               name="confirmPassword"
@@ -92,6 +126,18 @@ const RegisterPage: React.FC<RouteComponentProps> = ({
               margin="dense"
               variant="outlined"
               fullWidth
+              required
+              helperText={errors.confirmPassword}
+              error={!!errors.confirmPassword}
+              {...password({
+                name: 'confirmPassword',
+                validate: (value, values) => {
+                  if (value !== values.password) {
+                    return 'Confirm password is not the same as password.';
+                  }
+                },
+                validateOnBlur: true,
+              })}
             />
             <Button
               className={classes.submitButton}
@@ -99,6 +145,7 @@ const RegisterPage: React.FC<RouteComponentProps> = ({
               variant="contained"
               type="submit"
               fullWidth
+              disabled={isLoading}
             >
               Register
             </Button>
@@ -108,6 +155,12 @@ const RegisterPage: React.FC<RouteComponentProps> = ({
             <Typography variant="body2">Login</Typography>
           </Link>
         </div>
+        <Snackbar
+        autoHideDuration={6000}
+        open={snackbarMessage !== ''}
+        message={snackbarMessage}
+        onClose={handleCloseSnackbar}
+      />
       </RegisterPageContext.Provider>
     </div>
   );
