@@ -17,7 +17,7 @@ namespace Infrastructure
             IConfiguration configuration)
         {
             services.AddDbContext<ApplicationDbContext>(
-                options => options.UseSqlServer(
+                options => options.UseNpgsql(
                     configuration.GetConnectionString("DefaultConnection"),
                     b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
