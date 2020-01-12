@@ -28,7 +28,7 @@ namespace Infrastructure.Services
             var user = new ApplicationUser
             {
                 FullName = userDto.FullName,
-                Email = userDto.UserName,
+                Email = userDto.Email,
                 UserName = userDto.UserName
             };
             var result = await _userManager.CreateAsync(user, password);
