@@ -1,6 +1,12 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { makeStyles, Typography, TextField, Button, Snackbar } from '@material-ui/core';
+import {
+  makeStyles,
+  Typography,
+  TextField,
+  Button,
+  Snackbar,
+} from '@material-ui/core';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { useFormState } from 'react-use-form-state';
 import RegisterPageContext from './RegisterPageContext';
@@ -37,6 +43,10 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+interface TokenResponse {
+  refresh_token: string;
+}
+
 const RegisterPage: React.FC<RouteComponentProps> = ({
   history,
 }): React.ReactElement => {
@@ -47,8 +57,29 @@ const RegisterPage: React.FC<RouteComponentProps> = ({
 
   const handleSubmit = (event: React.SyntheticEvent): void => {
     event.preventDefault();
-    const body = JSON.stringify(values);
+    const loginUser = async (): Promise<void> => {
+      try {
+        const { userName, password: userpassword } = values;
+        const body = `grant_type=password&client_id=mvc&username=${userName}&password=${userpassword}`;
+        const data = await request<TokenResponse>(
+          'http://localhost:9340/connect/token',
+          {
+            method: 'post',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body,
+          },
+        );
+        localStorage.setItem('refresh_token', data.refresh_token);
+        history.push('/');
+      } catch (error) {
+        const errorResponse = await error.response.json();
+        setSnackbarMessage(errorResponse.message);
+      }
+    };
     const createUser = async (): Promise<void> => {
+      const body = JSON.stringify(values);
       setIsLoading(true);
       try {
         await request('http://localhost:9340/api/users', {
@@ -58,6 +89,7 @@ const RegisterPage: React.FC<RouteComponentProps> = ({
           },
           body,
         });
+        loginUser();
       } catch (error) {
         const errorResponse = await error.response.json();
         setSnackbarMessage(errorResponse.message);
@@ -65,7 +97,6 @@ const RegisterPage: React.FC<RouteComponentProps> = ({
       setIsLoading(false);
     };
     createUser();
-    // history.push('/');
   };
 
   const handleCloseSnackbar = (): void => {
@@ -132,10 +163,11 @@ const RegisterPage: React.FC<RouteComponentProps> = ({
               error={!!errors.confirmPassword}
               {...password({
                 name: 'confirmPassword',
-                validate: (value, values) => {
-                  if (value !== values.password) {
+                validate: (value, formvalues) => {
+                  if (value !== formvalues.password) {
                     return 'Confirm password is not the same as password.';
                   }
+                  return null;
                 },
                 validateOnBlur: true,
               })}
@@ -157,11 +189,11 @@ const RegisterPage: React.FC<RouteComponentProps> = ({
           </Link>
         </div>
         <Snackbar
-        autoHideDuration={6000}
-        open={snackbarMessage !== ''}
-        message={snackbarMessage}
-        onClose={handleCloseSnackbar}
-      />
+          autoHideDuration={6000}
+          open={snackbarMessage !== ''}
+          message={snackbarMessage}
+          onClose={handleCloseSnackbar}
+        />
       </RegisterPageContext.Provider>
     </div>
   );
