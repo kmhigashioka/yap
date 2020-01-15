@@ -115,21 +115,21 @@ const RegisterPage: React.FC<RouteComponentProps> = ({
           <Typography variant="h6">CREATE AN ACCOUNT</Typography>
           <form className={classes.form} onSubmit={handleSubmit}>
             <TextField
-              name="fullName"
               label="Full Name"
               margin="dense"
               variant="outlined"
               fullWidth
               required
+              placeholder="Full Name"
               {...text('fullName')}
             />
             <TextField
-              name="emailAddress"
               label="Email Address"
               margin="dense"
               variant="outlined"
               fullWidth
               required
+              placeholder="Email Address"
               {...text('email')}
             />
             <TextField
@@ -139,26 +139,27 @@ const RegisterPage: React.FC<RouteComponentProps> = ({
               variant="outlined"
               fullWidth
               required
+              placeholder="Username"
               {...text('userName')}
             />
             <TextField
-              name="password"
               label="Password"
               type="password"
               margin="dense"
               variant="outlined"
               fullWidth
               required
+              placeholder="Password"
               {...password('password')}
             />
             <TextField
-              name="confirmPassword"
               label="Confirm Password"
               type="password"
               margin="dense"
               variant="outlined"
               fullWidth
               required
+              placeholder="Confirm Password"
               helperText={errors.confirmPassword}
               error={!!errors.confirmPassword}
               {...password({
