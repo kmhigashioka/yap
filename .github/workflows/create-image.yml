@@ -1,0 +1,10 @@
+on: [push]
+
+jobs: 
+  create_image_job:
+    runs-on: ubuntu-latest
+    name: Creating Docker Image
+    steps:
+      - uses: actions/checkout@v1
+      - name: Create Image
+        run: docker build --rm -f "Dockerfile" -t yap:latest "."
