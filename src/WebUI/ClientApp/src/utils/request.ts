@@ -51,7 +51,6 @@ export async function requestWithToken<T>(
         return usualApiCall<T>(url, options);
       } catch (tokenerr) {
         localStorage.clear();
-        console.log('should redirect to /login');
       }
     }
     return Promise.reject(err);
