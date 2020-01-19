@@ -11,7 +11,8 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { useFormState } from 'react-use-form-state';
 import RegisterPageContext from './RegisterPageContext';
 import Welcome from '../LoginPage/Welcome';
-import request from '../../utils/request';
+import request, { TokenResponse } from '../../utils/request';
+import auth from '../../utils/auth';
 
 const useStyles = makeStyles(theme => ({
   loginWrapper: {
@@ -43,10 +44,6 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-interface TokenResponse {
-  refresh_token: string;
-}
-
 const RegisterPage: React.FC<RouteComponentProps> = ({
   history,
 }): React.ReactElement => {
@@ -72,6 +69,7 @@ const RegisterPage: React.FC<RouteComponentProps> = ({
           },
         );
         localStorage.setItem('refresh_token', data.refresh_token);
+        auth.accessToken = data.access_token;
         history.push('/');
       } catch (error) {
         const errorResponse = await error.response.json();
