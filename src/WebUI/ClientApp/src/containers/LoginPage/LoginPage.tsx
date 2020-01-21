@@ -11,7 +11,8 @@ import { useFormState } from 'react-use-form-state';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import LoginPageContext from './LoginPageContext';
 import Welcome from './Welcome';
-import request from '../../utils/request';
+import request, { TokenResponse } from '../../utils/request';
+import auth from '../../utils/auth';
 
 const useStyles = makeStyles(theme => ({
   loginWrapper: {
@@ -49,19 +50,33 @@ const LoginPage: React.FC<RouteComponentProps> = ({
   const classes = useStyles();
   const [formState, { text, password }] = useFormState();
   const [snackbarMessage, setSnackbarMessage] = React.useState('');
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [successfullyLoggedIn, setSuccessfullyLoggedIn] = React.useState(false);
+
+  React.useEffect(() => {
+    if (successfullyLoggedIn) {
+      history.push('/');
+    }
+  }, [successfullyLoggedIn]);
 
   const handleSubmit = (event: React.SyntheticEvent): void => {
     event.preventDefault();
-    const body = `grant_type=client_credentials&client_id=${formState.values.username}&client_secret=${formState.values.password}`;
-    request('https://demo.identityserver.io/connect/token', {
+    setIsLoading(true);
+    const body = `grant_type=password&username=${formState.values.username}&password=${formState.values.password}&client_id=mvc`;
+    request<TokenResponse>('http://localhost:9340/connect/token', {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       method: 'post',
       body,
     })
-      .then(() => history.push('/'))
-      .catch(() => setSnackbarMessage('Invalid username or password.'));
+      .then(data => {
+        setSuccessfullyLoggedIn(true);
+        auth.accessToken = data.access_token;
+        localStorage.setItem('refresh_token', data.refresh_token);
+      })
+      .catch(() => setSnackbarMessage('Invalid username or password.'))
+      .finally(() => setIsLoading(false));
   };
 
   const handleCloseSnackbar = (): void => {
@@ -104,6 +119,7 @@ const LoginPage: React.FC<RouteComponentProps> = ({
               variant="contained"
               type="submit"
               fullWidth
+              disabled={isLoading}
             >
               Login
             </Button>
