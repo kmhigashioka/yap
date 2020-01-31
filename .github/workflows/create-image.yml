@@ -6,5 +6,20 @@ jobs:
     name: Creating Docker Image
     steps:
       - uses: actions/checkout@v1
+
+      - name: Login to docker registry
+        uses: actions-hub/docker/login@master
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          DOCKER_REGISTRY: hub.docker.com
+
       - name: Create Image
-        run: docker build --rm -f "Dockerfile" -t yap:latest "."
+        if: success()
+        run: docker build -f "Dockerfile" -t kmhigashioka/yap:latest .
+
+      - name: Push to docker hub
+        if: success()
+        uses: actions-hub/docker@master
+        with:
+          args: push kmhigashioka/yap:latest
