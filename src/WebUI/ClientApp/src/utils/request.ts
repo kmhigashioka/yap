@@ -1,7 +1,9 @@
+import auth from './auth';
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export default function request<T>(
   url: string,
-  options?: {} | undefined,
+  options?: any | undefined,
 ): Promise<T> {
   return fetch(url, options)
     .then(checkStatus)
@@ -33,4 +35,58 @@ function parseJSON(response: Response): Promise<any> | null {
     return null;
   }
   return response.json();
+}
+
+export async function requestWithToken<T>(
+  url: string,
+  options?: any | undefined,
+): Promise<T> {
+  try {
+    const res = await usualApiCall<T>(url, options);
+    return res;
+  } catch (err) {
+    if (err.response.status === 401) {
+      try {
+        await requestForTokenRenewal();
+        return usualApiCall<T>(url, options);
+      } catch (tokenerr) {
+        localStorage.clear();
+      }
+    }
+    return Promise.reject(err);
+  }
+}
+
+function usualApiCall<T>(url: string, options?: any | undefined): Promise<T> {
+  const authorization = `bearer ${auth.accessToken}`;
+  if (options) {
+    const { headers } = options;
+    const requestOptions = {
+      ...options,
+      headers: { ...headers, Authorization: authorization },
+    };
+    return request<T>(url, requestOptions);
+  }
+  return request<T>(url, { headers: { Authorization: authorization } });
+}
+
+async function requestForTokenRenewal(): Promise<void> {
+  const body = `grant_type=refresh_token&client_id=mvc&refresh_token=${auth.refreshToken}`;
+  const data = await request<TokenResponse>(
+    'http://localhost:9340/connect/token',
+    {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body,
+    },
+  );
+  auth.accessToken = data.access_token;
+  localStorage.setItem('refresh_token', data.refresh_token);
+}
+
+export interface TokenResponse {
+  access_token: string;
+  refresh_token: string;
 }

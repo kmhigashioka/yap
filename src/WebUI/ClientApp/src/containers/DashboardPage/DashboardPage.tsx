@@ -5,7 +5,7 @@ import DashboardPageContext from './DashboardPageContext';
 import DashboardBanner from './DashboardBanner';
 import DashboardAccountList from './DashboardAccountList';
 
-const DashboardPage = () => (
+const DashboardPage: React.FC = () => (
   <DashboardPageContext.Provider value={{}}>
     <Helmet>
       <title>Dashboard</title>
