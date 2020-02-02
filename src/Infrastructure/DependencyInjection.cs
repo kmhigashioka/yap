@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace Infrastructure
 {
@@ -16,9 +17,16 @@ namespace Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services,
             IConfiguration configuration)
         {
+#if DEBUG
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
+            var identityServerAuthority = configuration.GetValue<string>("IdentityServerAuthority");
+#else
+            var connectionString = Environment.GetEnvironmentVariable("YAP_CONNECTION_STRING");
+            var identityServerAuthority = Environment.GetEnvironmentVariable("YAP_IDENTITY_SERVER_AUTHORITY");
+#endif
             services.AddDbContext<ApplicationDbContext>(
                 options => options.UseNpgsql(
-                    configuration.GetConnectionString("DefaultConnection"),
+                    connectionString,
                     b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
                 {
@@ -46,7 +54,7 @@ namespace Infrastructure
                 })
                 .AddIdentityServerAuthentication(options =>
                 {
-                    options.Authority = "http://localhost:9340";
+                    options.Authority = identityServerAuthority;
                     options.RequireHttpsMetadata = false;
                     options.ApiName = "api1";
                 });

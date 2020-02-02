@@ -1,0 +1,28 @@
+on:
+  push:
+    branches:
+      - master
+
+jobs: 
+  create_image_job:
+    runs-on: ubuntu-latest
+    name: Creating Docker Image
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Login to docker registry
+        uses: actions-hub/docker/login@master
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          DOCKER_REGISTRY: hub.docker.com
+
+      - name: Create Image
+        if: success()
+        run: docker build -f "Dockerfile" -t kmhigashioka/yap:latest .
+
+      - name: Push to docker hub
+        if: success()
+        uses: actions-hub/docker@master
+        with:
+          args: push kmhigashioka/yap:latest
