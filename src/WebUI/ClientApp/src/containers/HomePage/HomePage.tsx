@@ -27,8 +27,8 @@ const HomePage = (): React.ReactElement => {
     accounts,
     activeAccount,
     setAccounts,
+    setCurrentUser,
   } = useHomePageState();
-  const [currentUser, setCurrentUser] = React.useState<User | null>(null);
   const [fetchingUser, setFetchingUser] = React.useState(false);
   const [, setError] = React.useState();
   const { requestWithToken } = useFetch();
@@ -48,8 +48,7 @@ const HomePage = (): React.ReactElement => {
     const fetchCurrentUser = async (): Promise<void> => {
       setFetchingUser(true);
       try {
-        const data = await requestWithToken<User>('/api/users/me');
-        setCurrentUser(data);
+        setCurrentUser(await requestWithToken<User>('/api/users/me'));
       } catch (err) {
         setError(err);
       }
