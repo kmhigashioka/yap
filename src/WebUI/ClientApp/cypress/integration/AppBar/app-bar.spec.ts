@@ -1,37 +1,14 @@
 describe('AppBar', () => {
-  let polyfill;
-
-  before(() => {
-    const polyfillUrl = 'https://unpkg.com/unfetch/dist/unfetch.umd.js';
-    cy.request(polyfillUrl).then(response => {
-      polyfill = response.body;
-    });
-  });
-
   beforeEach(() => {
     cy.server();
     cy.route('/api/accounts', 'fixture:accounts.json');
     cy.route('/api/transactions', 'fixture:transactions.json');
     cy.login();
-    cy.visit('/', {
-      onBeforeLoad(win) {
-        const winCopy = win;
-        delete winCopy.fetch;
-        winCopy.eval(polyfill);
-        winCopy.fetch = win.unfetch;
-      },
-    });
+    cy.visit('/');
   });
 
   it("should able to select BPI account and display BPI's transaction", () => {
-    cy.visit('/transactions', {
-      onBeforeLoad(win) {
-        const winCopy = win;
-        delete winCopy.fetch;
-        winCopy.eval(polyfill);
-        winCopy.fetch = win.unfetch;
-      },
-    });
+    cy.visit('/transactions');
     cy.findByText('ALL').click();
     cy.route('/api/transactions?accountId=2', [
       {

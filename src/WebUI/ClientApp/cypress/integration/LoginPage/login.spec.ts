@@ -1,27 +1,11 @@
 describe('LoginPage', () => {
-  let polyfill;
-
-  before(() => {
-    const polyfillUrl = 'https://unpkg.com/unfetch/dist/unfetch.umd.js';
-    cy.request(polyfillUrl).then(response => {
-      polyfill = response.body;
-    });
-  });
-
   it('should successfully login', () => {
     cy.server();
     cy.route('POST', '/connect/token', {
       access_token: 'access_token',
       refresh_token: 'refresh_token',
     });
-    cy.visit('/login', {
-      onBeforeLoad(win) {
-        const winCopy = win;
-        delete winCopy.fetch;
-        winCopy.eval(polyfill);
-        winCopy.fetch = win.unfetch;
-      },
-    });
+    cy.visit('/login');
 
     cy.findByPlaceholderText('Username').type('m2m');
     cy.findByPlaceholderText('Password').type('secret');
@@ -38,14 +22,7 @@ describe('LoginPage', () => {
       status: 400,
       response: {},
     });
-    cy.visit('/login', {
-      onBeforeLoad(win) {
-        const winCopy = win;
-        delete winCopy.fetch;
-        winCopy.eval(polyfill);
-        winCopy.fetch = win.unfetch;
-      },
-    });
+    cy.visit('/login');
 
     cy.findByPlaceholderText('Username').type('invalid');
     cy.findByPlaceholderText('Password').type('credential');

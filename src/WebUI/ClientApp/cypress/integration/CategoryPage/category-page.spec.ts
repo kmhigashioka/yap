@@ -1,26 +1,10 @@
 describe('Category Page', () => {
-  let polyfill;
-
-  before(() => {
-    const polyfillUrl = 'https://unpkg.com/unfetch/dist/unfetch.umd.js';
-    cy.request(polyfillUrl).then(response => {
-      polyfill = response.body;
-    });
-  });
-
   beforeEach(() => {
     cy.server();
     cy.route('/api/accounts', 'fixture:accounts.json');
     cy.route('/api/usercategories?userId=1', 'fixture:usercategories.json');
     cy.login();
-    cy.visit('/category', {
-      onBeforeLoad(win) {
-        const winCopy = win;
-        delete winCopy.fetch;
-        winCopy.eval(polyfill);
-        winCopy.fetch = win.unfetch;
-      },
-    });
+    cy.visit('/category');
   });
 
   it("should set the Charges' display to off", () => {

@@ -1,22 +1,6 @@
 describe('RegisterPage', () => {
-  let polyfill;
-
-  before(() => {
-    const polyfillUrl = 'https://unpkg.com/unfetch/dist/unfetch.umd.js';
-    cy.request(polyfillUrl).then(response => {
-      polyfill = response.body;
-    });
-  });
-
   beforeEach(() => {
-    cy.visit('/register', {
-      onBeforeLoad(win) {
-        const winCopy = win;
-        delete winCopy.fetch;
-        winCopy.eval(polyfill);
-        winCopy.fetch = win.unfetch;
-      },
-    });
+    cy.visit('/register');
   });
 
   it('should display unmatch password and confirm password', () => {
