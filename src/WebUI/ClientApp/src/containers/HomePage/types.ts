@@ -37,3 +37,9 @@ export type Transaction = {
 export type UseHomePageState = {
   setAccounts: (accounts: Account[]) => void;
 } & THomePageContext;
+
+export interface User {
+  id: string;
+  fullName: string;
+  email: string;
+}
