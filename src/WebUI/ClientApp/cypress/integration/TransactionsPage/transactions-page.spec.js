@@ -10,6 +10,7 @@ describe('Expenses', () => {
 
   beforeEach(() => {
     cy.server();
+    cy.login();
     cy.route('/api/accounts', 'fixture:accounts.json');
     cy.route('/api/transactions', 'fixture:transactions.json');
     cy.route(

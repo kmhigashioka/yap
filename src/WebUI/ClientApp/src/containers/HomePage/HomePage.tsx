@@ -7,9 +7,10 @@ import AppBar from './AppBar';
 import TransactionsPage from '../TransactionsPage';
 import useHomePageState from './useHomePageState';
 import CategoryPage from '../CategoryPage';
-import { Account } from './types';
+import { Account, User } from './types';
 import useRequest from '../../utils/useRequest';
 import DashboardPage from '../DashboardPage';
+import useFetch from '../../utils/useFetch';
 
 const useStyle = makeStyles({
   contentContainer: {
@@ -26,7 +27,11 @@ const HomePage = (): React.ReactElement => {
     accounts,
     activeAccount,
     setAccounts,
+    setCurrentUser,
   } = useHomePageState();
+  const [fetchingUser, setFetchingUser] = React.useState(false);
+  const [, setError] = React.useState();
+  const { requestWithToken } = useFetch();
 
   const { data } = useRequest<Account[]>(
     { url: `${process.env.REACT_APP_API_URL}/api/accounts` },
@@ -38,6 +43,23 @@ const HomePage = (): React.ReactElement => {
       setAccounts(data);
     }
   }, [data, setAccounts]);
+
+  React.useEffect(() => {
+    const fetchCurrentUser = async (): Promise<void> => {
+      setFetchingUser(true);
+      try {
+        setCurrentUser(await requestWithToken<User>('/api/users/me'));
+      } catch (err) {
+        setError(err);
+      }
+      setFetchingUser(false);
+    };
+    fetchCurrentUser();
+  }, []);
+
+  if (fetchingUser) {
+    return <div>Fetching user...</div>;
+  }
 
   return (
     <HomePageContext.Provider

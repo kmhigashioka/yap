@@ -12,6 +12,7 @@ describe('Category Page', () => {
     cy.server();
     cy.route('/api/accounts', 'fixture:accounts.json');
     cy.route('/api/usercategories?userId=1', 'fixture:usercategories.json');
+    cy.login();
     cy.visit('/category', {
       onBeforeLoad(win) {
         const winCopy = win;

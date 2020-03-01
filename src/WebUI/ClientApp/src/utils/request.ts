@@ -1,4 +1,5 @@
 import auth from './auth';
+require('whatwg-fetch');
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export default function request<T>(
@@ -42,6 +43,11 @@ export async function requestWithToken<T>(
   options?: any | undefined,
 ): Promise<T> {
   try {
+    if (!auth.accessToken) {
+      const err = new ResponseError('Request for token.');
+      err.response = new Response(null, { status: 401 });
+      throw err;
+    }
     const res = await usualApiCall<T>(url, options);
     return res;
   } catch (err) {
@@ -51,6 +57,7 @@ export async function requestWithToken<T>(
         return usualApiCall<T>(url, options);
       } catch (tokenerr) {
         localStorage.clear();
+        throw tokenerr;
       }
     }
     return Promise.reject(err);
@@ -72,18 +79,19 @@ function usualApiCall<T>(url: string, options?: any | undefined): Promise<T> {
 
 async function requestForTokenRenewal(): Promise<void> {
   const body = `grant_type=refresh_token&client_id=mvc&refresh_token=${auth.refreshToken}`;
-  const data = await request<TokenResponse>(
-    'http://localhost:9340/connect/token',
-    {
+  try {
+    const data = await request<TokenResponse>('/connect/token', {
       method: 'post',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body,
-    },
-  );
-  auth.accessToken = data.access_token;
-  localStorage.setItem('refresh_token', data.refresh_token);
+    });
+    auth.accessToken = data.access_token;
+    localStorage.setItem('refresh_token', data.refresh_token);
+  } catch (err) {
+    throw new ResponseError('Expired session.');
+  }
 }
 
 export interface TokenResponse {

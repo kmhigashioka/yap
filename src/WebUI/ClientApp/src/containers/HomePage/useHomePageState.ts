@@ -1,9 +1,9 @@
 import React from 'react';
-import { UseHomePageState, Account } from './types';
+import { UseHomePageState, Account, User } from './types';
 
 const useHomePageState = (): UseHomePageState => {
   const [accounts, setAccounts] = React.useState<Account[]>([]);
-
+  const [currentUser, setCurrentUser] = React.useState<User | null>(null);
   const [activeAccount, setActiveAccount] = React.useState<Account | null>(
     null,
   );
@@ -31,6 +31,8 @@ const useHomePageState = (): UseHomePageState => {
     accounts,
     activeAccount,
     setAccounts,
+    currentUser,
+    setCurrentUser,
   };
 };
 
