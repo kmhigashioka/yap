@@ -12,6 +12,7 @@ describe('AppBar', () => {
     cy.server();
     cy.route('/api/accounts', 'fixture:accounts.json');
     cy.route('/api/transactions', 'fixture:transactions.json');
+    cy.login();
     cy.visit('/', {
       onBeforeLoad(win) {
         const winCopy = win;
