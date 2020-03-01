@@ -6,7 +6,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { useFormState } from 'react-use-form-state';
-import { FormDialogProps } from './types';
+import { FormDialogProps, Account } from './types';
+import useFetch from '../../utils/useFetch';
 
 const CreateNewAccountDialog: React.FC<FormDialogProps> = ({
   open,
@@ -16,22 +17,29 @@ const CreateNewAccountDialog: React.FC<FormDialogProps> = ({
   const [formState, { text, number }] = useFormState({
     name: '',
     abbreviation: '',
-    startingBalance: 0,
+    balance: 0,
   });
+  const { requestWithToken } = useFetch();
 
   const handleSubmit = (evt: React.FormEvent<EventTarget>): void => {
     evt.preventDefault();
 
-    const { name, abbreviation, startingBalance } = formState.values;
-    addAccount({
-      id: new Date().getUTCMilliseconds(),
-      name,
-      abbreviation,
-      balance: startingBalance,
-      transactions: [],
-    });
-    formState.clear();
-    onClose();
+    const newAccountRequest = async (): Promise<void> => {
+      const data = await requestWithToken<Account>('/api/Accounts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          account: formState.values,
+        }),
+      });
+      addAccount(data);
+      formState.clear();
+      onClose();
+    };
+
+    newAccountRequest();
   };
 
   return (
@@ -58,7 +66,7 @@ const CreateNewAccountDialog: React.FC<FormDialogProps> = ({
             placeholder="Abbreviation (Maximum of 3 characters)"
           />
           <TextField
-            {...number('startingBalance')}
+            {...number('balance')}
             margin="dense"
             label="Starting Balance"
             fullWidth

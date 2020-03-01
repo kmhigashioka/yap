@@ -26,13 +26,20 @@ describe('AppBar', () => {
   });
 
   it('should able to create new account', () => {
+    const newAccount = {
+      id: 1,
+      name: 'New Account',
+      abbreviation: 'NU',
+      balance: 2501.49,
+    };
+    cy.route('POST', '/api/Accounts', newAccount);
     cy.findByText('ALL').click();
     cy.findByText('CREATE NEW ACCOUNT').click();
-    cy.findByPlaceholderText('Name').type('New Account');
-    cy.findByPlaceholderText(/Abbreviation/).type('NU');
+    cy.findByPlaceholderText('Name').type(newAccount.name);
+    cy.findByPlaceholderText(/Abbreviation/).type(newAccount.abbreviation);
     cy.findByPlaceholderText('Starting Balance')
       .clear()
-      .type('500');
+      .type(newAccount.balance.toString());
     cy.findByText('Create').click();
     cy.findByText('New Account').should('be.visible');
   });
