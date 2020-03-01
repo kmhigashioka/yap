@@ -16,6 +16,7 @@ namespace Infrastructure.Persistence
             _currentUserService = currentUserService;
         }
 
+        public DbSet<Account> Accounts { get; set; }
         public DbSet<Todo> Todos { get; set; }
 
         public override int SaveChanges()

@@ -6,6 +6,7 @@ namespace Application.Common.Interfaces
 {
     public interface IApplicationDbContext
     {
+        DbSet<Account> Accounts { get; set; }
         DbSet<ApplicationUser> Users { get; set; }
         DbSet<Todo> Todos { get; set; }
         int SaveChanges();
