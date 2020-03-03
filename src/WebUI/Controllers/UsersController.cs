@@ -1,4 +1,5 @@
-﻿using Application.Common.Dtos;
+﻿using System.Collections.Generic;
+using Application.Common.Dtos;
 using Application.Users.Commands;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -37,6 +38,17 @@ namespace WebUI.Controllers
             {
                 CurrentUserId = _currentUserService.UserId
             });
+            return Ok(response);
+        }
+
+        [Authorize]
+        [HttpGet("accounts")]
+        [ProducesResponseType(typeof(List<AccountDto>), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> GetAccounts([FromQuery] GetUserAccountsQuery request)
+        {
+            request.UserId = _currentUserService.UserId;
+            var response = await Mediator.Send(request);
             return Ok(response);
         }
     }
