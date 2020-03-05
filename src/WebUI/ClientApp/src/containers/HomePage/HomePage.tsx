@@ -8,7 +8,6 @@ import TransactionsPage from '../TransactionsPage';
 import useHomePageState from './useHomePageState';
 import CategoryPage from '../CategoryPage';
 import { Account, User } from './types';
-import useRequest from '../../utils/useRequest';
 import DashboardPage from '../DashboardPage';
 import useFetch from '../../utils/useFetch';
 
@@ -33,16 +32,16 @@ const HomePage = (): React.ReactElement => {
   const [, setError] = React.useState();
   const { requestWithToken } = useFetch();
 
-  const { data } = useRequest<Account[]>(
-    { url: `${process.env.REACT_APP_API_URL}/api/accounts` },
-    [setAccounts],
-  );
-
   React.useEffect(() => {
-    if (data) {
-      setAccounts(data);
-    }
-  }, [data, setAccounts]);
+    const fetchAccounts = async (): Promise<void> => {
+      try {
+        setAccounts(await requestWithToken<Account[]>('/api/users/accounts'));
+      } catch (err) {
+        setError(err);
+      }
+    };
+    fetchAccounts();
+  }, []);
 
   React.useEffect(() => {
     const fetchCurrentUser = async (): Promise<void> => {
