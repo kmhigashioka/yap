@@ -3,7 +3,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:9340/",
+      "applicationUrl": "http://localhost:9340",
       "sslPort": 0
     }
   },
@@ -13,7 +13,10 @@
       "launchBrowser": true,
       "launchUrl": "",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "APPLICATION_CONNECTION_STRING": "Server=localhost;Database=yap;User Id=postgres;Password=password",
+        "APPLICATION_IDENTITY_SERVER_API_NAME": "api1",
+        "APPLICATION_IDENTITY_SERVER_AUTHORITY": "http://localhost:9340"
       }
     },
     "NetCoreWebApiPoC": {
@@ -21,7 +24,10 @@
       "launchBrowser": true,
       "launchUrl": "",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "APPLICATION_CONNECTION_STRING": "Server=localhost;Database=yap;User Id=postgres;Password=password",
+        "APPLICATION_IDENTITY_SERVER_API_NAME": "api1",
+        "APPLICATION_IDENTITY_SERVER_AUTHORITY": "http://localhost:9340"
       },
       "applicationUrl": "http://localhost:9341/"
     }
