@@ -1,4 +1,5 @@
-﻿using Application.Common.Interfaces;
+﻿using System;
+using Application.Common.Interfaces;
 using IdentityServer4.AccessTokenValidation;
 using Infrastructure.Identity;
 using Infrastructure.Persistence;
@@ -6,7 +7,6 @@ using Infrastructure.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Domain.Entities;
 
@@ -14,16 +14,12 @@ namespace Infrastructure
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services,
-            IConfiguration configuration)
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
-#if DEBUG
-            var connectionString = configuration.GetConnectionString("DefaultConnection");
-            var identityServerAuthority = configuration.GetValue<string>("IdentityServerAuthority");
-#else
-            var connectionString = Environment.GetEnvironmentVariable("YAP_CONNECTION_STRING");
-            var identityServerAuthority = Environment.GetEnvironmentVariable("YAP_IDENTITY_SERVER_AUTHORITY");
-#endif
+            var connectionString = Environment.GetEnvironmentVariable("APPLICATION_CONNECTION_STRING");
+            var identityServerApiName = Environment.GetEnvironmentVariable("APPLICATION_IDENTITY_SERVER_API_NAME");
+            var identityServerAuthority = Environment.GetEnvironmentVariable("APPLICATION_IDENTITY_SERVER_AUTHORITY");
+
             services.AddDbContext<ApplicationDbContext>(
                 options => options.UseNpgsql(
                     connectionString,
@@ -56,7 +52,7 @@ namespace Infrastructure
                 {
                     options.Authority = identityServerAuthority;
                     options.RequireHttpsMetadata = false;
-                    options.ApiName = "api1";
+                    options.ApiName = identityServerApiName;
                 });
             services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
             services.AddTransient<IDateTime, DateTimeService>();
