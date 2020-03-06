@@ -58,16 +58,13 @@ const RegisterPage: React.FC<RouteComponentProps> = ({
       try {
         const { userName, password: userpassword } = values;
         const body = `grant_type=password&client_id=mvc&username=${userName}&password=${userpassword}`;
-        const data = await request<TokenResponse>(
-          'http://localhost:9340/connect/token',
-          {
-            method: 'post',
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body,
+        const data = await request<TokenResponse>('/connect/token', {
+          method: 'post',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
           },
-        );
+          body,
+        });
         localStorage.setItem('refresh_token', data.refresh_token);
         auth.accessToken = data.access_token;
         history.push('/');
@@ -80,7 +77,7 @@ const RegisterPage: React.FC<RouteComponentProps> = ({
       const body = JSON.stringify(values);
       setIsLoading(true);
       try {
-        await request('http://localhost:9340/api/users', {
+        await request('/api/users', {
           method: 'post',
           headers: {
             'Content-Type': 'application/json',
