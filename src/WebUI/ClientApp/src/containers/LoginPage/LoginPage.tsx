@@ -63,7 +63,7 @@ const LoginPage: React.FC<RouteComponentProps> = ({
     event.preventDefault();
     setIsLoading(true);
     const body = `grant_type=password&username=${formState.values.username}&password=${formState.values.password}&client_id=mvc`;
-    request<TokenResponse>('http://localhost:9340/connect/token', {
+    request<TokenResponse>('/connect/token', {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
