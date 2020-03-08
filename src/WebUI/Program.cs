@@ -21,6 +21,10 @@ namespace WebUI
                 {
                     var context = services.GetRequiredService<IApplicationDbContext>();
                     DbInitializer.Initialize(context);
+
+                    var dbContext = services.GetRequiredService<IApplicationDbContext>();
+                    var dateTimeService = services.GetRequiredService<IDateTime>();
+                    ApplicationDbContextSeed.SeedAsync(dbContext, dateTimeService);
                 }
                 catch (Exception ex)
                 {

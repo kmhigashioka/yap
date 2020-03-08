@@ -25,7 +25,7 @@ namespace WebUI
             services.AddMvc(options => options.EnableEndpointRouting = false)
                 .AddNewtonsoftJson();
             services.AddApplication();
-            services.AddInfrastructure();
+            services.AddInfrastructure(Configuration);
             services.AddMvcCore()
                 .AddAuthorization();
             services.AddSwaggerGen(provider => 
