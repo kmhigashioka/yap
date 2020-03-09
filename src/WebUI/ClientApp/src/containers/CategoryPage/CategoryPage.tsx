@@ -7,7 +7,6 @@ import TitlePageWithSearch from './TitlePageWithSearch';
 import CategoryList from './CategoryList';
 import { Category } from './types';
 import useFetch from '../../utils/useFetch';
-import request from '../../utils/request';
 
 const useStyles = makeStyles(() => ({
   fabContainer: {
