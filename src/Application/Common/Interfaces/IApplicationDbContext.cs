@@ -7,7 +7,7 @@ namespace Application.Common.Interfaces
     public interface IApplicationDbContext
     {
         DbSet<Account> Accounts { get; set; }
-        public DbSet<TransactionCategory> TransactionCategories { get; set; }
+        DbSet<TransactionCategory> TransactionCategories { get; set; }
         DbSet<ApplicationUser> Users { get; set; }
         DbSet<Todo> Todos { get; set; }
         int SaveChanges();
