@@ -6,7 +6,7 @@ import CategoryPageContext from './CategoryPageContext';
 import TitlePageWithSearch from './TitlePageWithSearch';
 import CategoryList from './CategoryList';
 import { Category } from './types';
-import useRequest from '../../utils/useRequest';
+import useFetch from '../../utils/useFetch';
 import request from '../../utils/request';
 
 const useStyles = makeStyles(() => ({
@@ -22,17 +22,17 @@ const CategoryPage = (): React.ReactElement => {
   const [categories, setCategories] = React.useState<Category[]>([]);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [queriedCategories, setQueriedCategories] = React.useState(categories);
-
-  const { data } = useRequest<Category[]>(
-    { url: `${process.env.REACT_APP_API_URL}/api/usercategories?userId=1` },
-    [],
-  );
+  const { requestWithToken } = useFetch();
 
   React.useEffect(() => {
-    if (data) {
+    const fetchCategories = async (): Promise<void> => {
+      const data = await requestWithToken<Category[]>(
+        `/api/TransactionCategories`,
+      );
       setCategories(data);
-    }
-  }, [data]);
+    };
+    fetchCategories();
+  }, []);
 
   React.useEffect(() => {
     const newQueriedCategories = categories.filter(

@@ -46,6 +46,7 @@ const CategoryList: React.FC<CategoryListProps> = ({
                     }}
                     checked={row.display}
                     onChange={(_, value): void => onToggleDisplay(row, value)}
+                    disabled
                   />
                 </TableCell>
               </TableRow>
