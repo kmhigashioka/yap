@@ -53,36 +53,6 @@ const CategoryPage = (): React.ReactElement => {
     setSearchQuery(event.target.value.toLowerCase());
   };
 
-  const handleToggleDisplay = (category: Category, value: boolean): void => {
-    setCategories(
-      categories.map(mapCategory => {
-        if (mapCategory.name === category.name) {
-          return {
-            ...mapCategory,
-            display: value,
-          };
-        }
-        return mapCategory;
-      }),
-    );
-    const updateDisplay = async (): Promise<void> => {
-      const body = {
-        display: value,
-      };
-      await request(
-        `${process.env.REACT_APP_API_URL}/api/usercategories/${category.id}`,
-        {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(body),
-        },
-      );
-    };
-    updateDisplay();
-  };
-
   return (
     <CategoryPageContext.Provider value={{}}>
       <Helmet>
@@ -90,10 +60,7 @@ const CategoryPage = (): React.ReactElement => {
         <meta name="description" content="Description of CategoryPage" />
       </Helmet>
       <TitlePageWithSearch onSearch={handleSearch} />
-      <CategoryList
-        categories={queriedCategories}
-        onToggleDisplay={handleToggleDisplay}
-      />
+      <CategoryList categories={queriedCategories} />
       <Fab
         color="primary"
         classes={{ root: classes.fabContainer }}
