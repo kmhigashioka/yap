@@ -9,16 +9,22 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Domain.Entities;
+using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services)
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             var connectionString = Environment.GetEnvironmentVariable("APPLICATION_CONNECTION_STRING");
             var identityServerApiName = Environment.GetEnvironmentVariable("APPLICATION_IDENTITY_SERVER_API_NAME");
             var identityServerAuthority = Environment.GetEnvironmentVariable("APPLICATION_IDENTITY_SERVER_AUTHORITY");
+
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                connectionString = configuration.GetConnectionString("DefaultConnection");
+            }
 
             services.AddDbContext<ApplicationDbContext>(
                 options => options.UseNpgsql(

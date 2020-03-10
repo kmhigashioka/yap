@@ -1,4 +1,4 @@
-describe('Expenses', () => {
+describe('Transactions', () => {
   beforeEach(() => {
     cy.server();
     cy.login();

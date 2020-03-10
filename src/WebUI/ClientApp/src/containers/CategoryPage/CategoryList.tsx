@@ -17,7 +17,6 @@ const useStyles = makeStyles({
 });
 
 const CategoryList: React.FC<CategoryListProps> = ({
-  onToggleDisplay,
   categories,
 }): React.ReactElement => {
   const classes = useStyles();
@@ -45,7 +44,7 @@ const CategoryList: React.FC<CategoryListProps> = ({
                       'aria-label': row.name,
                     }}
                     checked={row.display}
-                    onChange={(_, value): void => onToggleDisplay(row, value)}
+                    disabled
                   />
                 </TableCell>
               </TableRow>

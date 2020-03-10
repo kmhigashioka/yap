@@ -4,7 +4,6 @@ export interface TitlePageWithSearchProps {
 }
 export interface CategoryListProps {
   categories: Category[];
-  onToggleDisplay: (category: Category, value: boolean) => void;
 }
 
 export type Category = {
