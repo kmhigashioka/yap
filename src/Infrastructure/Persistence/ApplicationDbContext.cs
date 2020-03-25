@@ -17,6 +17,7 @@ namespace Infrastructure.Persistence
         }
 
         public DbSet<Account> Accounts { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
         public DbSet<TransactionCategory> TransactionCategories { get; set; }
         public DbSet<Todo> Todos { get; set; }
 
