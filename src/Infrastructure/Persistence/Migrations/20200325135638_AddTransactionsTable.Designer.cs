@@ -3,15 +3,17 @@ using System;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200325135638_AddTransactionsTable")]
+    partial class AddTransactionsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -164,9 +166,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int?>("AccountId")
-                        .HasColumnType("integer");
-
                     b.Property<float>("Amount")
                         .HasColumnType("real");
 
@@ -195,8 +194,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AccountId");
 
                     b.HasIndex("CategoryId");
 
@@ -372,10 +369,6 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Transaction", b =>
                 {
-                    b.HasOne("Domain.Entities.Account", "Account")
-                        .WithMany("Transactions")
-                        .HasForeignKey("AccountId");
-
                     b.HasOne("Domain.Entities.TransactionCategory", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId");

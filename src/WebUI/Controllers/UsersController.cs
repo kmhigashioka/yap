@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
+using Application.Transactions.Queries;
 using Application.Users.Queries;
 using Microsoft.AspNetCore.Authorization;
 
@@ -46,6 +47,17 @@ namespace WebUI.Controllers
         [ProducesResponseType(typeof(List<AccountDto>), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetAccounts([FromQuery] GetUserAccountsQuery request)
+        {
+            request.UserId = _currentUserService.UserId;
+            var response = await Mediator.Send(request);
+            return Ok(response);
+        }
+
+        [Authorize]
+        [HttpGet("transactions")]
+        [ProducesResponseType(typeof(List<TransactionDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> GetTransactions([FromQuery] GetUserTransactionsQuery request)
         {
             request.UserId = _currentUserService.UserId;
             var response = await Mediator.Send(request);

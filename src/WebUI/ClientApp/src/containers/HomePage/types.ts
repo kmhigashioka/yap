@@ -25,7 +25,7 @@ export enum TransactionType {
 }
 
 export type Transaction = {
-  category: string;
+  category: TransactionCategory;
   amount: number;
   description: string;
   date: Date;
@@ -44,4 +44,10 @@ export interface User {
   id: string;
   fullName: string;
   email: string;
+}
+
+export interface TransactionCategory {
+  id: number;
+  display: boolean;
+  name: string;
 }

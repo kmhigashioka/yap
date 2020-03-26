@@ -2,11 +2,11 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { makeStyles, Snackbar } from '@material-ui/core';
 import TransactionsPageContext from './TransactionsPageContext';
-import { Transaction } from '../HomePage/types';
+import { Transaction, Account } from '../HomePage/types';
 import TransactionForm from './TransactionForm';
 import TransactionList from './TransactionList';
 import { useHomePageContext } from '../HomePage/HomePageContext';
-import useRequest from '../../utils/useRequest';
+import useFetch from '../../utils/useFetch';
 
 const useStyle = makeStyles({
   dataContainer: {},
@@ -25,23 +25,27 @@ const TransactionsPage: React.FC = (): React.ReactElement => {
   const [transactions, setTransactions] = React.useState<Transaction[]>([]);
   const [snackbarMessage, setSnackbarMessage] = React.useState('');
   const { activeAccount } = useHomePageContext();
+  const { requestWithToken } = useFetch();
 
-  const query = activeAccount === null ? '' : `?accountId=${activeAccount.id}`;
-  const { data } = useRequest<Transaction[]>(
-    { url: `${process.env.REACT_APP_API_URL}/api/transactions${query}` },
-    [activeAccount],
+  const fetchTransactions = React.useCallback(
+    async (account: Account | null): Promise<void> => {
+      const accountId = account === null ? null : account.id;
+      const data = await requestWithToken<Transaction[]>(
+        `/api/users/transactions?accountId=${accountId}`,
+      );
+      setTransactions(
+        data.map(d => ({
+          ...d,
+          date: new Date(d.date),
+        })),
+      );
+    },
+    [],
   );
 
   React.useEffect(() => {
-    if (data) {
-      setTransactions(
-        data.map(transaction => ({
-          ...transaction,
-          date: new Date(transaction.date),
-        })),
-      );
-    }
-  }, [data]);
+    fetchTransactions(activeAccount);
+  }, [activeAccount, fetchTransactions]);
 
   const addTransaction = (newTransaction: Transaction): void => {
     setTransactions([...transactions, newTransaction]);
