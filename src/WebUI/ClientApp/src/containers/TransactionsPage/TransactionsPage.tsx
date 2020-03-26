@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { makeStyles, Snackbar } from '@material-ui/core';
 import TransactionsPageContext from './TransactionsPageContext';
-import { Transaction } from '../HomePage/types';
+import { Transaction, Account } from '../HomePage/types';
 import TransactionForm from './TransactionForm';
 import TransactionList from './TransactionList';
 import { useHomePageContext } from '../HomePage/HomePageContext';
@@ -27,9 +27,9 @@ const TransactionsPage: React.FC = (): React.ReactElement => {
   const { activeAccount } = useHomePageContext();
   const { requestWithToken } = useFetch();
 
-  React.useEffect(() => {
-    const accountId = activeAccount === null ? null : activeAccount.id;
-    const fetchTransactions = async (): Promise<void> => {
+  const fetchTransactions = React.useCallback(
+    async (account: Account | null): Promise<void> => {
+      const accountId = account === null ? null : account.id;
       const data = await requestWithToken<Transaction[]>(
         `/api/users/transactions?accountId=${accountId}`,
       );
@@ -39,9 +39,13 @@ const TransactionsPage: React.FC = (): React.ReactElement => {
           date: new Date(d.date),
         })),
       );
-    };
-    fetchTransactions();
-  }, [activeAccount]);
+    },
+    [],
+  );
+
+  React.useEffect(() => {
+    fetchTransactions(activeAccount);
+  }, [activeAccount, fetchTransactions]);
 
   const addTransaction = (newTransaction: Transaction): void => {
     setTransactions([...transactions, newTransaction]);
