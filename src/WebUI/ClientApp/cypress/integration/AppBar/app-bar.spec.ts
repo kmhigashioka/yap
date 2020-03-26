@@ -2,7 +2,10 @@ describe('AppBar', () => {
   beforeEach(() => {
     cy.server();
     cy.route('/api/users/accounts', 'fixture:accounts.json');
-    cy.route('/api/transactions', 'fixture:transactions.json');
+    cy.route(
+      '/api/users/transactions?accountId=*',
+      'fixture:transactions.json',
+    );
     cy.login();
     cy.visit('/');
   });
