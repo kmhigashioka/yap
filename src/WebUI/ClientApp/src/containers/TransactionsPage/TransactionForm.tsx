@@ -175,7 +175,7 @@ const TransactionForm: React.FC<TransactionsPageState> = ({
                 )}
               </div>
               <div>
-                <Typography>{selectedTransaction.category}</Typography>
+                <Typography>{selectedTransaction.category.name}</Typography>
               </div>
             </>
           )}

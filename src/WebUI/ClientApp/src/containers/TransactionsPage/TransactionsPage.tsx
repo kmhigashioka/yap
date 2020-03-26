@@ -6,7 +6,7 @@ import { Transaction } from '../HomePage/types';
 import TransactionForm from './TransactionForm';
 import TransactionList from './TransactionList';
 import { useHomePageContext } from '../HomePage/HomePageContext';
-import useRequest from '../../utils/useRequest';
+import useFetch from '../../utils/useFetch';
 
 const useStyle = makeStyles({
   dataContainer: {},
@@ -25,23 +25,23 @@ const TransactionsPage: React.FC = (): React.ReactElement => {
   const [transactions, setTransactions] = React.useState<Transaction[]>([]);
   const [snackbarMessage, setSnackbarMessage] = React.useState('');
   const { activeAccount } = useHomePageContext();
-
-  const query = activeAccount === null ? '' : `?accountId=${activeAccount.id}`;
-  const { data } = useRequest<Transaction[]>(
-    { url: `${process.env.REACT_APP_API_URL}/api/transactions${query}` },
-    [activeAccount],
-  );
+  const { requestWithToken } = useFetch();
 
   React.useEffect(() => {
-    if (data) {
+    const accountId = activeAccount === null ? null : activeAccount.id;
+    const fetchTransactions = async (): Promise<void> => {
+      const data = await requestWithToken<Transaction[]>(
+        `/api/users/transactions?accountId=${accountId}`,
+      );
       setTransactions(
-        data.map(transaction => ({
-          ...transaction,
-          date: new Date(transaction.date),
+        data.map(d => ({
+          ...d,
+          date: new Date(d.date),
         })),
       );
-    }
-  }, [data]);
+    };
+    fetchTransactions();
+  }, [activeAccount]);
 
   const addTransaction = (newTransaction: Transaction): void => {
     setTransactions([...transactions, newTransaction]);

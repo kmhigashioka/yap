@@ -124,7 +124,7 @@ const TransactionList: React.FC<TransactionsPageState> = ({
             >
               <TableCell component="th" scope="row" />
               <TableCell>{typeDescription[transaction.type]}</TableCell>
-              <TableCell>{transaction.category}</TableCell>
+              <TableCell>{transaction.category.name}</TableCell>
               <TableCell>{transaction.amount}</TableCell>
               <TableCell>{transaction.description}</TableCell>
               <TableCell>{transaction.date.toLocaleDateString()}</TableCell>
