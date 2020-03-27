@@ -14,9 +14,8 @@ import { AddTransactionDialogProps } from './types';
 import { useHomePageContext } from '../HomePage/HomePageContext';
 import { Transaction, TransactionType } from '../HomePage/types';
 import { useTransactionsPageContext } from './TransactionsPageContext';
-import request from '../../utils/request';
-import useRequest from '../../utils/useRequest';
-import { Category } from '../CategoryPage/types';
+import useFetch from '../../utils/useFetch';
+import { TransactionCategory } from '../CategoryPage/types';
 
 const useStyles = makeStyles({
   fieldContainer: {
@@ -47,20 +46,23 @@ const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
   const classes = useStyles();
   const { accounts } = useHomePageContext();
   const { values } = formState;
-  const [categories, setCategories] = React.useState<Category[]>([]);
+  const [categories, setCategories] = React.useState<TransactionCategory[]>([]);
 
-  const { data: supportedCategories } = useRequest<Category[]>(
-    {
-      url: `${process.env.REACT_APP_API_URL}/api/usercategories?userId=1&display=true&sort=name`,
-    },
-    [],
-  );
+  const { requestWithToken } = useFetch();
+
+  const fetchTransactionCategories = React.useCallback(async (): Promise<
+    void
+  > => {
+    const data = await requestWithToken<TransactionCategory[]>(
+      '/api/TransactionCategories',
+    );
+    setCategories(data);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   React.useEffect(() => {
-    if (supportedCategories) {
-      setCategories(supportedCategories);
-    }
-  }, [supportedCategories]);
+    fetchTransactionCategories();
+  }, [fetchTransactionCategories]);
 
   React.useEffect(() => {
     if (activeAccount === null) {
@@ -71,33 +73,43 @@ const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
 
   const handleOnSubmit = (event: React.SyntheticEvent): void => {
     event.preventDefault();
+    const category = categories.find(
+      c => c.id === values.category,
+    ) as TransactionCategory;
     const transaction: Transaction = {
       accountId: values.accountId,
       amount: values.amount,
-      category: values.category,
+      category,
       date: values.date,
       description: values.description,
       id: 0,
       type: values.type,
     };
     const pushTransaction = async (): Promise<void> => {
-      const data = await request<Transaction>(
-        `${process.env.REACT_APP_API_URL}/api/transactions`,
+      const data = await requestWithToken<Transaction[]>(
+        `/api/users/transactions?accountId=${values.accountId}`,
         {
           method: 'post',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(transaction),
+          body: JSON.stringify({
+            transactions: [transaction],
+            accountId: transaction.accountId,
+          }),
         },
       );
-      data.date = new Date(data.date);
-      addTransaction(data);
+      setSnackbarMessage('Transaction successfully created.');
+      onClose();
+      formState.reset();
+      data.forEach(d => {
+        addTransaction({
+          ...d,
+          date: new Date(d.date),
+        });
+      });
     };
     pushTransaction();
-    setSnackbarMessage('Transaction successfully created.');
-    onClose();
-    formState.reset();
   };
 
   const handleChangeAccount = (
@@ -148,7 +160,7 @@ const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
                 value={values.category}
               >
                 {categories.map(category => (
-                  <MenuItem key={category.name} value={category.name}>
+                  <MenuItem key={category.name} value={category.id}>
                     {category.name}
                   </MenuItem>
                 ))}

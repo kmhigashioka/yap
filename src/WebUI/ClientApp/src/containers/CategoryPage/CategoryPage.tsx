@@ -5,7 +5,7 @@ import AddIcon from '@material-ui/icons/Add';
 import CategoryPageContext from './CategoryPageContext';
 import TitlePageWithSearch from './TitlePageWithSearch';
 import CategoryList from './CategoryList';
-import { Category } from './types';
+import { TransactionCategory } from './types';
 import useFetch from '../../utils/useFetch';
 
 const useStyles = makeStyles(() => ({
@@ -18,14 +18,14 @@ const useStyles = makeStyles(() => ({
 
 const CategoryPage = (): React.ReactElement => {
   const classes = useStyles();
-  const [categories, setCategories] = React.useState<Category[]>([]);
+  const [categories, setCategories] = React.useState<TransactionCategory[]>([]);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [queriedCategories, setQueriedCategories] = React.useState(categories);
   const { requestWithToken } = useFetch();
 
   React.useEffect(() => {
     const fetchCategories = async (): Promise<void> => {
-      const data = await requestWithToken<Category[]>(
+      const data = await requestWithToken<TransactionCategory[]>(
         `/api/TransactionCategories`,
       );
       setCategories(data);
@@ -35,15 +35,7 @@ const CategoryPage = (): React.ReactElement => {
 
   React.useEffect(() => {
     const newQueriedCategories = categories.filter(
-      (category: { [key: string]: {} }) =>
-        Object.keys(category).some(key => {
-          if (typeof category[key] === 'string') {
-            const categoryValue = (category[key] as string).toLowerCase();
-            const isMatched = categoryValue.indexOf(searchQuery) > -1;
-            return isMatched;
-          }
-          return false;
-        }),
+      category => category.name.toLowerCase().indexOf(searchQuery) > -1,
     );
     setQueriedCategories(newQueriedCategories);
   }, [searchQuery, categories]);
