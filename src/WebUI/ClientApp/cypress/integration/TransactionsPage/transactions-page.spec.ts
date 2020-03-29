@@ -3,26 +3,35 @@ describe('Transactions', () => {
     cy.server();
     cy.login();
     cy.route('/api/users/accounts', 'fixture:accounts.json');
-    cy.route('/api/transactions', 'fixture:transactions.json');
     cy.route(
-      '/api/usercategories?userId=1&display=true&sort=name',
-      'fixture:usercategories.json',
+      '/api/users/transactions?accountId=*',
+      'fixture:transactions.json',
     );
+    cy.route('/api/TransactionCategories', 'fixture:usercategories.json');
     cy.visit('/transactions');
   });
 
   it('should add an expense', () => {
-    cy.route('post', '/api/transactions', {});
+    const transaction = {
+      description: 'Load',
+      date: '11/22/2019',
+      category: {
+        name: 'Charges',
+      },
+      amount: 200,
+      type: 0,
+    };
+    cy.route('post', '/api/users/transactions?accountId=*', [transaction]);
     cy.findByTestId('add-transaction').click();
     cy.findByTestId('select-category').click();
     cy.findAllByRole('option')
-      .contains('Charges')
+      .contains(transaction.category.name)
       .click();
     cy.findByPlaceholderText('Amount')
       .clear()
-      .type('200');
-    cy.findByPlaceholderText('Description').type('Load');
-    cy.findByPlaceholderText('Date').type('11/22/2019');
+      .type(transaction.amount.toString());
+    cy.findByPlaceholderText('Description').type(transaction.description);
+    cy.findByPlaceholderText('Date').type(transaction.date);
     cy.findByTestId('select-account').click();
     cy.findByText('Bank Developer Option').click();
     cy.findByText('Save').click();
@@ -30,7 +39,16 @@ describe('Transactions', () => {
   });
 
   it('should add an income', () => {
-    cy.route('post', '/api/transactions', {});
+    const transaction = {
+      description: 'Salary',
+      date: '11/22/2019',
+      category: {
+        name: 'Charges',
+      },
+      amount: 20000,
+      type: 1,
+    };
+    cy.route('post', '/api/users/transactions?accountId=*', [transaction]);
     cy.findByTestId('add-transaction').click();
     cy.findByTestId('select-type').click();
     cy.findByText('Income').click();
@@ -40,9 +58,9 @@ describe('Transactions', () => {
       .click();
     cy.findByPlaceholderText('Amount')
       .clear()
-      .type('20000');
-    cy.findByPlaceholderText('Description').type('Salary');
-    cy.findByPlaceholderText('Date').type('11/22/2019');
+      .type(transaction.amount.toString());
+    cy.findByPlaceholderText('Description').type(transaction.description);
+    cy.findByPlaceholderText('Date').type(transaction.date);
     cy.findByTestId('select-account').click();
     cy.findByText('Bank Developer Option').click();
     cy.findByText('Save').click();

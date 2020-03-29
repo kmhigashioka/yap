@@ -63,5 +63,17 @@ namespace WebUI.Controllers
             var response = await Mediator.Send(request);
             return Ok(response);
         }
+
+        [Authorize]
+        [HttpPost("transactions")]
+        [ProducesResponseType(typeof(List<TransactionDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> PostTransactions([FromBody] NewUserTransactionsCommand request, [FromQuery] int accountId)
+        {
+            request.UserId = _currentUserService.UserId;
+            request.AccountId = accountId;
+            var response = await Mediator.Send(request);
+            return Ok(response);
+        }
     }
 }

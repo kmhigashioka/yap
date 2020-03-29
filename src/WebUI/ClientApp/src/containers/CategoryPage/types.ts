@@ -3,11 +3,11 @@ export interface TitlePageWithSearchProps {
   onSearch: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 export interface CategoryListProps {
-  categories: Category[];
+  categories: TransactionCategory[];
 }
 
-export type Category = {
+export interface TransactionCategory {
   id: number;
   name: string;
   display: boolean;
-};
+}

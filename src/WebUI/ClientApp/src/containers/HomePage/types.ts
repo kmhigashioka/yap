@@ -1,3 +1,5 @@
+import { TransactionCategory } from '../CategoryPage/types';
+
 export type THomePageContext = {
   addAccount: (account: Account) => void;
   setActiveAccount: (account: Account | null) => void;
@@ -44,10 +46,4 @@ export interface User {
   id: string;
   fullName: string;
   email: string;
-}
-
-export interface TransactionCategory {
-  id: number;
-  display: boolean;
-  name: string;
 }
