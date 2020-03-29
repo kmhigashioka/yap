@@ -23,15 +23,17 @@ const CategoryPage = (): React.ReactElement => {
   const [queriedCategories, setQueriedCategories] = React.useState(categories);
   const { requestWithToken } = useFetch();
 
-  React.useEffect(() => {
-    const fetchCategories = async (): Promise<void> => {
-      const data = await requestWithToken<TransactionCategory[]>(
-        `/api/TransactionCategories`,
-      );
-      setCategories(data);
-    };
-    fetchCategories();
+  const fetchCategories = React.useCallback(async (): Promise<void> => {
+    const data = await requestWithToken<TransactionCategory[]>(
+      `/api/TransactionCategories`,
+    );
+    setCategories(data);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  React.useEffect(() => {
+    fetchCategories();
+  }, [fetchCategories]);
 
   React.useEffect(() => {
     const newQueriedCategories = categories.filter(
