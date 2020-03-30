@@ -87,7 +87,7 @@ describe('Transactions', () => {
   });
 
   it('should delete first transaction', () => {
-    cy.route('delete', '/api/transactions/1', {});
+    cy.route('delete', '/api/users/transactions/1', {});
     cy.findByTestId('transaction-row-id-1').click();
     cy.findByTestId('delete-transaction').click();
     cy.findByText('Yes').click();
