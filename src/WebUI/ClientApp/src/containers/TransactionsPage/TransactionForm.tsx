@@ -19,6 +19,7 @@ import DeleteTransactionDialog from './DeleteTransactionDialog';
 import { TransactionType } from '../HomePage/types';
 import { useTransactionsPageContext } from './TransactionsPageContext';
 import request from '../../utils/request';
+import useFetch from '../../utils/useFetch';
 
 const useStyles = makeStyles(theme => ({
   transactionViewerContainer: {
@@ -61,6 +62,7 @@ const TransactionForm: React.FC<TransactionsPageState> = ({
   const [formState, { text, raw, select }] = useFormState({
     date: new Date(),
   });
+  const { requestWithToken } = useFetch();
 
   const handleOnDelete = (): void => {
     setOpenDeleteDialog(true);
@@ -75,16 +77,21 @@ const TransactionForm: React.FC<TransactionsPageState> = ({
       return;
     }
     const requestDeleteTransaction = async (): Promise<void> => {
-      await request(
-        `${process.env.REACT_APP_API_URL}/api/transactions/${selectedTransaction.id}`,
-        {
-          method: 'delete',
-        },
-      );
-      deleteTransaction(selectedTransaction.id);
-      setOpenDeleteDialog(false);
-      setSelectedTransaction(null);
-      setSnackbarMessage('Transaction successfully deleted.');
+      try {
+        await requestWithToken(
+          `/api/users/transactions/${selectedTransaction.id}`,
+          {
+            method: 'delete',
+          },
+        );
+        deleteTransaction(selectedTransaction.id);
+        setOpenDeleteDialog(false);
+        setSelectedTransaction(null);
+        setSnackbarMessage('Transaction successfully deleted.');
+      } catch (error) {
+        const errorResponse = await error.response.json();
+        setSnackbarMessage(errorResponse.message);
+      }
     };
     requestDeleteTransaction();
   };
