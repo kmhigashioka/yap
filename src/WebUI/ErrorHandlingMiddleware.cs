@@ -31,12 +31,25 @@ namespace WebUI
         private static Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             var code = HttpStatusCode.InternalServerError;
+            var message = exception.Message;
 
-            if (exception is NotFoundException) code = HttpStatusCode.NotFound;
-            else if (exception is UnauthorizedException) code = HttpStatusCode.Unauthorized;
-            else if (exception is BadRequestException) code = HttpStatusCode.BadRequest;
+            switch (exception)
+            {
+                case NotFoundException _:
+                    code = HttpStatusCode.NotFound;
+                    break;
+                case UnauthorizedException _:
+                    code = HttpStatusCode.Unauthorized;
+                    break;
+                case BadRequestException _:
+                    code = HttpStatusCode.BadRequest;
+                    break;
+                default:
+                    message = "Something went wrong.";
+                    break;
+            }
 
-            var result = JsonConvert.SerializeObject(new { message = exception.Message });
+            var result = JsonConvert.SerializeObject(new { message });
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)code;
             return context.Response.WriteAsync(result);
