@@ -73,9 +73,18 @@ const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
 
   const handleOnSubmit = (event: React.SyntheticEvent): void => {
     event.preventDefault();
-    const category = categories.find(
-      c => c.id === values.category,
-    ) as TransactionCategory;
+    const category = categories.find(c => c.id === values.category);
+
+    if (!category) {
+      setSnackbarMessage('Please select a category.');
+      return;
+    }
+
+    if (values.accountId <= 0) {
+      setSnackbarMessage('Please select an account.');
+      return;
+    }
+
     const transaction: Transaction = {
       accountId: values.accountId,
       amount: values.amount,
@@ -86,28 +95,33 @@ const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
       type: values.type,
     };
     const pushTransaction = async (): Promise<void> => {
-      const data = await requestWithToken<Transaction[]>(
-        `/api/users/transactions?accountId=${values.accountId}`,
-        {
-          method: 'post',
-          headers: {
-            'Content-Type': 'application/json',
+      try {
+        const data = await requestWithToken<Transaction[]>(
+          `/api/users/transactions?accountId=${values.accountId}`,
+          {
+            method: 'post',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              transactions: [transaction],
+              accountId: transaction.accountId,
+            }),
           },
-          body: JSON.stringify({
-            transactions: [transaction],
-            accountId: transaction.accountId,
-          }),
-        },
-      );
-      setSnackbarMessage('Transaction successfully created.');
-      onClose();
-      formState.reset();
-      data.forEach(d => {
-        addTransaction({
-          ...d,
-          date: new Date(d.date),
+        );
+        setSnackbarMessage('Transaction successfully created.');
+        onClose();
+        formState.reset();
+        data.forEach(d => {
+          addTransaction({
+            ...d,
+            date: new Date(d.date),
+          });
         });
-      });
+      } catch (error) {
+        const errorResponse = await error.response.json();
+        setSnackbarMessage(errorResponse.message);
+      }
     };
     pushTransaction();
   };
@@ -144,7 +158,6 @@ const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
                 {...select({
                   name: 'type',
                   onChange: event => event.target.value,
-                  validate: () => true,
                 })}
               >
                 <MenuItem value={TransactionType.Expense}>Expense</MenuItem>
@@ -190,7 +203,6 @@ const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
               {...raw({
                 name: 'date',
                 onChange: date => date && date.toDate(),
-                validate: () => true,
               })}
             />
             <FormControl classes={{ root: classes.fieldRoot }}>
