@@ -133,4 +133,103 @@ describe('Transactions', () => {
       );
     });
   });
+
+  it('should toast warning message when there is no category', () => {
+    const transaction = {
+      description: 'Load',
+      date: '11/22/2019',
+      category: {
+        name: 'Charges',
+      },
+      amount: 200,
+      type: 0,
+    };
+    cy.route('post', '/api/users/transactions?accountId=*', [transaction]);
+    cy.findByTestId('add-transaction').click();
+    cy.findByText('Save').click();
+    cy.findByText('Please select a category.').should('be.visible');
+  });
+
+  it('should toast warning message when there is no account', () => {
+    const transaction = {
+      description: 'Load',
+      date: '11/22/2019',
+      category: {
+        name: 'Charges',
+      },
+      amount: 200,
+      type: 0,
+    };
+    cy.route('post', '/api/users/transactions?accountId=*', [transaction]);
+    cy.findByTestId('add-transaction').click();
+    cy.findByTestId('select-category').click();
+    cy.findAllByRole('option')
+      .contains(transaction.category.name)
+      .click();
+    cy.findByText('Save').click();
+    cy.findByText('Please select an account.').should('be.visible');
+  });
+
+  it('should able to handle error provided by API', () => {
+    const transaction = {
+      description: 'Load',
+      date: '11/22/2019',
+      category: {
+        name: 'Charges',
+      },
+      amount: 200,
+      type: 0,
+    };
+    cy.route({
+      method: 'POST',
+      url: '/api/users/transactions?accountId=*',
+      status: 400,
+      response: { message: 'Error message from API' },
+    });
+    cy.findByTestId('add-transaction').click();
+    cy.findByTestId('select-category').click();
+    cy.findAllByRole('option')
+      .contains(transaction.category.name)
+      .click();
+    cy.findByPlaceholderText('Amount')
+      .clear()
+      .type(transaction.amount.toString());
+    cy.findByPlaceholderText('Description').type(transaction.description);
+    cy.findByPlaceholderText('Date').type(transaction.date);
+    cy.findByTestId('select-account').click();
+    cy.findByText('Bank Developer Option').click();
+    cy.findByText('Save').click();
+    cy.findByText('Error message from API').should('be.visible');
+  });
+
+  it('should reset form when Add transaction is closed', () => {
+    const transaction = {
+      description: 'Load',
+      date: '11/22/2019',
+      category: {
+        name: 'Charges',
+      },
+      amount: 200,
+      type: 0,
+    };
+    cy.route({
+      method: 'POST',
+      url: '/api/users/transactions?accountId=*',
+      status: 400,
+      response: { message: 'Error message from API' },
+    });
+    cy.findByTestId('add-transaction').click();
+    cy.findByTestId('select-category').click();
+    cy.findAllByRole('option')
+      .contains(transaction.category.name)
+      .click();
+    cy.findByPlaceholderText('Amount')
+      .clear()
+      .type(transaction.amount.toString());
+    cy.findByPlaceholderText('Description').type(transaction.description);
+    cy.findByPlaceholderText('Date').type(transaction.date);
+    cy.findByTestId('select-account').click();
+    cy.findByText('Bank Developer Option').click();
+    cy.findByText('Cancel').click();
+  });
 });

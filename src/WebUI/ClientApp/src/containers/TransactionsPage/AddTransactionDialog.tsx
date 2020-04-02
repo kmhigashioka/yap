@@ -158,6 +158,7 @@ const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
                 {...select({
                   name: 'type',
                   onChange: event => event.target.value,
+                  validate: () => true,
                 })}
               >
                 <MenuItem value={TransactionType.Expense}>Expense</MenuItem>
