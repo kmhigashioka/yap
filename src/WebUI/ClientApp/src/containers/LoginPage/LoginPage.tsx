@@ -57,7 +57,7 @@ const LoginPage: React.FC<RouteComponentProps> = ({
     if (successfullyLoggedIn) {
       history.push('/');
     }
-  }, [successfullyLoggedIn]);
+  }, [history, successfullyLoggedIn]);
 
   const handleSubmit = (event: React.SyntheticEvent): void => {
     event.preventDefault();
