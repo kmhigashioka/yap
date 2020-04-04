@@ -32,29 +32,33 @@ const HomePage = (): React.ReactElement => {
   const [, setError] = React.useState();
   const { requestWithToken } = useFetch();
 
-  React.useEffect(() => {
-    const fetchAccounts = async (): Promise<void> => {
-      try {
-        setAccounts(await requestWithToken<Account[]>('/api/users/accounts'));
-      } catch (err) {
-        setError(err);
-      }
-    };
-    fetchAccounts();
+  const fetchAccounts = React.useCallback(async (): Promise<void> => {
+    try {
+      setAccounts(await requestWithToken<Account[]>('/api/users/accounts'));
+    } catch (err) {
+      setError(err);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   React.useEffect(() => {
-    const fetchCurrentUser = async (): Promise<void> => {
-      setFetchingUser(true);
-      try {
-        setCurrentUser(await requestWithToken<User>('/api/users/me'));
-      } catch (err) {
-        setError(err);
-      }
-      setFetchingUser(false);
-    };
-    fetchCurrentUser();
+    fetchAccounts();
+  }, [fetchAccounts]);
+
+  const fetchCurrentUser = React.useCallback(async (): Promise<void> => {
+    setFetchingUser(true);
+    try {
+      setCurrentUser(await requestWithToken<User>('/api/users/me'));
+    } catch (err) {
+      setError(err);
+    }
+    setFetchingUser(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  React.useEffect(() => {
+    fetchCurrentUser();
+  }, [fetchCurrentUser]);
 
   if (fetchingUser) {
     return <div>Fetching user...</div>;

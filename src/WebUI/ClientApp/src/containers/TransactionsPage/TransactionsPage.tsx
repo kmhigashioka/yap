@@ -40,6 +40,7 @@ const TransactionsPage: React.FC = (): React.ReactElement => {
         })),
       );
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
 
