@@ -91,8 +91,8 @@ describe('Transactions', () => {
     cy.findByTestId('transaction-row-id-1').click();
     cy.findByTestId('delete-transaction').click();
     cy.findByText('Yes').click();
-    cy.queryByTestId('transaction-row-id-1').should('not.be.visible');
     cy.findByText('Transaction successfully deleted.').should('be.visible');
+    cy.queryByTestId('transaction-row-id-1').should('not.be.visible');
   });
 
   it('should edit first transaction', () => {
