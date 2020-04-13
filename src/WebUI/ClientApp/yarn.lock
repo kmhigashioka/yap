@@ -1279,7 +1279,7 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
-"@babel/runtime@^7.0.0", "@babel/runtime@^7.1.2", "@babel/runtime@^7.3.1", "@babel/runtime@^7.3.4", "@babel/runtime@^7.4.0", "@babel/runtime@^7.4.4", "@babel/runtime@^7.4.5", "@babel/runtime@^7.5.5", "@babel/runtime@^7.6.0", "@babel/runtime@^7.6.2", "@babel/runtime@^7.6.3", "@babel/runtime@^7.7.2", "@babel/runtime@^7.7.4", "@babel/runtime@^7.8.4":
+"@babel/runtime@^7.0.0", "@babel/runtime@^7.1.2", "@babel/runtime@^7.3.1", "@babel/runtime@^7.3.4", "@babel/runtime@^7.4.0", "@babel/runtime@^7.4.4", "@babel/runtime@^7.4.5", "@babel/runtime@^7.5.5", "@babel/runtime@^7.6.0", "@babel/runtime@^7.6.2", "@babel/runtime@^7.6.3", "@babel/runtime@^7.7.2", "@babel/runtime@^7.7.4", "@babel/runtime@^7.8.4", "@babel/runtime@^7.8.7", "@babel/runtime@^7.9.2":
   version "7.9.2"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.9.2.tgz#d90df0583a3a252f09aaa619665367bae518db06"
   integrity sha512-NE2DtOdufG7R5vnfQUTehdTfNycfUANEtCa9PssN9O/xmTzP4E08UI797ixaei6hBEVL9BI/PsdJS5x7mWoB9Q==
@@ -1852,11 +1852,6 @@
   dependencies:
     any-observable "^0.3.0"
 
-"@sheerun/mutationobserver-shim@^0.3.2":
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/@sheerun/mutationobserver-shim/-/mutationobserver-shim-0.3.2.tgz#8013f2af54a2b7d735f71560ff360d3a8176a87b"
-  integrity sha512-vTCdPp/T/Q3oSqwHmZ5Kpa9oI7iLtGl3RQaA/NyLHikvcrPxACkkKVr/XzkSPJWXHRhKGzVvb0urJsbMlRxi1Q==
-
 "@sindresorhus/is@^0.14.0":
   version "0.14.0"
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.14.0.tgz#9fb3a3cf3132328151f353de4632e01e52102bea"
@@ -1972,27 +1967,25 @@
   dependencies:
     defer-to-connect "^1.0.1"
 
-"@testing-library/cypress@5.3.0":
-  version "5.3.0"
-  resolved "https://registry.yarnpkg.com/@testing-library/cypress/-/cypress-5.3.0.tgz#1bbfcbf8a391d31693998c439408b1456c5c24df"
-  integrity sha512-OLUHMHFS1HRE7xBeOnqZLd+qtFmGLphnSx8ryX9YafBrYzs4e/DfnpR0dy9D5zx7Je4FnkoWBQKHiWxG1T/UKw==
+"@testing-library/cypress@6.0.0":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@testing-library/cypress/-/cypress-6.0.0.tgz#935f7716e0e495f02fd753a42621e4d350097dce"
+  integrity sha512-vWPQtPsIDk5STOH2XdJbJoYq9gxOSAItP0ail+MlylK230zNkf3ODKd6eqWnDdruuqrhTF3CyqvPNMA8Xks/UQ==
   dependencies:
-    "@babel/runtime" "^7.8.4"
-    "@testing-library/dom" "^6.12.2"
-    "@types/testing-library__cypress" "^5.0.2"
+    "@babel/runtime" "^7.8.7"
+    "@testing-library/dom" "^7.0.2"
+    "@types/testing-library__cypress" "^5.0.3"
 
-"@testing-library/dom@^6.12.2":
-  version "6.16.0"
-  resolved "https://registry.yarnpkg.com/@testing-library/dom/-/dom-6.16.0.tgz#04ada27ed74ad4c0f0d984a1245bb29b1fd90ba9"
-  integrity sha512-lBD88ssxqEfz0wFL6MeUyyWZfV/2cjEZZV3YRpb2IoJRej/4f1jB0TzqIOznTpfR1r34CNesrubxwIlAQ8zgPA==
+"@testing-library/dom@^7.0.2":
+  version "7.2.1"
+  resolved "https://registry.yarnpkg.com/@testing-library/dom/-/dom-7.2.1.tgz#bb3b31d669bbe0c4939dadd95d69caa3c1d0b372"
+  integrity sha512-xIGoHlQ2ZiEL1dJIFKNmLDypzYF+4OJTTASRctl/aoIDaS5y/pRVHRigoqvPUV11mdJoR71IIgi/6UviMgyz4g==
   dependencies:
-    "@babel/runtime" "^7.8.4"
-    "@sheerun/mutationobserver-shim" "^0.3.2"
-    "@types/testing-library__dom" "^6.12.1"
+    "@babel/runtime" "^7.9.2"
+    "@types/testing-library__dom" "^7.0.0"
     aria-query "^4.0.2"
-    dom-accessibility-api "^0.3.0"
+    dom-accessibility-api "^0.4.2"
     pretty-format "^25.1.0"
-    wait-for-expect "^3.0.2"
 
 "@types/babel__core@^7.1.0":
   version "7.1.6"
@@ -2274,7 +2267,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/testing-library__cypress@5.0.5", "@types/testing-library__cypress@^5.0.2":
+"@types/testing-library__cypress@5.0.5", "@types/testing-library__cypress@^5.0.3":
   version "5.0.5"
   resolved "https://registry.yarnpkg.com/@types/testing-library__cypress/-/testing-library__cypress-5.0.5.tgz#ca2a23eb03c48ecb50f411b3d5e62a218ac6b03b"
   integrity sha512-FXRE98G+jkru7Dag6dFWs3M90BGMzDEBzox8Uro+7M70UcB1YVUetNVRyqYShFDLIDv+z3ZjV4ZeUmdgPuuyNw==
@@ -2282,12 +2275,19 @@
     "@types/testing-library__dom" "*"
     cypress "*"
 
-"@types/testing-library__dom@*", "@types/testing-library__dom@^6.12.1":
+"@types/testing-library__dom@*":
   version "6.14.0"
   resolved "https://registry.yarnpkg.com/@types/testing-library__dom/-/testing-library__dom-6.14.0.tgz#1aede831cb4ed4a398448df5a2c54b54a365644e"
   integrity sha512-sMl7OSv0AvMOqn1UJ6j1unPMIHRXen0Ita1ujnMX912rrOcawe4f7wu0Zt9GIQhBhJvH2BaibqFgQ3lP+Pj2hA==
   dependencies:
     pretty-format "^24.3.0"
+
+"@types/testing-library__dom@^7.0.0":
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/@types/testing-library__dom/-/testing-library__dom-7.0.1.tgz#426bef0aa306a603fe071859d4b485941b28aca6"
+  integrity sha512-WokGRksRJb3Dla6h02/0/NNHTkjsj4S8aJZiwMj/5/UL8VZ1iCe3H8SHzfpmBeH8Vp4SPRT8iC2o9kYULFhDIw==
+  dependencies:
+    pretty-format "^25.1.0"
 
 "@types/through@*":
   version "0.0.30"
@@ -5038,10 +5038,10 @@ doctrine@^3.0.0:
   dependencies:
     esutils "^2.0.2"
 
-dom-accessibility-api@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/dom-accessibility-api/-/dom-accessibility-api-0.3.0.tgz#511e5993dd673b97c87ea47dba0e3892f7e0c983"
-  integrity sha512-PzwHEmsRP3IGY4gv/Ug+rMeaTIyTJvadCb+ujYXYeIylbHJezIyNToe8KfEgHTCEYyC+/bUghYOGg8yMGlZ6vA==
+dom-accessibility-api@^0.4.2:
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/dom-accessibility-api/-/dom-accessibility-api-0.4.3.tgz#93ca9002eb222fd5a343b6e5e6b9cf5929411c4c"
+  integrity sha512-JZ8iPuEHDQzq6q0k7PKMGbrIdsgBB7TRrtVOUm4nSMCExlg5qQG4KXWTH2k90yggjM4tTumRGwTKJSldMzKyLA==
 
 dom-converter@^0.2:
   version "0.2.0"
@@ -13735,11 +13735,6 @@ w3c-xmlserializer@^1.1.2:
     domexception "^1.0.1"
     webidl-conversions "^4.0.2"
     xml-name-validator "^3.0.0"
-
-wait-for-expect@^3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/wait-for-expect/-/wait-for-expect-3.0.2.tgz#d2f14b2f7b778c9b82144109c8fa89ceaadaa463"
-  integrity sha512-cfS1+DZxuav1aBYbaO/kE06EOS8yRw7qOFoD3XtjTkYvCvh3zUvNST8DXK/nPaeqIzIv3P3kL3lRJn8iwOiSag==
 
 wait-on@4.0.0:
   version "4.0.0"
