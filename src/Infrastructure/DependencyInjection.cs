@@ -41,7 +41,7 @@ namespace Infrastructure
                 })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-            services.AddIdentityServer()
+            services.AddIdentityServer(x => x.IssuerUri = identityServerAuthority)
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddInMemoryClients(Config.GetClients())
                 .AddInMemoryApiResources(Config.GetApiResources())
