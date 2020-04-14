@@ -1,0 +1,36 @@
+on:
+  pull_request:
+    paths:
+      - '!src/WebUI/ClientApp/**'
+    branches:
+      - '*'
+  push:
+    paths:
+      - '!src/WebUI/ClientApp/**'
+    branches:
+      - '*'
+      #- 'master'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    env:
+      working-directory: ./src/WebUI
+
+    strategy:
+      matrix:
+        dotnet: ['3.1.100']
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Dotnet ${{ matrix.dotnet }}
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: ${{ matrix.dotnet }}
+    - name: Dotnet Build
+      working-directory: ${{env.working-directory}}
+      run: dotnet build
+    - name: Dotnet Publish
+      working-directory: ${{env.working-directory}}
+      run: dotnet publish -c Release -o out
