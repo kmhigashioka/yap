@@ -10,8 +10,8 @@
     "moment": "2.24.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
-    "react-helmet-async": "1.0.4",
-    "react-intl": "4.3.1",
+    "react-helmet-async": "1.0.5",
+    "react-intl": "4.4.0",
     "react-router-dom": "5.1.2",
     "react-scripts": "3.4.1",
     "react-use-form-state": "0.12.1"
@@ -46,7 +46,7 @@
     "@types/react-dom": "16.9.6",
     "@types/react-router-dom": "5.1.4",
     "@types/testing-library__cypress": "5.0.5",
-    "@typescript-eslint/parser": "2.27.0",
+    "@typescript-eslint/parser": "2.28.0",
     "cypress": "4.4.0",
     "eslint": "6.8.0",
     "eslint-config-airbnb": "18.1.0",
@@ -61,7 +61,7 @@
     "nyc": "15.0.1",
     "plop": "2.6.0",
     "prettier": "1.18.2",
-    "start-server-and-test": "1.10.11",
+    "start-server-and-test": "1.11.0",
     "typescript": "3.8.3"
   },
   "nyc": {
