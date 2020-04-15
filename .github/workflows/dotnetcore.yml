@@ -8,8 +8,7 @@ on:
     paths:
       - '!src/WebUI/ClientApp/**'
     branches:
-      - '*'
-      #- 'master'
+      - 'master'
 
 jobs:
   build:
