@@ -1,12 +1,12 @@
 on:
   pull_request:
     paths:
-      - './src/WebUI/ClientApp/**'
+      - 'src/WebUI/ClientApp/**'
     branches:
       - '*'
   push:
     paths:
-      - './src/WebUI/ClientApp/**'
+      - 'src/WebUI/ClientApp/**'
     branches:
       - master
 
