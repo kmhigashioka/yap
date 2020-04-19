@@ -6,7 +6,11 @@ export default function request<T>(
   url: string,
   options?: any | undefined,
 ): Promise<T> {
-  return fetch(url, options)
+  const requestUrl =
+    url.indexOf('http') === 0
+      ? url
+      : `${process.env.REACT_APP_API_URL || ''}${url}`;
+  return fetch(requestUrl, options)
     .then(checkStatus)
     .then(parseJSON);
 }
