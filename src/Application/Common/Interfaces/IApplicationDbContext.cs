@@ -10,7 +10,6 @@ namespace Application.Common.Interfaces
         DbSet<Transaction> Transactions { get; set; }
         DbSet<TransactionCategory> TransactionCategories { get; set; }
         DbSet<ApplicationUser> Users { get; set; }
-        DbSet<Todo> Todos { get; set; }
         int SaveChanges();
         DatabaseFacade Database { get; }
     }
