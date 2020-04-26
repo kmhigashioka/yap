@@ -126,20 +126,24 @@ const TransactionForm: React.FC<TransactionsPageState> = ({
       ...formState.values,
     };
     const updateTransaction = async (): Promise<void> => {
-      await request(
-        `${process.env.REACT_APP_API_URL}/api/transactions/${editedTransaction.id}`,
-        {
+      try {
+        await requestWithToken('/api/users/transactions', {
           headers: {
             'Content-Type': 'application/json',
           },
           method: 'put',
-          body: JSON.stringify(editedTransaction),
-        },
-      );
-      editTransaction(selectedTransaction.id, editedTransaction);
-      setSnackbarMessage('Transaction successfully updated.');
-      setIsEditing(false);
-      setSelectedTransaction(editedTransaction);
+          body: JSON.stringify({
+            transactions: [editedTransaction],
+          }),
+        });
+        editTransaction(selectedTransaction.id, editedTransaction);
+        setSnackbarMessage('Transaction successfully updated.');
+        setIsEditing(false);
+        setSelectedTransaction(editedTransaction);
+      } catch (error) {
+        const errorResponse = await error.response.json();
+        setSnackbarMessage(errorResponse.message);
+      }
     };
     updateTransaction();
   };
