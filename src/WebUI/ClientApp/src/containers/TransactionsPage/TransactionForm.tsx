@@ -18,7 +18,6 @@ import { TransactionsPageState } from './types';
 import DeleteTransactionDialog from './DeleteTransactionDialog';
 import { TransactionType } from '../HomePage/types';
 import { useTransactionsPageContext } from './TransactionsPageContext';
-import request from '../../utils/request';
 import useFetch from '../../utils/useFetch';
 
 const useStyles = makeStyles(theme => ({
