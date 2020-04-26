@@ -3,7 +3,7 @@ on:
     paths:
       - 'src/WebUI/ClientApp/**'
     branches:
-      - '*'
+      - '**'
   push:
     paths:
       - 'src/WebUI/ClientApp/**'
