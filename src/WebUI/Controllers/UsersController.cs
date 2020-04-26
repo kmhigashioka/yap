@@ -90,5 +90,16 @@ namespace WebUI.Controllers
             await Mediator.Send(request);
             return NoContent();
         }
+
+        [Authorize]
+        [HttpPut("transactions")]
+        [ProducesResponseType(typeof(List<TransactionDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> PutTransactions([FromBody] UpdateUserTransactionCommand request)
+        {
+            request.UserId = _currentUserService.UserId;
+            var response = await Mediator.Send(request);
+            return Ok(response);
+        }
     }
 }
