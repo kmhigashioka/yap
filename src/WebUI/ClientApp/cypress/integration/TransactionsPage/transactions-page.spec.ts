@@ -96,7 +96,7 @@ describe('Transactions', () => {
   });
 
   it('should edit first transaction', () => {
-    cy.route('put', '/api/transactions/1', {});
+    cy.route('put', '/api/users/transactions', {});
     const newTransaction = {
       type: 'Expense',
       amount: '5000',
