@@ -57,7 +57,7 @@
     "eslint-plugin-react": "7.19.0",
     "istanbul-lib-coverage": "3.0.0",
     "nyc": "15.0.1",
-    "plop": "2.6.0",
+    "plop": "2.7.1",
     "prettier": "1.18.2",
     "start-server-and-test": "1.11.0",
     "typescript": "3.8.3"
