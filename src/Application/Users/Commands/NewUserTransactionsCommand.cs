@@ -6,6 +6,7 @@ using Application.Common.Dtos;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
+using Domain.Enums;
 using MediatR;
 using Omu.ValueInjecter;
 
@@ -43,6 +44,14 @@ namespace Application.Users.Commands
                 var transaction = Mapper.Map<Transaction>(t);
                 transaction.Category = categories.First(c => c.Id == t.Category.Id);
                 transaction.Account = account;
+                if (transaction.Type == TransactionType.Income)
+                {
+                    account.Balance += t.Amount;
+                }
+                else
+                {
+                    account.Balance -= t.Amount;
+                }
                 return transaction;
             }).ToList();
 

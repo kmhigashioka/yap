@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Dtos;
 using Application.Common.Interfaces;
+using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Omu.ValueInjecter;
@@ -41,7 +42,15 @@ namespace Application.Users.Commands
                 {
                     return;
                 }
-
+                if (transaction.Type == TransactionType.Expense) {
+                    transaction.Account.Balance += transaction.Amount;
+                    transaction.Account.Balance -= rt.Amount;
+                }
+                else
+                {
+                    transaction.Account.Balance -= transaction.Amount;
+                    transaction.Account.Balance += rt.Amount;
+                }
                 transaction.InjectFrom(rt);
             });
 
