@@ -1,5 +1,6 @@
 import { DialogProps } from '@material-ui/core/Dialog';
-import { Transaction } from '../HomePage/types';
+import { TransactionCategory } from '../CategoryPage/types';
+import { Account, Transaction, TransactionType } from '../HomePage/types';
 
 export type TTransactionPageContext = {
   transactions: Transaction[];
@@ -24,4 +25,14 @@ export interface TransactionsPageState {
 export interface AddTransactionDialogProps extends DialogProps {
   onClose: () => void;
   setSnackbarMessage: (message: string) => void;
+}
+
+export interface UpdateUserTransactionCommandVm {
+  category: TransactionCategory;
+  amount: number;
+  description: string;
+  date: Date;
+  id: number;
+  account: Account;
+  type: TransactionType;
 }
