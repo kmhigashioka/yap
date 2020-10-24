@@ -19,7 +19,7 @@ const DashboardAccountList = (): React.ReactElement => {
 
   return (
     <ul className={classes.container}>
-      {accounts.map(account => (
+      {accounts.map((account) => (
         <DashboardAccountItem key={account.id} account={account} />
       ))}
     </ul>

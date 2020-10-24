@@ -14,7 +14,7 @@ import Welcome from './Welcome';
 import request, { TokenResponse } from '../../utils/request';
 import auth from '../../utils/auth';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   loginWrapper: {
     display: 'flex',
     height: '100%',
@@ -70,7 +70,7 @@ const LoginPage: React.FC<RouteComponentProps> = ({
       method: 'post',
       body,
     })
-      .then(data => {
+      .then((data) => {
         setSuccessfullyLoggedIn(true);
         auth.accessToken = data.access_token;
         localStorage.setItem('refresh_token', data.refresh_token);

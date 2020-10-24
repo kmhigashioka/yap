@@ -34,7 +34,7 @@ const TransactionsPage: React.FC = (): React.ReactElement => {
         `/api/users/transactions?accountId=${accountId}`,
       );
       setTransactions(
-        data.map(d => ({
+        data.map((d) => ({
           ...d,
           date: new Date(d.date),
         })),
@@ -54,7 +54,7 @@ const TransactionsPage: React.FC = (): React.ReactElement => {
 
   const deleteTransaction = (transactionId: number): void => {
     setTransactions(
-      transactions.filter(transaction => transaction.id !== transactionId),
+      transactions.filter((transaction) => transaction.id !== transactionId),
     );
   };
 
@@ -63,7 +63,7 @@ const TransactionsPage: React.FC = (): React.ReactElement => {
     newTransaction: Transaction,
   ): void => {
     setTransactions(
-      transactions.map(transaction => {
+      transactions.map((transaction) => {
         if (transaction.id === transactionId) {
           return {
             ...transaction,

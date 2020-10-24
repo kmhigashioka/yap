@@ -26,7 +26,7 @@ const CategoryPage = (): React.ReactElement => {
 
   React.useEffect(() => {
     const newQueriedCategories = categories.filter(
-      category => category.name.toLowerCase().indexOf(searchQuery) > -1,
+      (category) => category.name.toLowerCase().indexOf(searchQuery) > -1,
     );
     setQueriedCategories(newQueriedCategories);
   }, [searchQuery, categories]);

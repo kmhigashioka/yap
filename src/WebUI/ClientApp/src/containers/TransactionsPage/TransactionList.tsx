@@ -16,7 +16,7 @@ import { useTransactionsPageContext } from './TransactionsPageContext';
 import AddTransactionDialog from './AddTransactionDialog';
 import { TransactionType } from '../HomePage/types';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   bannerContainer: {
     backgroundColor: theme.palette.grey[200],
     boxSizing: 'border-box',
@@ -107,7 +107,7 @@ const TransactionList: React.FC<TransactionsPageState> = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          {transactions.map(transaction => (
+          {transactions.map((transaction) => (
             <TableRow
               key={transaction.id}
               hover
