@@ -21,7 +21,7 @@ import { useTransactionsPageContext } from './TransactionsPageContext';
 import useFetch from '../../utils/useFetch';
 import { useHomePageContext } from '../HomePage/HomePageContext';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   transactionViewerContainer: {
     borderLeft: `1px solid ${theme.palette.grey[500]}`,
     width: '320px',
@@ -145,7 +145,7 @@ const TransactionForm: React.FC<TransactionsPageState> = ({
         setSnackbarMessage('Transaction successfully updated.');
         setIsEditing(false);
         setSelectedTransaction(editedTransaction);
-        data.forEach(d => {
+        data.forEach((d) => {
           updateAccountBalance(d.account.id, d.account.balance);
         });
       } catch (error) {
@@ -211,7 +211,7 @@ const TransactionForm: React.FC<TransactionsPageState> = ({
                   value={formState.values.type}
                   {...select({
                     name: 'type',
-                    onChange: event => event.target.value,
+                    onChange: (event) => event.target.value,
                     validate: () => true,
                   })}
                 >
@@ -250,7 +250,7 @@ const TransactionForm: React.FC<TransactionsPageState> = ({
                 autoOk
                 {...raw({
                   name: 'date',
-                  onChange: date => date && date.toDate(),
+                  onChange: (date) => date && date.toDate(),
                   validate: () => true,
                 })}
               />

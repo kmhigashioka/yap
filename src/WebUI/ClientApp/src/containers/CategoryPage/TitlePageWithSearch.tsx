@@ -3,7 +3,7 @@ import { makeStyles, Typography, TextField } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { TitlePageWithSearchProps } from './types';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   bannerContainer: {
     backgroundColor: theme.palette.grey[200],
     boxSizing: 'border-box',

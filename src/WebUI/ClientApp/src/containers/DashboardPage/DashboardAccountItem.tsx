@@ -3,7 +3,7 @@ import { makeStyles, Typography } from '@material-ui/core';
 import { FormattedNumber } from 'react-intl';
 import { DashboardAccountItemProps } from './types';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   container: {
     borderRadius: '4px',
     border: `1px solid ${theme.palette.secondary.light}`,

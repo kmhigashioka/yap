@@ -10,9 +10,7 @@ export default function request<T>(
     url.indexOf('http') === 0
       ? url
       : `${process.env.REACT_APP_API_URL || ''}${url}`;
-  return fetch(requestUrl, options)
-    .then(checkStatus)
-    .then(parseJSON);
+  return fetch(requestUrl, options).then(checkStatus).then(parseJSON);
 }
 
 function checkStatus(response: Response): Response {

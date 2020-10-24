@@ -14,7 +14,7 @@ import Welcome from '../LoginPage/Welcome';
 import request, { TokenResponse } from '../../utils/request';
 import auth from '../../utils/auth';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   loginWrapper: {
     display: 'flex',
     height: '100%',

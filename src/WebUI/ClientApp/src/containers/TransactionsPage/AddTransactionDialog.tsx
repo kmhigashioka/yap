@@ -77,7 +77,7 @@ const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
 
   const handleOnSubmit = (event: React.SyntheticEvent): void => {
     event.preventDefault();
-    const category = categories.find(c => c.id === values.category);
+    const category = categories.find((c) => c.id === values.category);
 
     if (!category) {
       setSnackbarMessage('Please select a category.');
@@ -116,7 +116,7 @@ const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
         setSnackbarMessage('Transaction successfully created.');
         onClose();
         formState.reset();
-        data.transactions.forEach(d => {
+        data.transactions.forEach((d) => {
           addTransaction({
             ...d,
             date: new Date(d.date),
@@ -162,7 +162,7 @@ const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
                 value={values.type}
                 {...select({
                   name: 'type',
-                  onChange: event => event.target.value,
+                  onChange: (event) => event.target.value,
                   validate: () => true,
                 })}
               >
@@ -178,7 +178,7 @@ const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
                 data-testid="select-category"
                 value={values.category}
               >
-                {categories.map(category => (
+                {categories.map((category) => (
                   <MenuItem key={category.name} value={category.id}>
                     {category.name}
                   </MenuItem>
@@ -208,7 +208,7 @@ const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
               autoOk
               {...raw({
                 name: 'date',
-                onChange: date => date && date.toDate(),
+                onChange: (date) => date && date.toDate(),
               })}
             />
             <FormControl classes={{ root: classes.fieldRoot }}>
@@ -219,7 +219,7 @@ const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
                 onChange={handleChangeAccount}
                 data-testid="select-account"
               >
-                {accounts.map(account => (
+                {accounts.map((account) => (
                   <MenuItem key={account.id} value={account.id}>
                     {account.name}
                   </MenuItem>

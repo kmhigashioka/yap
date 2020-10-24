@@ -13,7 +13,7 @@ const useHomePageState = (): UseHomePageState => {
   };
 
   const updateAccountBalance = (id: number, balance: number): void => {
-    const newAccounts = accounts.map(a => {
+    const newAccounts = accounts.map((a) => {
       const newAccount = { ...a };
       if (newAccount.id === id) {
         newAccount.balance = balance;
@@ -29,7 +29,7 @@ const useHomePageState = (): UseHomePageState => {
       return;
     }
     const newAccount = accounts.find(
-      account => account.id === activeAccount.id,
+      (account) => account.id === activeAccount.id,
     );
     if (!newAccount) {
       return;
