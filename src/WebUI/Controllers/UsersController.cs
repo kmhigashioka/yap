@@ -78,7 +78,7 @@ namespace WebUI.Controllers
 
         [Authorize]
         [HttpDelete("transactions/{transactionId}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> DeleteTransaction(int transactionId)
         {
@@ -87,8 +87,8 @@ namespace WebUI.Controllers
                 TransactionId = transactionId,
                 UserId = _currentUserService.UserId
             };
-            await Mediator.Send(request);
-            return NoContent();
+            var response = await Mediator.Send(request);
+            return Ok(response);
         }
 
         [Authorize]
