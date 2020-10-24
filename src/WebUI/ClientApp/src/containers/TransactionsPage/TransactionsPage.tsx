@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { makeStyles, Snackbar } from '@material-ui/core';
 import TransactionsPageContext from './TransactionsPageContext';
 import { Transaction, Account } from '../HomePage/types';
-import TransactionForm from './TransactionForm';
+import TransactionForm, { TransactionFormPlaceholder } from './TransactionForm';
 import TransactionList from './TransactionList';
 import { useHomePageContext } from '../HomePage/HomePageContext';
 import useFetch from '../../utils/useFetch';
@@ -99,11 +99,15 @@ const TransactionsPage: React.FC = (): React.ReactElement => {
           setSelectedTransaction={setSelectedTransaction}
           setSnackbarMessage={setSnackbarMessage}
         />
-        <TransactionForm
-          selectedTransaction={selectedTransaction}
-          setSelectedTransaction={setSelectedTransaction}
-          setSnackbarMessage={setSnackbarMessage}
-        />
+        {selectedTransaction === null ? (
+          <TransactionFormPlaceholder />
+        ) : (
+          <TransactionForm
+            selectedTransaction={selectedTransaction}
+            setSelectedTransaction={setSelectedTransaction}
+            setSnackbarMessage={setSnackbarMessage}
+          />
+        )}
       </div>
       <Snackbar
         autoHideDuration={6000}
