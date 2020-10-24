@@ -95,10 +95,22 @@ describe('Transactions', () => {
     cy.findByTestId('transaction-row-id-1').should('not.be.visible');
   });
 
+  it('should dismiss delete dialog when No/Cancel is pressed', () => {
+    cy.route('delete', '/api/users/transactions/1', {});
+    cy.findByTestId('transaction-row-id-1').click();
+    cy.findByTestId('delete-transaction').click();
+    cy.findByText('No').click();
+    cy.findByText('Are you sure you want to delete this transaction?').should(
+      'not.be.visible',
+    );
+  });
+
   it('should edit first transaction', () => {
-    cy.route('put', '/api/users/transactions', {});
+    cy.route('put', '/api/users/transactions', [
+      { account: { id: 1, balance: -5000 } },
+    ]);
     const newTransaction = {
-      type: 'Expense',
+      type: 'Income',
       amount: '5000',
       description: 'New HD',
       date: '11/23/2019',
@@ -106,6 +118,8 @@ describe('Transactions', () => {
     };
     cy.findByTestId('transaction-row-id-1').click();
     cy.findByTestId('edit-transaction').click();
+    cy.findByTestId('select-transaction-type').click();
+    cy.findByText('Income').click();
     cy.findByPlaceholderText('Amount')
       .clear()
       .type(newTransaction.amount);
@@ -170,7 +184,7 @@ describe('Transactions', () => {
     cy.findByText('Please select an account.').should('be.visible');
   });
 
-  it('should able to handle error provided by API', () => {
+  it('should able to handle error provided by API when creating Transaction', () => {
     const transaction = {
       description: 'Load',
       date: '11/22/2019',
@@ -231,5 +245,72 @@ describe('Transactions', () => {
     cy.findByTestId('select-account').click();
     cy.findByText('Bank Developer Option').click();
     cy.findByText('Cancel').click();
+  });
+
+  it('should reset form when Edit transaction is cancelled', () => {
+    const newTransaction = {
+      type: 'Expense',
+      amount: '5000',
+      description: 'New HD',
+      date: '11/23/2019',
+      category: 'Charges',
+    };
+    cy.findByTestId('transaction-row-id-1').click();
+    cy.findByTestId('edit-transaction').click();
+    cy.findByPlaceholderText('Amount')
+      .clear()
+      .type(newTransaction.amount);
+    cy.findByPlaceholderText('Description').type(newTransaction.description);
+    cy.findByPlaceholderText('Date')
+      .clear()
+      .type(newTransaction.date);
+    cy.findByTestId('cancel-edit-transaction').click();
+
+    const oldTransaction = {
+      amount: 200,
+      id: 1,
+      category: {
+        name: 'Charges',
+      },
+      description: '',
+      date: '11/02/2019',
+      accountId: 1,
+      type: 0,
+    };
+    cy.findByPlaceholderText('Amount').should(
+      'have.value',
+      oldTransaction.amount,
+    );
+    cy.findByPlaceholderText('Description').should(
+      'have.value',
+      oldTransaction.description,
+    );
+    cy.findByPlaceholderText('Date').should('have.value', oldTransaction.date);
+  });
+
+  it('should able to handle error provided by API when deleting Transaction', () => {
+    cy.route({
+      method: 'DELETE',
+      url: '/api/users/transactions/1',
+      status: 400,
+      response: { message: 'Error message from API' },
+    });
+    cy.findByTestId('transaction-row-id-1').click();
+    cy.findByTestId('delete-transaction').click();
+    cy.findByText('Yes').click();
+    cy.findByText('Error message from API').should('be.visible');
+  });
+
+  it('should able to handle error provided by API when editing Transaction', () => {
+    cy.route({
+      method: 'PUT',
+      url: '/api/users/transactions',
+      status: 400,
+      response: { message: 'Error message from API' },
+    });
+    cy.findByTestId('transaction-row-id-1').click();
+    cy.findByTestId('edit-transaction').click();
+    cy.findByText('Save').click();
+    cy.findByText('Error message from API').should('be.visible');
   });
 });
