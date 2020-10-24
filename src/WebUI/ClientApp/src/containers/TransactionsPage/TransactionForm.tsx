@@ -16,9 +16,10 @@ import InputLabel from '@material-ui/core/InputLabel';
 
 import { TransactionsPageState } from './types';
 import DeleteTransactionDialog from './DeleteTransactionDialog';
-import { TransactionType } from '../HomePage/types';
+import { Account, TransactionType } from '../HomePage/types';
 import { useTransactionsPageContext } from './TransactionsPageContext';
 import useFetch from '../../utils/useFetch';
+import { useHomePageContext } from '../HomePage/HomePageContext';
 
 const useStyles = makeStyles(theme => ({
   transactionViewerContainer: {
@@ -55,6 +56,7 @@ const TransactionForm: React.FC<TransactionsPageState> = ({
   setSnackbarMessage,
 }): React.ReactElement => {
   const classes = useStyles();
+  const { updateAccountBalance } = useHomePageContext();
   const { deleteTransaction, editTransaction } = useTransactionsPageContext();
   const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
   const [isEditing, setIsEditing] = React.useState(false);
@@ -77,7 +79,7 @@ const TransactionForm: React.FC<TransactionsPageState> = ({
     }
     const requestDeleteTransaction = async (): Promise<void> => {
       try {
-        await requestWithToken(
+        const data = await requestWithToken<Account>(
           `/api/users/transactions/${selectedTransaction.id}`,
           {
             method: 'delete',
@@ -87,6 +89,7 @@ const TransactionForm: React.FC<TransactionsPageState> = ({
         setOpenDeleteDialog(false);
         setSelectedTransaction(null);
         setSnackbarMessage('Transaction successfully deleted.');
+        updateAccountBalance(data.id, data.balance);
       } catch (error) {
         const errorResponse = await error.response.json();
         setSnackbarMessage(errorResponse.message);
