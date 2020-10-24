@@ -12,7 +12,11 @@ import { makeStyles, FormControl, InputLabel } from '@material-ui/core';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import { AddTransactionDialogProps } from './types';
 import { useHomePageContext } from '../HomePage/HomePageContext';
-import { Transaction, TransactionType } from '../HomePage/types';
+import {
+  Transaction,
+  TransactionType,
+  NewUserTransactionCommandVm,
+} from '../HomePage/types';
 import { useTransactionsPageContext } from './TransactionsPageContext';
 import useFetch from '../../utils/useFetch';
 import { TransactionCategory } from '../CategoryPage/types';
@@ -44,7 +48,7 @@ const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
     type: TransactionType.Expense,
   });
   const classes = useStyles();
-  const { accounts } = useHomePageContext();
+  const { accounts, updateAccountBalance } = useHomePageContext();
   const { values } = formState;
   const [categories, setCategories] = React.useState<TransactionCategory[]>([]);
 
@@ -96,7 +100,7 @@ const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
     };
     const pushTransaction = async (): Promise<void> => {
       try {
-        const data = await requestWithToken<Transaction[]>(
+        const data = await requestWithToken<NewUserTransactionCommandVm>(
           `/api/users/transactions?accountId=${values.accountId}`,
           {
             method: 'post',
@@ -112,12 +116,13 @@ const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
         setSnackbarMessage('Transaction successfully created.');
         onClose();
         formState.reset();
-        data.forEach(d => {
+        data.transactions.forEach(d => {
           addTransaction({
             ...d,
             date: new Date(d.date),
           });
         });
+        updateAccountBalance(data.account.id, data.account.balance);
       } catch (error) {
         const errorResponse = await error.response.json();
         setSnackbarMessage(errorResponse.message);
