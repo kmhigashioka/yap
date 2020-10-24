@@ -14,7 +14,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 
-import { TransactionsPageState } from './types';
+import { TransactionsPageState, UpdateUserTransactionCommandVm } from './types';
 import DeleteTransactionDialog from './DeleteTransactionDialog';
 import { Account, TransactionType } from '../HomePage/types';
 import { useTransactionsPageContext } from './TransactionsPageContext';
@@ -129,19 +129,25 @@ const TransactionForm: React.FC<TransactionsPageState> = ({
     };
     const updateTransaction = async (): Promise<void> => {
       try {
-        await requestWithToken('/api/users/transactions', {
-          headers: {
-            'Content-Type': 'application/json',
+        const data = await requestWithToken<UpdateUserTransactionCommandVm[]>(
+          '/api/users/transactions',
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            method: 'put',
+            body: JSON.stringify({
+              transactions: [editedTransaction],
+            }),
           },
-          method: 'put',
-          body: JSON.stringify({
-            transactions: [editedTransaction],
-          }),
-        });
+        );
         editTransaction(selectedTransaction.id, editedTransaction);
         setSnackbarMessage('Transaction successfully updated.');
         setIsEditing(false);
         setSelectedTransaction(editedTransaction);
+        data.forEach(d => {
+          updateAccountBalance(d.account.id, d.account.balance);
+        });
       } catch (error) {
         const errorResponse = await error.response.json();
         setSnackbarMessage(errorResponse.message);

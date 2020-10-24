@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Dtos;
 using Application.Common.Interfaces;
+using Domain.Entities;
 using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -42,15 +43,7 @@ namespace Application.Users.Commands
                 {
                     return;
                 }
-                if (transaction.Type == TransactionType.Expense) {
-                    transaction.Account.Balance += transaction.Amount;
-                    transaction.Account.Balance -= rt.Amount;
-                }
-                else
-                {
-                    transaction.Account.Balance -= transaction.Amount;
-                    transaction.Account.Balance += rt.Amount;
-                }
+                ComputeNewBalance(transaction, rt);
                 transaction.InjectFrom(rt);
             });
 
@@ -61,9 +54,33 @@ namespace Application.Users.Commands
                 {
                     var dto = Mapper.Map<TransactionDto>(t);
                     dto.Category = Mapper.Map<TransactionCategoryDto>(t.Category);
+                    dto.Account = AccountDto.From(t.Account);
                     return dto;
                 })
                 .ToList();
+        }
+
+        private void ComputeNewBalance(Transaction transaction, TransactionDto rt)
+        {
+            switch (transaction.Type)
+            {
+                case TransactionType.Expense:
+                    transaction.Account.Balance += transaction.Amount;
+                    break;
+                case TransactionType.Income:
+                    transaction.Account.Balance -= transaction.Amount;
+                    break;
+            }
+
+            switch (rt.Type)
+            {
+                case TransactionType.Expense:
+                    transaction.Account.Balance -= rt.Amount;
+                    break;
+                case TransactionType.Income:
+                    transaction.Account.Balance += rt.Amount;
+                    break;
+            }
         }
     }
 }
