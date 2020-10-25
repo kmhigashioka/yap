@@ -37,3 +37,9 @@ export interface UpdateUserTransactionCommandVm {
   account: Account;
   type: TransactionType;
 }
+
+export interface TransactionFormProps {
+  setSelectedTransaction: (transaction: Transaction | null) => void;
+  selectedTransaction: Transaction;
+  setSnackbarMessage: (message: string) => void;
+}
