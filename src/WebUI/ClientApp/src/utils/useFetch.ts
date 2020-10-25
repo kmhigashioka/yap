@@ -3,14 +3,14 @@ import { useHistory } from 'react-router-dom';
 import { requestWithToken } from './request';
 
 interface UseFetch {
-  requestWithToken: <T>(url: string, options?: any) => Promise<T>;
+  requestWithToken: <T>(url: string, options?: RequestInit) => Promise<T>;
 }
 
 export default (): UseFetch => {
   const history = useHistory();
 
   const requestWithTokenFn = React.useCallback(
-    async <T>(url: string, options?: any): Promise<T> => {
+    async <T>(url: string, options?: RequestInit): Promise<T> => {
       const requestUrl =
         url.indexOf('http') === 0
           ? url
