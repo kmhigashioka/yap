@@ -25,6 +25,7 @@ export interface TransactionsPageState {
 export interface AddTransactionDialogProps extends DialogProps {
   onClose: () => void;
   setSnackbarMessage: (message: string) => void;
+  categories: TransactionCategory[];
 }
 
 export interface UpdateUserTransactionCommandVm {

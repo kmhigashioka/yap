@@ -19,7 +19,6 @@ import {
 } from '../HomePage/types';
 import { useTransactionsPageContext } from './TransactionsPageContext';
 import useFetch from '../../utils/useFetch';
-import { TransactionCategory } from '../CategoryPage/types';
 
 const useStyles = makeStyles({
   fieldContainer: {
@@ -36,6 +35,7 @@ const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
   open,
   onClose,
   setSnackbarMessage,
+  categories,
 }): React.ReactElement => {
   const { activeAccount } = useHomePageContext();
   const { addTransaction } = useTransactionsPageContext();
@@ -50,23 +50,8 @@ const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
   const classes = useStyles();
   const { accounts, updateAccountBalance } = useHomePageContext();
   const { values } = formState;
-  const [categories, setCategories] = React.useState<TransactionCategory[]>([]);
 
   const { requestWithToken } = useFetch();
-
-  const fetchTransactionCategories = React.useCallback(async (): Promise<
-    void
-  > => {
-    const data = await requestWithToken<TransactionCategory[]>(
-      '/api/TransactionCategories',
-    );
-    setCategories(data);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  React.useEffect(() => {
-    fetchTransactionCategories();
-  }, [fetchTransactionCategories]);
 
   React.useEffect(() => {
     if (activeAccount === null) {
