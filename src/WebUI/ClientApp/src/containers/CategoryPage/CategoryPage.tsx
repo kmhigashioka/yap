@@ -1,5 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
+import { Snackbar } from '@material-ui/core';
 import CategoryPageContext from './CategoryPageContext';
 import TitlePageWithSearch from './TitlePageWithSearch';
 import CategoryList from './CategoryList';
@@ -10,6 +11,7 @@ const CategoryPage = (): React.ReactElement => {
   const [categories, setCategories] = React.useState<TransactionCategory[]>([]);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [queriedCategories, setQueriedCategories] = React.useState(categories);
+  const [snackbarMessage, setSnackbarMessage] = React.useState('');
   const { requestWithToken } = useFetch();
 
   React.useEffect(() => {
@@ -20,11 +22,10 @@ const CategoryPage = (): React.ReactElement => {
         );
         setCategories(data);
       } catch (error) {
-        console.log(error);
+        setSnackbarMessage(error.message);
       }
     };
     fetchCategories();
-
   }, [requestWithToken]);
 
   React.useEffect(() => {
@@ -38,6 +39,10 @@ const CategoryPage = (): React.ReactElement => {
     setSearchQuery(event.target.value.toLowerCase());
   };
 
+  const handleCloseSnackbar = (): void => {
+    setSnackbarMessage('');
+  };
+
   return (
     <CategoryPageContext.Provider value={{}}>
       <Helmet>
@@ -46,6 +51,12 @@ const CategoryPage = (): React.ReactElement => {
       </Helmet>
       <TitlePageWithSearch onSearch={handleSearch} />
       <CategoryList categories={queriedCategories} />
+      <Snackbar
+        autoHideDuration={6000}
+        open={snackbarMessage !== ''}
+        message={snackbarMessage}
+        onClose={handleCloseSnackbar}
+      />
     </CategoryPageContext.Provider>
   );
 };

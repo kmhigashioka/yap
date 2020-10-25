@@ -85,7 +85,6 @@ const TransactionList: React.FC<TransactionsPageState> = ({
       }
     };
     fetchTransactionCategories();
-
   }, [requestWithToken, setSnackbarMessage]);
 
   return (
