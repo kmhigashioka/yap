@@ -1,5 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
+import { Snackbar } from '@material-ui/core';
 import CategoryPageContext from './CategoryPageContext';
 import TitlePageWithSearch from './TitlePageWithSearch';
 import CategoryList from './CategoryList';
@@ -10,19 +11,22 @@ const CategoryPage = (): React.ReactElement => {
   const [categories, setCategories] = React.useState<TransactionCategory[]>([]);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [queriedCategories, setQueriedCategories] = React.useState(categories);
+  const [snackbarMessage, setSnackbarMessage] = React.useState('');
   const { requestWithToken } = useFetch();
 
-  const fetchCategories = React.useCallback(async (): Promise<void> => {
-    const data = await requestWithToken<TransactionCategory[]>(
-      `/api/TransactionCategories`,
-    );
-    setCategories(data);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   React.useEffect(() => {
+    const fetchCategories = async (): Promise<void> => {
+      try {
+        const data = await requestWithToken<TransactionCategory[]>(
+          `/api/TransactionCategories`,
+        );
+        setCategories(data);
+      } catch (error) {
+        setSnackbarMessage(error.message);
+      }
+    };
     fetchCategories();
-  }, [fetchCategories]);
+  }, [requestWithToken]);
 
   React.useEffect(() => {
     const newQueriedCategories = categories.filter(
@@ -35,6 +39,10 @@ const CategoryPage = (): React.ReactElement => {
     setSearchQuery(event.target.value.toLowerCase());
   };
 
+  const handleCloseSnackbar = (): void => {
+    setSnackbarMessage('');
+  };
+
   return (
     <CategoryPageContext.Provider value={{}}>
       <Helmet>
@@ -43,6 +51,12 @@ const CategoryPage = (): React.ReactElement => {
       </Helmet>
       <TitlePageWithSearch onSearch={handleSearch} />
       <CategoryList categories={queriedCategories} />
+      <Snackbar
+        autoHideDuration={6000}
+        open={snackbarMessage !== ''}
+        message={snackbarMessage}
+        onClose={handleCloseSnackbar}
+      />
     </CategoryPageContext.Provider>
   );
 };

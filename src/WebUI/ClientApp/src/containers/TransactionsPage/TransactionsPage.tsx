@@ -27,26 +27,28 @@ const TransactionsPage: React.FC = (): React.ReactElement => {
   const { activeAccount } = useHomePageContext();
   const { requestWithToken } = useFetch();
 
-  const fetchTransactions = React.useCallback(
-    async (account: Account | null): Promise<void> => {
-      const accountId = account === null ? null : account.id;
-      const data = await requestWithToken<Transaction[]>(
-        `/api/users/transactions?accountId=${accountId}`,
-      );
-      setTransactions(
-        data.map((d) => ({
-          ...d,
-          date: new Date(d.date),
-        })),
-      );
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  );
-
   React.useEffect(() => {
+    const fetchTransactions = async (
+      account: Account | null,
+    ): Promise<void> => {
+      const accountId = account === null ? null : account.id;
+      try {
+        const data = await requestWithToken<Transaction[]>(
+          `/api/users/transactions?accountId=${accountId}`,
+        );
+        setTransactions(
+          data.map((d) => ({
+            ...d,
+            date: new Date(d.date),
+          })),
+        );
+      } catch (error) {
+        setSnackbarMessage(error.message);
+      }
+    };
+
     fetchTransactions(activeAccount);
-  }, [activeAccount, fetchTransactions]);
+  }, [activeAccount, requestWithToken]);
 
   const addTransaction = (newTransaction: Transaction): void => {
     setTransactions([...transactions, newTransaction]);

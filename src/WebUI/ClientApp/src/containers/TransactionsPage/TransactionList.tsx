@@ -15,6 +15,8 @@ import { TransactionsPageState } from './types';
 import { useTransactionsPageContext } from './TransactionsPageContext';
 import AddTransactionDialog from './AddTransactionDialog';
 import { TransactionType } from '../HomePage/types';
+import useFetch from '../../utils/useFetch';
+import { TransactionCategory } from '../CategoryPage/types';
 
 const useStyles = makeStyles((theme) => ({
   bannerContainer: {
@@ -55,6 +57,8 @@ const TransactionList: React.FC<TransactionsPageState> = ({
     openAddTransactionDialog,
     setOpenAddTransactionDialog,
   ] = React.useState(false);
+  const [categories, setCategories] = React.useState<TransactionCategory[]>([]);
+  const { requestWithToken } = useFetch();
 
   const handleOpenAddTransactionDialog = (): void => {
     setOpenAddTransactionDialog(true);
@@ -69,6 +73,20 @@ const TransactionList: React.FC<TransactionsPageState> = ({
     [TransactionType.Income]: 'Income',
   };
 
+  React.useEffect(() => {
+    const fetchTransactionCategories = async (): Promise<void> => {
+      try {
+        const data = await requestWithToken<TransactionCategory[]>(
+          '/api/TransactionCategories',
+        );
+        setCategories(data);
+      } catch (error) {
+        setSnackbarMessage(error.message);
+      }
+    };
+    fetchTransactionCategories();
+  }, [requestWithToken, setSnackbarMessage]);
+
   return (
     <div>
       <div className={classes.bannerContainer}>
@@ -77,6 +95,7 @@ const TransactionList: React.FC<TransactionsPageState> = ({
             open={openAddTransactionDialog}
             onClose={handleOnCloseDialog}
             setSnackbarMessage={setSnackbarMessage}
+            categories={categories}
           />
           <Fab
             color="primary"
