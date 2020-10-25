@@ -4,11 +4,11 @@ import { Route, Switch } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core';
 import HomePageContext from './HomePageContext';
 import AppBar from './AppBar';
-import TransactionsPage from '../TransactionsPage';
+import TransactionsPage from '../TransactionsPage/Loadable';
 import useHomePageState from './useHomePageState';
-import CategoryPage from '../CategoryPage';
+import CategoryPage from '../CategoryPage/Loadable';
 import { Account, User } from './types';
-import DashboardPage from '../DashboardPage';
+import DashboardPage from '../DashboardPage/Loadable';
 import useFetch from '../../utils/useFetch';
 
 const useStyle = makeStyles({
