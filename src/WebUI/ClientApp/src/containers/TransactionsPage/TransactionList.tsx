@@ -74,14 +74,10 @@ const TransactionList: React.FC<TransactionsPageState> = ({
   };
 
   React.useEffect(() => {
-    const controller = new AbortController();
-    const { signal } = controller;
-
     const fetchTransactionCategories = async (): Promise<void> => {
       try {
         const data = await requestWithToken<TransactionCategory[]>(
           '/api/TransactionCategories',
-          { signal },
         );
         setCategories(data);
       } catch (error) {
@@ -90,9 +86,6 @@ const TransactionList: React.FC<TransactionsPageState> = ({
     };
     fetchTransactionCategories();
 
-    return (): void => {
-      controller.abort();
-    };
   }, [requestWithToken, setSnackbarMessage]);
 
   return (

@@ -13,13 +13,10 @@ const CategoryPage = (): React.ReactElement => {
   const { requestWithToken } = useFetch();
 
   React.useEffect(() => {
-    const controller = new AbortController();
-    const { signal } = controller;
     const fetchCategories = async (): Promise<void> => {
       try {
         const data = await requestWithToken<TransactionCategory[]>(
           `/api/TransactionCategories`,
-          { signal },
         );
         setCategories(data);
       } catch (error) {
@@ -28,9 +25,6 @@ const CategoryPage = (): React.ReactElement => {
     };
     fetchCategories();
 
-    return (): void => {
-      controller.abort();
-    };
   }, [requestWithToken]);
 
   React.useEffect(() => {

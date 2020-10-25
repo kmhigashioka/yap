@@ -28,9 +28,6 @@ const TransactionsPage: React.FC = (): React.ReactElement => {
   const { requestWithToken } = useFetch();
 
   React.useEffect(() => {
-    const controller = new AbortController();
-    const { signal } = controller;
-
     const fetchTransactions = async (
       account: Account | null,
     ): Promise<void> => {
@@ -38,7 +35,6 @@ const TransactionsPage: React.FC = (): React.ReactElement => {
       try {
         const data = await requestWithToken<Transaction[]>(
           `/api/users/transactions?accountId=${accountId}`,
-          { signal },
         );
         setTransactions(
           data.map((d) => ({
@@ -50,11 +46,8 @@ const TransactionsPage: React.FC = (): React.ReactElement => {
         setSnackbarMessage(error.message);
       }
     };
-    fetchTransactions(activeAccount);
 
-    return (): void => {
-      controller.abort();
-    };
+    fetchTransactions(activeAccount);
   }, [activeAccount, requestWithToken]);
 
   const addTransaction = (newTransaction: Transaction): void => {
