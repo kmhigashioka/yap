@@ -1,7 +1,16 @@
 import React from 'react';
-import { makeStyles, Typography } from '@material-ui/core';
+import { IconButton, makeStyles, Typography } from '@material-ui/core';
+import MoreVert from '@material-ui/icons/MoreVert';
+import DeleteForever from '@material-ui/icons/DeleteForever';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
 import { FormattedNumber } from 'react-intl';
 import { DashboardAccountItemProps } from './types';
+import PromptDialog from '../../components/PromptDialog';
+import { useHomePageContext } from '../HomePage/HomePageContext';
+import useFetch from '../../utils/useFetch';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -18,7 +27,8 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.secondary.contrastText,
     display: 'flex',
     height: '64px',
-    padding: '0 24px',
+    padding: '0 12px 0 24px',
+    justifyContent: 'space-between',
   },
   body: {
     display: 'flex',
@@ -30,17 +40,88 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '24px',
     fontWeight: 'bold',
   },
+  moreVertIconButton: {
+    color: theme.palette.secondary.contrastText,
+  },
 }));
 
 const DashboardAccountItem: React.FC<DashboardAccountItemProps> = ({
   account,
+  setSnackbarMessage,
 }): React.ReactElement => {
   const classes = useStyles();
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [open, setOpen] = React.useState(false);
+  const { deleteAccount } = useHomePageContext();
+  const { requestWithToken } = useFetch();
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>): void => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = (): void => {
+    setAnchorEl(null);
+  };
+
+  const handlePromptDelete = (): void => {
+    setOpen(true);
+    setAnchorEl(null);
+  };
+
+  const handlePromptDialogClose = (): void => {
+    setOpen(false);
+  };
+
+  const handlePromptDialogProceed = (): void => {
+    setOpen(false);
+
+    const deleteAsync = async (): Promise<void> => {
+      try {
+        setSnackbarMessage('Account deletion in progress.');
+        const endpoint = `/api/Users/Accounts?accountId=${account.id}`;
+        await requestWithToken<Account>(endpoint, {
+          method: 'DELETE',
+        });
+        deleteAccount(account.id);
+        setSnackbarMessage('Account successfully deleted.');
+      } catch (error) {
+        const errorResponse = await error.response.json();
+        setSnackbarMessage(errorResponse.message);
+      }
+    };
+
+    deleteAsync();
+  };
 
   return (
     <li className={classes.container}>
       <div className={classes.header}>
         <Typography>{account.name}</Typography>
+        <IconButton
+          classes={{ root: classes.moreVertIconButton }}
+          onClick={handleClick}
+        >
+          <MoreVert color="inherit" />
+        </IconButton>
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+        >
+          <MenuItem onClick={handlePromptDelete}>
+            <ListItemIcon>
+              <DeleteForever fontSize="small" />
+            </ListItemIcon>
+            <ListItemText primary="Delete" />
+          </MenuItem>
+        </Menu>
+        <PromptDialog
+          open={open}
+          onClose={handlePromptDialogClose}
+          onProceed={handlePromptDialogProceed}
+          title={`Delete ${account.name}?`}
+          contentText="This is an irreversible action. Do you want to proceed?"
+        />
       </div>
       <div className={classes.body}>
         <Typography variant="subtitle2" color="textSecondary">
