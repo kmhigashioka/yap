@@ -59,7 +59,7 @@
     "nyc": "15.1.0",
     "plop": "2.7.4",
     "prettier": "2.1.2",
-    "start-server-and-test": "1.11.0",
+    "start-server-and-test": "1.11.5",
     "typescript": "3.8.3"
   },
   "nyc": {
