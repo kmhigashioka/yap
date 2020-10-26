@@ -54,6 +54,22 @@ namespace WebUI.Controllers
         }
 
         [Authorize]
+        [HttpDelete("accounts")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> DeleteAccount([FromQuery] int accountId)
+        {
+            var request = new DeleteUserAccountCommand
+            {
+                AccountId = accountId,
+                UserId = _currentUserService.UserId
+            };
+            await Mediator.Send(request);
+            return NoContent();
+        }
+
+        [Authorize]
         [HttpGet("transactions")]
         [ProducesResponseType(typeof(List<TransactionDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
