@@ -128,7 +128,6 @@ const RegisterPage: React.FC<RouteComponentProps> = ({
               {...text('email')}
             />
             <TextField
-              name="username"
               label="Username"
               margin="dense"
               variant="outlined"
@@ -139,7 +138,6 @@ const RegisterPage: React.FC<RouteComponentProps> = ({
             />
             <TextField
               label="Password"
-              type="password"
               margin="dense"
               variant="outlined"
               fullWidth
@@ -149,7 +147,6 @@ const RegisterPage: React.FC<RouteComponentProps> = ({
             />
             <TextField
               label="Confirm Password"
-              type="password"
               margin="dense"
               variant="outlined"
               fullWidth
