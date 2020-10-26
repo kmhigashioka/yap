@@ -4,11 +4,11 @@ import { Route, Switch } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core';
 import HomePageContext from './HomePageContext';
 import AppBar from './AppBar';
-import TransactionsPage from '../TransactionsPage';
+import TransactionsPage from '../TransactionsPage/Loadable';
 import useHomePageState from './useHomePageState';
-import CategoryPage from '../CategoryPage';
+import CategoryPage from '../CategoryPage/Loadable';
 import { Account, User } from './types';
-import DashboardPage from '../DashboardPage';
+import DashboardPage from '../DashboardPage/Loadable';
 import useFetch from '../../utils/useFetch';
 
 const useStyle = makeStyles({
@@ -27,38 +27,35 @@ const HomePage = (): React.ReactElement => {
     activeAccount,
     setAccounts,
     setCurrentUser,
+    updateAccountBalance,
   } = useHomePageState();
   const [fetchingUser, setFetchingUser] = React.useState(false);
   const [, setError] = React.useState();
   const { requestWithToken } = useFetch();
 
-  const fetchAccounts = React.useCallback(async (): Promise<void> => {
-    try {
-      setAccounts(await requestWithToken<Account[]>('/api/users/accounts'));
-    } catch (err) {
-      setError(err);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   React.useEffect(() => {
+    const fetchAccounts = async (): Promise<void> => {
+      try {
+        setAccounts(await requestWithToken<Account[]>('/api/users/accounts'));
+      } catch (err) {
+        setError(err);
+      }
+    };
     fetchAccounts();
-  }, [fetchAccounts]);
-
-  const fetchCurrentUser = React.useCallback(async (): Promise<void> => {
-    setFetchingUser(true);
-    try {
-      setCurrentUser(await requestWithToken<User>('/api/users/me'));
-    } catch (err) {
-      setError(err);
-    }
-    setFetchingUser(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [requestWithToken, setAccounts]);
 
   React.useEffect(() => {
+    const fetchCurrentUser = async (): Promise<void> => {
+      setFetchingUser(true);
+      try {
+        setCurrentUser(await requestWithToken<User>('/api/users/me'));
+      } catch (err) {
+        setError(err);
+      }
+      setFetchingUser(false);
+    };
     fetchCurrentUser();
-  }, [fetchCurrentUser]);
+  }, [requestWithToken, setCurrentUser]);
 
   if (fetchingUser) {
     return <div>Fetching user...</div>;
@@ -71,6 +68,7 @@ const HomePage = (): React.ReactElement => {
         setActiveAccount,
         accounts,
         activeAccount,
+        updateAccountBalance,
       }}
     >
       <Helmet>

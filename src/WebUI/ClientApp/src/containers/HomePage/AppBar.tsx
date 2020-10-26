@@ -165,7 +165,7 @@ const AppBar: React.FC = () => {
                 <Divider />
               </>
             ) : null}
-            {accounts.map(account => (
+            {accounts.map((account) => (
               <React.Fragment key={account.id}>
                 <Button
                   fullWidth

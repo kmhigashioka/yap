@@ -1,17 +1,16 @@
+import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { requestWithToken } from './request';
 
 interface UseFetch {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  requestWithToken: <T>(url: string, options?: any) => Promise<T>;
+  requestWithToken: <T>(url: string, options?: RequestInit) => Promise<T>;
 }
 
 export default (): UseFetch => {
   const history = useHistory();
 
-  return {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    requestWithToken: async <T>(url: string, options?: any): Promise<T> => {
+  const requestWithTokenFn = React.useCallback(
+    async <T>(url: string, options?: RequestInit): Promise<T> => {
       const requestUrl =
         url.indexOf('http') === 0
           ? url
@@ -26,5 +25,10 @@ export default (): UseFetch => {
         throw error;
       }
     },
+    [history],
+  );
+
+  return {
+    requestWithToken: requestWithTokenFn,
   };
 };

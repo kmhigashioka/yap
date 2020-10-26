@@ -5,6 +5,7 @@ export type THomePageContext = {
   setActiveAccount: (account: Account | null) => void;
   accounts: Account[];
   activeAccount: Account | null;
+  updateAccountBalance: (id: number, balance: number) => void;
 };
 
 export interface FormDialogProps {
@@ -46,4 +47,9 @@ export interface User {
   id: string;
   fullName: string;
   email: string;
+}
+
+export interface NewUserTransactionCommandVm {
+  transactions: Transaction[];
+  account: Account;
 }

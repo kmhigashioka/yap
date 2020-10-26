@@ -32,7 +32,7 @@ const CategoryList: React.FC<CategoryListProps> = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {categories.map(row => (
+            {categories.map((row) => (
               <TableRow
                 key={row.name}
                 data-testid={`category-row-name-${row.name}`}

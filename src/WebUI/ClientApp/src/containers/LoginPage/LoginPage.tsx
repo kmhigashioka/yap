@@ -14,7 +14,7 @@ import Welcome from './Welcome';
 import request, { TokenResponse } from '../../utils/request';
 import auth from '../../utils/auth';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   loginWrapper: {
     display: 'flex',
     height: '100%',
@@ -70,7 +70,7 @@ const LoginPage: React.FC<RouteComponentProps> = ({
       method: 'post',
       body,
     })
-      .then(data => {
+      .then((data) => {
         setSuccessfullyLoggedIn(true);
         auth.accessToken = data.access_token;
         localStorage.setItem('refresh_token', data.refresh_token);
@@ -95,7 +95,6 @@ const LoginPage: React.FC<RouteComponentProps> = ({
           <Typography variant="h6">LOGIN TO YOUR ACCOUNT</Typography>
           <form className={classes.form} onSubmit={handleSubmit}>
             <TextField
-              name="username"
               label="Username"
               placeholder="Username"
               margin="dense"
@@ -104,10 +103,8 @@ const LoginPage: React.FC<RouteComponentProps> = ({
               {...text('username')}
             />
             <TextField
-              name="password"
               label="Password"
               placeholder="Password"
-              type="password"
               margin="dense"
               variant="outlined"
               fullWidth

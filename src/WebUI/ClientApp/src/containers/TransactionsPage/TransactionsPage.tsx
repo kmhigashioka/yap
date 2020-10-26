@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { makeStyles, Snackbar } from '@material-ui/core';
 import TransactionsPageContext from './TransactionsPageContext';
 import { Transaction, Account } from '../HomePage/types';
-import TransactionForm from './TransactionForm';
+import TransactionForm, { TransactionFormPlaceholder } from './TransactionForm';
 import TransactionList from './TransactionList';
 import { useHomePageContext } from '../HomePage/HomePageContext';
 import useFetch from '../../utils/useFetch';
@@ -27,26 +27,28 @@ const TransactionsPage: React.FC = (): React.ReactElement => {
   const { activeAccount } = useHomePageContext();
   const { requestWithToken } = useFetch();
 
-  const fetchTransactions = React.useCallback(
-    async (account: Account | null): Promise<void> => {
-      const accountId = account === null ? null : account.id;
-      const data = await requestWithToken<Transaction[]>(
-        `/api/users/transactions?accountId=${accountId}`,
-      );
-      setTransactions(
-        data.map(d => ({
-          ...d,
-          date: new Date(d.date),
-        })),
-      );
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  );
-
   React.useEffect(() => {
+    const fetchTransactions = async (
+      account: Account | null,
+    ): Promise<void> => {
+      const accountId = account === null ? null : account.id;
+      try {
+        const data = await requestWithToken<Transaction[]>(
+          `/api/users/transactions?accountId=${accountId}`,
+        );
+        setTransactions(
+          data.map((d) => ({
+            ...d,
+            date: new Date(d.date),
+          })),
+        );
+      } catch (error) {
+        setSnackbarMessage(error.message);
+      }
+    };
+
     fetchTransactions(activeAccount);
-  }, [activeAccount, fetchTransactions]);
+  }, [activeAccount, requestWithToken]);
 
   const addTransaction = (newTransaction: Transaction): void => {
     setTransactions([...transactions, newTransaction]);
@@ -54,7 +56,7 @@ const TransactionsPage: React.FC = (): React.ReactElement => {
 
   const deleteTransaction = (transactionId: number): void => {
     setTransactions(
-      transactions.filter(transaction => transaction.id !== transactionId),
+      transactions.filter((transaction) => transaction.id !== transactionId),
     );
   };
 
@@ -63,7 +65,7 @@ const TransactionsPage: React.FC = (): React.ReactElement => {
     newTransaction: Transaction,
   ): void => {
     setTransactions(
-      transactions.map(transaction => {
+      transactions.map((transaction) => {
         if (transaction.id === transactionId) {
           return {
             ...transaction,
@@ -99,11 +101,15 @@ const TransactionsPage: React.FC = (): React.ReactElement => {
           setSelectedTransaction={setSelectedTransaction}
           setSnackbarMessage={setSnackbarMessage}
         />
-        <TransactionForm
-          selectedTransaction={selectedTransaction}
-          setSelectedTransaction={setSelectedTransaction}
-          setSnackbarMessage={setSnackbarMessage}
-        />
+        {selectedTransaction === null ? (
+          <TransactionFormPlaceholder />
+        ) : (
+          <TransactionForm
+            selectedTransaction={selectedTransaction}
+            setSelectedTransaction={setSelectedTransaction}
+            setSnackbarMessage={setSnackbarMessage}
+          />
+        )}
       </div>
       <Snackbar
         autoHideDuration={6000}

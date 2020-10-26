@@ -12,12 +12,24 @@ const useHomePageState = (): UseHomePageState => {
     setAccounts([...accounts, account]);
   };
 
+  const updateAccountBalance = (id: number, balance: number): void => {
+    const newAccounts = accounts.map((a) => {
+      const newAccount = { ...a };
+      if (newAccount.id === id) {
+        newAccount.balance = balance;
+      }
+      return newAccount;
+    });
+
+    setAccounts(newAccounts);
+  };
+
   React.useEffect(() => {
     if (activeAccount === null) {
       return;
     }
     const newAccount = accounts.find(
-      account => account.id === activeAccount.id,
+      (account) => account.id === activeAccount.id,
     );
     if (!newAccount) {
       return;
@@ -33,6 +45,7 @@ const useHomePageState = (): UseHomePageState => {
     setAccounts,
     currentUser,
     setCurrentUser,
+    updateAccountBalance,
   };
 };
 

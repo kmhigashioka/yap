@@ -14,7 +14,7 @@ import Welcome from '../LoginPage/Welcome';
 import request, { TokenResponse } from '../../utils/request';
 import auth from '../../utils/auth';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   loginWrapper: {
     display: 'flex',
     height: '100%',
@@ -128,7 +128,6 @@ const RegisterPage: React.FC<RouteComponentProps> = ({
               {...text('email')}
             />
             <TextField
-              name="username"
               label="Username"
               margin="dense"
               variant="outlined"
@@ -139,7 +138,6 @@ const RegisterPage: React.FC<RouteComponentProps> = ({
             />
             <TextField
               label="Password"
-              type="password"
               margin="dense"
               variant="outlined"
               fullWidth
@@ -149,7 +147,6 @@ const RegisterPage: React.FC<RouteComponentProps> = ({
             />
             <TextField
               label="Confirm Password"
-              type="password"
               margin="dense"
               variant="outlined"
               fullWidth
