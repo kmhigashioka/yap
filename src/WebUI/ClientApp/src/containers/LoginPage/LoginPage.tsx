@@ -95,7 +95,6 @@ const LoginPage: React.FC<RouteComponentProps> = ({
           <Typography variant="h6">LOGIN TO YOUR ACCOUNT</Typography>
           <form className={classes.form} onSubmit={handleSubmit}>
             <TextField
-              name="username"
               label="Username"
               placeholder="Username"
               margin="dense"
@@ -104,10 +103,8 @@ const LoginPage: React.FC<RouteComponentProps> = ({
               {...text('username')}
             />
             <TextField
-              name="password"
               label="Password"
               placeholder="Password"
-              type="password"
               margin="dense"
               variant="outlined"
               fullWidth

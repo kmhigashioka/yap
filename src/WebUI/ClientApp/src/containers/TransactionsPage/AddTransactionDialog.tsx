@@ -144,7 +144,6 @@ const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
               <Select
                 placeholder="Type"
                 data-testid="select-type"
-                value={values.type}
                 {...select({
                   name: 'type',
                   onChange: (event) => event.target.value,
@@ -184,7 +183,6 @@ const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
             />
             <KeyboardDatePicker
               className={classes.fieldRoot}
-              value={values.date}
               disableToolbar
               variant="inline"
               format="MM/DD/YYYY"

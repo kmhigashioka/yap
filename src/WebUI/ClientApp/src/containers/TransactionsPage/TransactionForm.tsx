@@ -60,7 +60,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   const { deleteTransaction, editTransaction } = useTransactionsPageContext();
   const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
   const [isEditing, setIsEditing] = React.useState(false);
-  const [formState, { text, raw, select }] = useFormState({
+  const [formState, { text, raw, select, number }] = useFormState({
     date: new Date(),
   });
   const { requestWithToken } = useFetch();
@@ -199,7 +199,6 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                 fullWidth
                 disabled={!isEditing}
                 placeholder="Type"
-                value={formState.values.type}
                 {...select({
                   name: 'type',
                   onChange: (event) => event.target.value,
@@ -216,16 +215,14 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
               </Select>
             </FormControl>
             <TextField
-              type="number"
               margin="dense"
               label="Amount"
               fullWidth
               disabled={!isEditing}
               placeholder="Amount"
-              {...text('amount')}
+              {...number('amount')}
             />
             <TextField
-              type="text"
               margin="dense"
               label="Description"
               fullWidth
@@ -235,7 +232,6 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
             />
             <KeyboardDatePicker
               className={classes.fieldRoot}
-              value={formState.values.date}
               disableToolbar
               variant="inline"
               format="MM/DD/YYYY"
