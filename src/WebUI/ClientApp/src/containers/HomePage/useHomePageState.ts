@@ -24,6 +24,11 @@ const useHomePageState = (): UseHomePageState => {
     setAccounts(newAccounts);
   };
 
+  const deleteAccount = (id: number): void => {
+    const newAccounts = accounts.filter((a) => a.id !== id);
+    setAccounts(newAccounts);
+  };
+
   React.useEffect(() => {
     if (activeAccount === null) {
       return;
@@ -46,6 +51,7 @@ const useHomePageState = (): UseHomePageState => {
     currentUser,
     setCurrentUser,
     updateAccountBalance,
+    deleteAccount,
   };
 };
 
