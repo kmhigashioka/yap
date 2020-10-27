@@ -94,12 +94,13 @@ const DashboardAccountItem: React.FC<DashboardAccountItemProps> = ({
   };
 
   return (
-    <li className={classes.container}>
+    <li className={classes.container} data-testid={`account-${account.id}`}>
       <div className={classes.header}>
         <Typography>{account.name}</Typography>
         <IconButton
           classes={{ root: classes.moreVertIconButton }}
           onClick={handleClick}
+          title="More Actions"
         >
           <MoreVert color="inherit" />
         </IconButton>
