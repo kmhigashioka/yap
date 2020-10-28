@@ -5,6 +5,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { FormState, StateErrors, useFormState } from 'react-use-form-state';
+import { Account } from '../containers/HomePage/types';
 
 interface AccountDialogFormProps {
   onClose: () => void;
@@ -14,6 +15,7 @@ interface AccountDialogFormProps {
   ) => void;
   title?: string;
   proceedButtonText?: string;
+  initialState?: Account;
 }
 
 const AccountDialogForm: React.FC<AccountDialogFormProps> = ({
@@ -21,12 +23,9 @@ const AccountDialogForm: React.FC<AccountDialogFormProps> = ({
   onSubmit,
   title,
   proceedButtonText,
+  initialState,
 }) => {
-  const [formState, { text, number }] = useFormState({
-    name: '',
-    abbreviation: '',
-    balance: 0,
-  });
+  const [formState, { text, number }] = useFormState(initialState);
 
   const handleSubmit = (evt: React.FormEvent<EventTarget>): void => {
     evt.preventDefault();
@@ -78,6 +77,13 @@ const AccountDialogForm: React.FC<AccountDialogFormProps> = ({
 AccountDialogForm.defaultProps = {
   title: 'Create New Account',
   proceedButtonText: 'Create',
+  initialState: {
+    name: '',
+    abbreviation: '',
+    balance: 0,
+    id: 0,
+    transactions: [],
+  },
 };
 
 export default AccountDialogForm;

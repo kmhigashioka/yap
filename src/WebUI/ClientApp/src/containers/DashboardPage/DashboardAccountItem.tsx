@@ -2,6 +2,7 @@ import React from 'react';
 import { IconButton, makeStyles, Typography } from '@material-ui/core';
 import MoreVert from '@material-ui/icons/MoreVert';
 import DeleteForever from '@material-ui/icons/DeleteForever';
+import Edit from '@material-ui/icons/Edit';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -11,6 +12,7 @@ import { DashboardAccountItemProps } from './types';
 import PromptDialog from '../../components/PromptDialog';
 import { useHomePageContext } from '../HomePage/HomePageContext';
 import useFetch from '../../utils/useFetch';
+import EditAccountDialog from './EditAccountDialog';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -52,7 +54,10 @@ const DashboardAccountItem: React.FC<DashboardAccountItemProps> = ({
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [open, setOpen] = React.useState(false);
-  const { deleteAccount } = useHomePageContext();
+  const [openEditAccountDialog, setOpenEditAccountDialog] = React.useState(
+    false,
+  );
+  const { deleteAccount, editAccount } = useHomePageContext();
   const { requestWithToken } = useFetch();
 
   const handleClick = (event: React.MouseEvent<HTMLElement>): void => {
@@ -93,6 +98,15 @@ const DashboardAccountItem: React.FC<DashboardAccountItemProps> = ({
     deleteAsync();
   };
 
+  const handleCloseEditAccountDialog = (): void => {
+    setOpenEditAccountDialog(false);
+  };
+
+  const handleClickOpenEditAccountDialog = (): void => {
+    setOpenEditAccountDialog(true);
+    setAnchorEl(null);
+  };
+
   return (
     <li className={classes.container} data-testid={`account-${account.id}`}>
       <div className={classes.header}>
@@ -109,6 +123,12 @@ const DashboardAccountItem: React.FC<DashboardAccountItemProps> = ({
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
+          <MenuItem onClick={handleClickOpenEditAccountDialog}>
+            <ListItemIcon>
+              <Edit fontSize="small" />
+            </ListItemIcon>
+            <ListItemText primary="Edit" />
+          </MenuItem>
           <MenuItem onClick={handlePromptDelete}>
             <ListItemIcon>
               <DeleteForever fontSize="small" />
@@ -122,6 +142,13 @@ const DashboardAccountItem: React.FC<DashboardAccountItemProps> = ({
           onProceed={handlePromptDialogProceed}
           title={`Delete ${account.name}?`}
           contentText="This is an irreversible action. Do you want to proceed?"
+        />
+        <EditAccountDialog
+          open={openEditAccountDialog}
+          onClose={handleCloseEditAccountDialog}
+          account={account}
+          editAccount={editAccount}
+          setSnackbarMessage={setSnackbarMessage}
         />
       </div>
       <div className={classes.body}>
