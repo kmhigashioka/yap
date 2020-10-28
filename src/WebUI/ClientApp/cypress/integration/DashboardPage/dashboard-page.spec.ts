@@ -43,4 +43,56 @@ describe('Dashboard', () => {
     cy.findByText('Cancel').click();
     cy.findByTestId(testid).should('be.visible');
   });
+
+  it('should dismiss More Actions menu', () => {
+    const testid = 'account-1';
+    cy.findByTestId(testid).findByTitle('More Actions').click();
+    cy.findByText('Delete').type('{esc}');
+    cy.findByText('Delete').should('not.be.visible');
+  });
+
+  it('should edit account successfully', () => {
+    const newAccount = {
+      name: 'Bank Developer Optionx',
+      abbreviation: 'BDX',
+      balance: 2000,
+    };
+    cy.route('put', '/api/users/accounts', { id: 1, ...newAccount });
+    const testid = 'account-1';
+    cy.findByTestId(testid).findByTitle('More Actions').click();
+    cy.findByText('Edit').click();
+    cy.findByPlaceholderText('Name').clear().type(newAccount.name);
+    cy.findByPlaceholderText(/Abbreviation/)
+      .clear()
+      .type(newAccount.abbreviation);
+    cy.findByPlaceholderText('Starting Balance')
+      .clear()
+      .type(newAccount.balance.toString());
+    cy.findByText('Save').click();
+    cy.findByText('Account successfully updated.').should('be.visible');
+  });
+
+  it('should able to handle edit account error API', () => {
+    cy.route({
+      method: 'PUT',
+      url: '/api/users/accounts',
+      status: 400,
+      response: {
+        message: 'Error message from API',
+      },
+    });
+    const testid = 'account-1';
+    cy.findByTestId(testid).findByTitle('More Actions').click();
+    cy.findByText('Edit').click();
+    cy.findByText('Save').click();
+    cy.findByText('Error message from API').should('be.visible');
+  });
+
+  it('should dismiss edit account dialog', () => {
+    const testid = 'account-1';
+    cy.findByTestId(testid).findByTitle('More Actions').click();
+    cy.findByText('Edit').click();
+    cy.findByText('Cancel').click();
+    cy.findByText('Edit Account Information').should('not.be.visible');
+  });
 });
