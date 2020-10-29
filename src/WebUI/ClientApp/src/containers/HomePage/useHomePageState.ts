@@ -29,6 +29,25 @@ const useHomePageState = (): UseHomePageState => {
     setAccounts(newAccounts);
   };
 
+  const editAccount = (id: number, account: Account): void => {
+    const newAccounts = accounts.map((a) => {
+      let newAccount = { ...a };
+
+      if (id === a.id) {
+        newAccount = {
+          ...newAccount,
+          balance: account.balance,
+          abbreviation: account.abbreviation,
+          name: account.name,
+        };
+      }
+
+      return newAccount;
+    });
+
+    setAccounts(newAccounts);
+  };
+
   React.useEffect(() => {
     if (activeAccount === null) {
       return;
@@ -52,6 +71,7 @@ const useHomePageState = (): UseHomePageState => {
     setCurrentUser,
     updateAccountBalance,
     deleteAccount,
+    editAccount,
   };
 };
 

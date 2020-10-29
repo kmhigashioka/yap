@@ -70,6 +70,18 @@ namespace WebUI.Controllers
         }
 
         [Authorize]
+        [HttpPut("accounts")]
+        [ProducesResponseType(typeof(AccountDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> EditAccount([FromBody] EditUserAccountCommand request)
+        {
+            var response = await Mediator.Send(request);
+
+            return Ok(response);
+        }
+
+        [Authorize]
         [HttpGet("transactions")]
         [ProducesResponseType(typeof(List<TransactionDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
