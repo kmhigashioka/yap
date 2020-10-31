@@ -95,4 +95,15 @@ describe('Dashboard', () => {
     cy.findByText('Cancel').click();
     cy.findByText('Edit Account Information').should('not.be.visible');
   });
+
+  it('should set to ALL when active account is deleted', () => {
+    cy.route('delete', '/api/Users/Accounts?accountId=*', {});
+    cy.findByText('ALL').click();
+    cy.findByText('BDO').click().type('{esc}');
+    const testid = 'account-1';
+    cy.findByTestId(testid).findByTitle('More Actions').click();
+    cy.findByText('Delete').click();
+    cy.findByText('Proceed').click();
+    cy.findByText('ALL').should('be.visible');
+  });
 });
