@@ -56,6 +56,7 @@ const useHomePageState = (): UseHomePageState => {
       (account) => account.id === activeAccount.id,
     );
     if (!newAccount) {
+      setActiveAccount(null);
       return;
     }
     setActiveAccount(newAccount);
