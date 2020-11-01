@@ -30,6 +30,7 @@ const HomePage = (): React.ReactElement => {
     updateAccountBalance,
     deleteAccount,
     editAccount,
+    currentUser,
   } = useHomePageState();
   const [fetchingUser, setFetchingUser] = React.useState(false);
   const [, setError] = React.useState();
@@ -73,6 +74,7 @@ const HomePage = (): React.ReactElement => {
         updateAccountBalance,
         deleteAccount,
         editAccount,
+        currentUser,
       }}
     >
       <Helmet>
