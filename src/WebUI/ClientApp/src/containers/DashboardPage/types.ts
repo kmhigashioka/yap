@@ -18,3 +18,8 @@ export interface EditAccountDialogProps {
   editAccount: (id: number, account: Account) => void;
   setSnackbarMessage: (message: string) => void;
 }
+
+export interface DashboardBannerProps {
+  fullName: string | undefined;
+  hasAccount: boolean;
+}

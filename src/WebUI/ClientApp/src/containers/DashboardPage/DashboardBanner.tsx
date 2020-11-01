@@ -1,5 +1,6 @@
 import React from 'react';
 import { makeStyles, Typography } from '@material-ui/core';
+import { DashboardBannerProps } from './types';
 
 const useStyles = makeStyles({
   container: {
@@ -16,13 +17,22 @@ const useStyles = makeStyles({
   },
 });
 
-const DashboardBanner = (): React.ReactElement => {
+const DashboardBanner: React.FC<DashboardBannerProps> = ({
+  fullName,
+  hasAccount,
+}) => {
   const classes = useStyles();
+  const [welcomeMessage] = React.useState(() => {
+    if (hasAccount) {
+      return `Welcome back, ${fullName}!`;
+    }
+    return `Welcome, ${fullName}!`;
+  });
 
   return (
     <div className={classes.container}>
       <Typography className={classes.containerText} variant="h4">
-        Welcome back, user!
+        {welcomeMessage}
       </Typography>
     </div>
   );
