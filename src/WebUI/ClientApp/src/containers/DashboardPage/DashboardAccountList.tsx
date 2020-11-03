@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core';
 import DashboardAccountItem from './DashboardAccountItem';
 import { useHomePageContext } from '../HomePage/HomePageContext';
+import { DashboardAccountListProps } from './types';
 
 const useStyles = makeStyles({
   container: {
@@ -13,14 +14,20 @@ const useStyles = makeStyles({
   },
 });
 
-const DashboardAccountList = (): React.ReactElement => {
+const DashboardAccountList: React.FC<DashboardAccountListProps> = ({
+  setSnackbarMessage,
+}) => {
   const classes = useStyles();
   const { accounts } = useHomePageContext();
 
   return (
     <ul className={classes.container}>
       {accounts.map((account) => (
-        <DashboardAccountItem key={account.id} account={account} />
+        <DashboardAccountItem
+          key={account.id}
+          account={account}
+          setSnackbarMessage={setSnackbarMessage}
+        />
       ))}
     </ul>
   );

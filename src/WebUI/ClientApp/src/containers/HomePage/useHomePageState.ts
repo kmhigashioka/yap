@@ -24,6 +24,30 @@ const useHomePageState = (): UseHomePageState => {
     setAccounts(newAccounts);
   };
 
+  const deleteAccount = (id: number): void => {
+    const newAccounts = accounts.filter((a) => a.id !== id);
+    setAccounts(newAccounts);
+  };
+
+  const editAccount = (id: number, account: Account): void => {
+    const newAccounts = accounts.map((a) => {
+      let newAccount = { ...a };
+
+      if (id === a.id) {
+        newAccount = {
+          ...newAccount,
+          balance: account.balance,
+          abbreviation: account.abbreviation,
+          name: account.name,
+        };
+      }
+
+      return newAccount;
+    });
+
+    setAccounts(newAccounts);
+  };
+
   React.useEffect(() => {
     if (activeAccount === null) {
       return;
@@ -32,6 +56,7 @@ const useHomePageState = (): UseHomePageState => {
       (account) => account.id === activeAccount.id,
     );
     if (!newAccount) {
+      setActiveAccount(null);
       return;
     }
     setActiveAccount(newAccount);
@@ -46,6 +71,8 @@ const useHomePageState = (): UseHomePageState => {
     currentUser,
     setCurrentUser,
     updateAccountBalance,
+    deleteAccount,
+    editAccount,
   };
 };
 
