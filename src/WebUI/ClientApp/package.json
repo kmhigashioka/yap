@@ -9,7 +9,7 @@
     "@material-ui/pickers": "3.2.10",
     "moment": "2.29.1",
     "react": "16.14.0",
-    "react-dom": "16.14.0",
+    "react-dom": "17.0.1",
     "react-helmet-async": "1.0.7",
     "react-intl": "5.8.8",
     "react-router-dom": "5.2.0",
