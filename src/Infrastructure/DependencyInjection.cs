@@ -42,10 +42,19 @@ namespace Infrastructure
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
             services.AddIdentityServer(x => x.IssuerUri = identityServerAuthority)
-                .AddInMemoryIdentityResources(Config.GetIdentityResources())
-                .AddInMemoryClients(Config.GetClients())
-                .AddInMemoryApiResources(Config.GetApiResources())
                 .AddDeveloperSigningCredential()
+                .AddConfigurationStore(options =>
+                {
+                    options.ConfigureDbContext = builder =>
+                        builder.UseNpgsql(connectionString,
+                            sql => sql.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName));
+                })
+                .AddOperationalStore(options =>
+                {
+                    options.ConfigureDbContext = builder =>
+                        builder.UseNpgsql(connectionString,
+                            sql => sql.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName));
+                })
                 .AddAspNetIdentity<ApplicationUser>()
                 .AddProfileService<ProfileService>();
             services

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Infrastructure.Persistence;
+using IdentityServer4.EntityFramework.DbContexts;
 
 namespace WebUI
 {
@@ -21,6 +22,12 @@ namespace WebUI
                 {
                     var context = services.GetRequiredService<IApplicationDbContext>();
                     DbInitializer.Initialize(context);
+
+                    var context2 = services.GetRequiredService<PersistedGrantDbContext>();
+                    DbInitializer.Initialize(context2);
+
+                    var context3 = services.GetRequiredService<ConfigurationDbContext>();
+                    DbInitializer.Initialize(context3);
 
                     var dbContext = services.GetRequiredService<IApplicationDbContext>();
                     var dateTimeService = services.GetRequiredService<IDateTime>();
