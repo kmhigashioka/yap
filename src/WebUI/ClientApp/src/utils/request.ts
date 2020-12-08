@@ -40,6 +40,8 @@ function parseJSON(response: Response): Promise<any> | null {
   return response.json();
 }
 
+let currentRequestingTokenRenewal: Promise<void> | null = null;
+
 export async function requestWithToken<T>(
   url: string,
   options?: any | undefined,
@@ -55,7 +57,10 @@ export async function requestWithToken<T>(
   } catch (err) {
     if (err.response.status === 401) {
       try {
-        await requestForTokenRenewal();
+        if (currentRequestingTokenRenewal === null) {
+          currentRequestingTokenRenewal = requestForTokenRenewal();
+        }
+        await currentRequestingTokenRenewal;
         return usualApiCall<T>(url, options);
       } catch (tokenerr) {
         localStorage.clear();
@@ -93,6 +98,8 @@ async function requestForTokenRenewal(): Promise<void> {
     localStorage.setItem('refresh_token', data.refresh_token);
   } catch (err) {
     throw new ResponseError('Expired session.');
+  } finally {
+    currentRequestingTokenRenewal = null;
   }
 }
 
