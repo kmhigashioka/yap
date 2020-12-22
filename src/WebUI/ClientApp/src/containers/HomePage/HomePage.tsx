@@ -10,6 +10,7 @@ import CategoryPage from '../CategoryPage/Loadable';
 import { Account, User } from './types';
 import DashboardPage from '../DashboardPage/Loadable';
 import useFetch from '../../utils/useFetch';
+import Loading from '../../components/Loading';
 
 const useStyle = makeStyles({
   contentContainer: {
@@ -61,7 +62,7 @@ const HomePage = (): React.ReactElement => {
   }, [requestWithToken, setCurrentUser]);
 
   if (fetchingUser) {
-    return <div>Fetching user...</div>;
+    return <Loading />;
   }
 
   return (
