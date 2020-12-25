@@ -15,7 +15,7 @@ describe('Dashboard', () => {
     cy.findByText('Proceed').click();
     cy.findByText('Account deletion in progress.').should('be.visible');
     cy.findByText('Account successfully deleted.').should('be.visible');
-    cy.findByTestId(testid).should('not.be.visible');
+    cy.findByTestId(testid).should('not.exist');
   });
 
   it('should able to handle delete account error API', () => {
