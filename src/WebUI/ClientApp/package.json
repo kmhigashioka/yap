@@ -46,7 +46,7 @@
     "@types/react-dom": "17.0.0",
     "@types/react-router-dom": "5.1.6",
     "@types/testing-library__cypress": "5.0.8",
-    "@typescript-eslint/parser": "2.29.0",
+    "@typescript-eslint/parser": "4.11.0",
     "cypress": "6.2.0",
     "eslint": "6.8.0",
     "eslint-config-airbnb": "18.2.1",
