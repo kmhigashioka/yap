@@ -9,10 +9,7 @@ describe('RegisterPage', () => {
       .type('abcdE1234')
       .blur();
 
-    cy.findByText('Confirm password is not the same as password.').should(
-      'be',
-      'visible',
-    );
+    cy.findByText('Confirm password is not the same as password.').should('exist');
   });
 
   it('should navigate to login page', () => {

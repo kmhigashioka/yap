@@ -30,6 +30,6 @@ describe('LoginPage', () => {
 
     cy.findByText('Invalid username or password.').should('be.visible');
     cy.findByPlaceholderText('Username').click();
-    cy.findByText('Invalid username or password.').should('not.be.visible');
+    cy.findByText('Invalid username or password.').should('not.exist');
   });
 });
