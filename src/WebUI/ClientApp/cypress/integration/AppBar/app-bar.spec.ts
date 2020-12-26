@@ -45,6 +45,7 @@ describe('AppBar', () => {
       .type(newAccount.balance.toString());
     cy.findByText('Create').click();
     cy.findByText('New Account').should('be.visible');
+    cy.findByText('New account successfully created.').should('be.exist');
   });
 
   it('should navigate to Dashboard page', () => {
