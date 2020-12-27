@@ -17,6 +17,7 @@ import AddTransactionDialog from './AddTransactionDialog';
 import { TransactionType } from '../HomePage/types';
 import useFetch from '../../utils/useFetch';
 import { TransactionCategory } from '../CategoryPage/types';
+import Empty from '../../components/Empty';
 
 const useStyles = makeStyles((theme) => ({
   bannerContainer: {
@@ -43,6 +44,10 @@ const useStyles = makeStyles((theme) => ({
   },
   hoverable: {
     cursor: 'pointer',
+  },
+  placeholderText: {
+    position: 'absolute',
+    bottom: '60px',
   },
 }));
 
@@ -108,49 +113,59 @@ const TransactionList: React.FC<TransactionsPageState> = ({
           <Typography variant="h5">Transactions</Typography>
         </div>
       </div>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell classes={{ root: classes.tableHeader }} />
-            <TableCell classes={{ root: classes.tableHeader }}>Type</TableCell>
-            <TableCell classes={{ root: classes.tableHeader }}>
-              Category
-            </TableCell>
-            <TableCell classes={{ root: classes.tableHeader }}>
-              Amount
-            </TableCell>
-            <TableCell classes={{ root: classes.tableHeader }}>
-              Description
-            </TableCell>
-            <TableCell classes={{ root: classes.tableHeader }}>Date</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {transactions.map((transaction) => (
-            <TableRow
-              key={transaction.id}
-              hover
-              classes={{ root: classes.hoverable }}
-              onClick={(): void => {
-                setSelectedTransaction(transaction);
-              }}
-              selected={
-                selectedTransaction !== null
-                  ? selectedTransaction.id === transaction.id
-                  : false
-              }
-              data-testid={`transaction-row-id-${transaction.id}`}
-            >
-              <TableCell component="th" scope="row" />
-              <TableCell>{typeDescription[transaction.type]}</TableCell>
-              <TableCell>{transaction.category.name}</TableCell>
-              <TableCell>{transaction.amount}</TableCell>
-              <TableCell>{transaction.description}</TableCell>
-              <TableCell>{transaction.date.toLocaleDateString()}</TableCell>
+      {transactions.length > 0 ? (
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell classes={{ root: classes.tableHeader }} />
+              <TableCell classes={{ root: classes.tableHeader }}>Type</TableCell>
+              <TableCell classes={{ root: classes.tableHeader }}>
+                Category
+              </TableCell>
+              <TableCell classes={{ root: classes.tableHeader }}>
+                Amount
+              </TableCell>
+              <TableCell classes={{ root: classes.tableHeader }}>
+                Description
+              </TableCell>
+              <TableCell classes={{ root: classes.tableHeader }}>Date</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHead>
+          <TableBody>
+            {transactions.map((transaction) => (
+              <TableRow
+                key={transaction.id}
+                hover
+                classes={{ root: classes.hoverable }}
+                onClick={(): void => {
+                  setSelectedTransaction(transaction);
+                }}
+                selected={
+                  selectedTransaction !== null
+                    ? selectedTransaction.id === transaction.id
+                    : false
+                }
+                data-testid={`transaction-row-id-${transaction.id}`}
+              >
+                <TableCell component="th" scope="row" />
+                <TableCell>{typeDescription[transaction.type]}</TableCell>
+                <TableCell>{transaction.category.name}</TableCell>
+                <TableCell>{transaction.amount}</TableCell>
+                <TableCell>{transaction.description}</TableCell>
+                <TableCell>{transaction.date.toLocaleDateString()}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      ) : (
+        <Empty
+          label={
+            <Typography className={classes.placeholderText} variant="body1">
+              There are no transactions.
+            </Typography>
+          }
+        />
+      )}
     </div>
   );
 };
