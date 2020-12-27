@@ -62,8 +62,7 @@ namespace Application.Users.Commands
             return new NewUserTransactionCommandVm
             {
                 Account = AccountDto.From(account),
-                Transactions = request.Transactions
-                    .ToList()
+                Transactions = transactions
                     .Select(t =>
                     {
                         var dto = Mapper.Map<TransactionDto>(t);
