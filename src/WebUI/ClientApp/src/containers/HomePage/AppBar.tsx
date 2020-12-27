@@ -127,6 +127,7 @@ const AppBar: React.FC = () => {
         </div>
         <div className={classes.toolbarRightContent}>
           <Button
+            id="appbar-toolbar-account-selection-button"
             classes={{ root: classes.toolbarAccountSelection }}
             onClick={handleClick}
           >
