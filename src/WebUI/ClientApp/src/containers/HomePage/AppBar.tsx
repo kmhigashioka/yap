@@ -120,6 +120,7 @@ const AppBar: React.FC = () => {
             color="inherit"
             aria-label="menu"
             onClick={handleClickIconButton}
+            data-testid="navigation-menu-button"
           >
             <MenuIcon />
           </IconButton>
