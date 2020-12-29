@@ -118,7 +118,9 @@ const TransactionList: React.FC<TransactionsPageState> = ({
           <TableHead>
             <TableRow>
               <TableCell classes={{ root: classes.tableHeader }} />
-              <TableCell classes={{ root: classes.tableHeader }}>Type</TableCell>
+              <TableCell classes={{ root: classes.tableHeader }}>
+                Type
+              </TableCell>
               <TableCell classes={{ root: classes.tableHeader }}>
                 Category
               </TableCell>
@@ -128,7 +130,9 @@ const TransactionList: React.FC<TransactionsPageState> = ({
               <TableCell classes={{ root: classes.tableHeader }}>
                 Description
               </TableCell>
-              <TableCell classes={{ root: classes.tableHeader }}>Date</TableCell>
+              <TableCell classes={{ root: classes.tableHeader }}>
+                Date
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
