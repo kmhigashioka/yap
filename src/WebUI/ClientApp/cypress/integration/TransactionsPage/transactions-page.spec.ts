@@ -22,11 +22,10 @@ describe('Transactions', () => {
       type: 0,
     };
     cy.route('post', '/api/users/transactions?accountId=*', [transaction]);
+    cy.findByText('There are no transactions.').should('be.exist');
     cy.findByTestId('add-transaction').click();
     cy.findByTestId('select-category').click();
-    cy.findAllByRole('option')
-      .contains(transaction.category.name)
-      .click();
+    cy.findAllByRole('option').contains(transaction.category.name).click();
     cy.findByPlaceholderText('Amount')
       .clear()
       .type(transaction.amount.toString());
@@ -53,9 +52,7 @@ describe('Transactions', () => {
     cy.findByTestId('select-type').click();
     cy.findByText('Income').click();
     cy.findByTestId('select-category').click();
-    cy.findAllByRole('option')
-      .contains('Wage')
-      .click();
+    cy.findAllByRole('option').contains('Wage').click();
     cy.findByPlaceholderText('Amount')
       .clear()
       .type(transaction.amount.toString());
@@ -69,7 +66,7 @@ describe('Transactions', () => {
 
   it('should view first transaction', () => {
     cy.findByTestId('transaction-row-id-1').click();
-    cy.get('form').then(subject => {
+    cy.get('form').then((subject) => {
       cy.findByText('Expense', { container: subject }).should('be.visible');
       cy.findByPlaceholderText('Amount', { container: subject }).should(
         'have.value',
@@ -120,16 +117,12 @@ describe('Transactions', () => {
     cy.findByTestId('edit-transaction').click();
     cy.findByTestId('select-transaction-type').click();
     cy.findByText('Income').click();
-    cy.findByPlaceholderText('Amount')
-      .clear()
-      .type(newTransaction.amount);
+    cy.findByPlaceholderText('Amount').clear().type(newTransaction.amount);
     cy.findByPlaceholderText('Description').type(newTransaction.description);
-    cy.findByPlaceholderText('Date')
-      .clear()
-      .type(newTransaction.date);
+    cy.findByPlaceholderText('Date').clear().type(newTransaction.date);
     cy.findByText('Save').click();
     cy.findByText('Transaction successfully updated.').should('be.visible');
-    cy.get('[data-testid="transaction-row-id-1"]').then(subject => {
+    cy.get('[data-testid="transaction-row-id-1"]').then((subject) => {
       cy.findByText(newTransaction.type, { container: subject }).should(
         'be.visible',
       );
@@ -177,9 +170,7 @@ describe('Transactions', () => {
     cy.route('post', '/api/users/transactions?accountId=*', [transaction]);
     cy.findByTestId('add-transaction').click();
     cy.findByTestId('select-category').click();
-    cy.findAllByRole('option')
-      .contains(transaction.category.name)
-      .click();
+    cy.findAllByRole('option').contains(transaction.category.name).click();
     cy.findByText('Save').click();
     cy.findByText('Please select an account.').should('be.visible');
   });
@@ -202,9 +193,7 @@ describe('Transactions', () => {
     });
     cy.findByTestId('add-transaction').click();
     cy.findByTestId('select-category').click();
-    cy.findAllByRole('option')
-      .contains(transaction.category.name)
-      .click();
+    cy.findAllByRole('option').contains(transaction.category.name).click();
     cy.findByPlaceholderText('Amount')
       .clear()
       .type(transaction.amount.toString());
@@ -234,9 +223,7 @@ describe('Transactions', () => {
     });
     cy.findByTestId('add-transaction').click();
     cy.findByTestId('select-category').click();
-    cy.findAllByRole('option')
-      .contains(transaction.category.name)
-      .click();
+    cy.findAllByRole('option').contains(transaction.category.name).click();
     cy.findByPlaceholderText('Amount')
       .clear()
       .type(transaction.amount.toString());
@@ -257,13 +244,9 @@ describe('Transactions', () => {
     };
     cy.findByTestId('transaction-row-id-1').click();
     cy.findByTestId('edit-transaction').click();
-    cy.findByPlaceholderText('Amount')
-      .clear()
-      .type(newTransaction.amount);
+    cy.findByPlaceholderText('Amount').clear().type(newTransaction.amount);
     cy.findByPlaceholderText('Description').type(newTransaction.description);
-    cy.findByPlaceholderText('Date')
-      .clear()
-      .type(newTransaction.date);
+    cy.findByPlaceholderText('Date').clear().type(newTransaction.date);
     cy.findByTestId('cancel-edit-transaction').click();
 
     const oldTransaction = {

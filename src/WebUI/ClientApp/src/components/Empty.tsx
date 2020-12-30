@@ -12,6 +12,10 @@ const useStyles = makeStyles({
     display: 'flex',
     justifyContent: 'center',
     position: 'relative',
+    pointerEvents: 'none',
+    '& *': {
+      pointerEvents: 'auto',
+    },
   },
 });
 
