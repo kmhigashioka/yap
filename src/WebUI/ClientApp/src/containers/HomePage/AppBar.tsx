@@ -28,11 +28,16 @@ const useStyle = makeStyles({
     justifyContent: 'space-between',
   },
   toolbarLeftContent: {},
-  toolbarRightContent: {},
+  toolbarRightContent: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    flex: 1,
+  },
   toolbarAccountSelection: {
     color: '#fff',
     justifyContent: 'space-between',
-    width: '300px',
+    maxWidth: '300px',
+    width: '100%',
   },
   avatarContainer: {
     margin: '0 10px 0 0',
