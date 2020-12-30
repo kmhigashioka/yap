@@ -4,14 +4,19 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
 import Divider from '@material-ui/core/Divider';
+import Drawer from '@material-ui/core/Drawer';
 import { makeStyles, Typography, Popover } from '@material-ui/core';
 import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
 import LibraryBooks from '@material-ui/icons/LibraryBooks';
 import CategoryIcon from '@material-ui/icons/Category';
 import DashboardIcon from '@material-ui/icons/Dashboard';
+import MenuIcon from '@material-ui/icons/Menu';
 import Create from '@material-ui/icons/Create';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
 import { useHistory } from 'react-router-dom';
 
 import CreateNewAccountDialog from './CreateNewAccountDialog';
@@ -23,11 +28,16 @@ const useStyle = makeStyles({
     justifyContent: 'space-between',
   },
   toolbarLeftContent: {},
-  toolbarRightContent: {},
+  toolbarRightContent: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    flex: 1,
+  },
   toolbarAccountSelection: {
     color: '#fff',
     justifyContent: 'space-between',
-    width: '300px',
+    maxWidth: '300px',
+    width: '100%',
   },
   avatarContainer: {
     margin: '0 10px 0 0',
@@ -50,6 +60,9 @@ const useStyle = makeStyles({
     justifyContent: 'flex-start',
     padding: '10px',
   },
+  drawerListItemContainer: {
+    width: '250px',
+  },
 });
 
 const AppBar: React.FC = () => {
@@ -62,6 +75,7 @@ const AppBar: React.FC = () => {
     openCreateNewAccountDialog,
     setOpenCreateNewAccountDialog,
   ] = React.useState<boolean>(false);
+  const [openDrawer, setOpenDrawer] = React.useState<boolean>(false);
   const {
     addAccount,
     setActiveAccount,
@@ -89,41 +103,32 @@ const AppBar: React.FC = () => {
     setOpenCreateNewAccountDialog(false);
   };
 
-  const handleNavigateTo = (path: string): void => {
+  const handleNavigateTo = (path: string) => (): void => {
     history.push(path);
+    setOpenDrawer(false);
+  };
+
+  const handleClickIconButton = (): void => {
+    setOpenDrawer(true);
+  };
+
+  const handleCloseDrawer = (): void => {
+    setOpenDrawer(false);
   };
 
   return (
     <MuiAppBar position="sticky">
       <Toolbar classes={{ root: classes.toolbarContainer }}>
         <div className={classes.toolbarLeftContent}>
-          <Tooltip title="Dashboard">
-            <IconButton
-              className={classes.iconButton}
-              onClick={(): void => handleNavigateTo('/')}
-              data-testid="navigation-button-dashboard"
-            >
-              <DashboardIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Transactions">
-            <IconButton
-              className={classes.iconButton}
-              onClick={(): void => handleNavigateTo('/transactions')}
-              data-testid="navigation-button-transactions"
-            >
-              <LibraryBooks />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Category">
-            <IconButton
-              className={classes.iconButton}
-              onClick={(): void => handleNavigateTo('/category')}
-              data-testid="navigation-button-category"
-            >
-              <CategoryIcon />
-            </IconButton>
-          </Tooltip>
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            onClick={handleClickIconButton}
+            data-testid="navigation-menu-button"
+          >
+            <MenuIcon />
+          </IconButton>
         </div>
         <div className={classes.toolbarRightContent}>
           <Button
@@ -197,6 +202,30 @@ const AppBar: React.FC = () => {
         onClose={handleCloseDialog}
         addAccount={addAccount}
       />
+      <Drawer anchor="left" open={openDrawer} onClose={handleCloseDrawer}>
+        <div className={classes.drawerListItemContainer}>
+          <List>
+            <ListItem button onClick={handleNavigateTo('/')}>
+              <ListItemIcon>
+                <DashboardIcon />
+              </ListItemIcon>
+              <ListItemText primary="Dashboard" />
+            </ListItem>
+            <ListItem button onClick={handleNavigateTo('/transactions')}>
+              <ListItemIcon>
+                <LibraryBooks />
+              </ListItemIcon>
+              <ListItemText primary="Transactions" />
+            </ListItem>
+            <ListItem button onClick={handleNavigateTo('/category')}>
+              <ListItemIcon>
+                <CategoryIcon />
+              </ListItemIcon>
+              <ListItemText primary="Category" />
+            </ListItem>
+          </List>
+        </div>
+      </Drawer>
     </MuiAppBar>
   );
 };
