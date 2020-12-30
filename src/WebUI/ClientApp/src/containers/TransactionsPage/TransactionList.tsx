@@ -2,6 +2,7 @@ import React from 'react';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import {
+  IconButton,
   makeStyles,
   Typography,
   Table,
@@ -10,14 +11,18 @@ import {
   TableCell,
   TableBody,
 } from '@material-ui/core';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import { TransactionsPageState } from './types';
 import { useTransactionsPageContext } from './TransactionsPageContext';
 import AddTransactionDialog from './AddTransactionDialog';
-import { TransactionType } from '../HomePage/types';
+import { Account, TransactionType } from '../HomePage/types';
 import useFetch from '../../utils/useFetch';
 import { TransactionCategory } from '../CategoryPage/types';
 import Empty from '../../components/Empty';
+import DeleteTransactionDialog from './DeleteTransactionDialog';
+import { useHomePageContext } from '../HomePage/HomePageContext';
 
 const useStyles = makeStyles((theme) => ({
   bannerContainer: {
@@ -27,7 +32,6 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     height: '160px',
     justifyContent: 'flex-end',
-    minWidth: 'calc(100vw - 320px)',
     padding: '12px',
   },
   titleContainer: {
@@ -49,6 +53,14 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     bottom: '60px',
   },
+  tableContainer: {
+    width: '100%',
+    overflowX: 'auto',
+  },
+  actionButtonContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
 }));
 
 const TransactionList: React.FC<TransactionsPageState> = ({
@@ -57,12 +69,14 @@ const TransactionList: React.FC<TransactionsPageState> = ({
   setSnackbarMessage,
 }): React.ReactElement => {
   const classes = useStyles();
-  const { transactions } = useTransactionsPageContext();
+  const { deleteTransaction, transactions } = useTransactionsPageContext();
+  const { updateAccountBalance } = useHomePageContext();
   const [
     openAddTransactionDialog,
     setOpenAddTransactionDialog,
   ] = React.useState(false);
   const [categories, setCategories] = React.useState<TransactionCategory[]>([]);
+  const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
   const { requestWithToken } = useFetch();
 
   const handleOpenAddTransactionDialog = (): void => {
@@ -71,6 +85,39 @@ const TransactionList: React.FC<TransactionsPageState> = ({
 
   const handleOnCloseDialog = (): void => {
     setOpenAddTransactionDialog(false);
+  };
+
+  const handleOpenDeleteTransactionDialog = (): void => {
+    setOpenDeleteDialog(true);
+  };
+
+  const handleCloseDeleteDialog = (): void => {
+    setOpenDeleteDialog(false);
+  };
+
+  const handleProceedDeleteDialog = (): void => {
+    if (!selectedTransaction) {
+      return;
+    }
+    const requestDeleteTransaction = async (): Promise<void> => {
+      try {
+        const data = await requestWithToken<Account>(
+          `/api/users/transactions/${selectedTransaction.id}`,
+          {
+            method: 'delete',
+          },
+        );
+        deleteTransaction(selectedTransaction.id);
+        setOpenDeleteDialog(false);
+        setSelectedTransaction(null);
+        setSnackbarMessage('Transaction successfully deleted.');
+        updateAccountBalance(data.id, data.balance);
+      } catch (error) {
+        const errorResponse = await error.response.json();
+        setSnackbarMessage(errorResponse.message);
+      }
+    };
+    requestDeleteTransaction();
   };
 
   const typeDescription = {
@@ -92,8 +139,14 @@ const TransactionList: React.FC<TransactionsPageState> = ({
     fetchTransactionCategories();
   }, [requestWithToken, setSnackbarMessage]);
 
+  React.useEffect(() => {
+    if (!openDeleteDialog) {
+      setSelectedTransaction(null);
+    }
+  }, [openDeleteDialog, setSelectedTransaction]);
+
   return (
-    <div>
+    <>
       <div className={classes.bannerContainer}>
         <div className={classes.titleContainer}>
           <AddTransactionDialog
@@ -114,53 +167,66 @@ const TransactionList: React.FC<TransactionsPageState> = ({
         </div>
       </div>
       {transactions.length > 0 ? (
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell classes={{ root: classes.tableHeader }} />
-              <TableCell classes={{ root: classes.tableHeader }}>
-                Type
-              </TableCell>
-              <TableCell classes={{ root: classes.tableHeader }}>
-                Category
-              </TableCell>
-              <TableCell classes={{ root: classes.tableHeader }}>
-                Amount
-              </TableCell>
-              <TableCell classes={{ root: classes.tableHeader }}>
-                Description
-              </TableCell>
-              <TableCell classes={{ root: classes.tableHeader }}>
-                Date
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {transactions.map((transaction) => (
-              <TableRow
-                key={transaction.id}
-                hover
-                classes={{ root: classes.hoverable }}
-                onClick={(): void => {
-                  setSelectedTransaction(transaction);
-                }}
-                selected={
-                  selectedTransaction !== null
-                    ? selectedTransaction.id === transaction.id
-                    : false
-                }
-                data-testid={`transaction-row-id-${transaction.id}`}
-              >
-                <TableCell component="th" scope="row" />
-                <TableCell>{typeDescription[transaction.type]}</TableCell>
-                <TableCell>{transaction.category.name}</TableCell>
-                <TableCell>{transaction.amount}</TableCell>
-                <TableCell>{transaction.description}</TableCell>
-                <TableCell>{transaction.date.toLocaleDateString()}</TableCell>
+        <div className={classes.tableContainer}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell classes={{ root: classes.tableHeader }} />
+                <TableCell classes={{ root: classes.tableHeader }}>
+                  Type
+                </TableCell>
+                <TableCell classes={{ root: classes.tableHeader }}>
+                  Category
+                </TableCell>
+                <TableCell classes={{ root: classes.tableHeader }}>
+                  Amount
+                </TableCell>
+                <TableCell classes={{ root: classes.tableHeader }}>
+                  Description
+                </TableCell>
+                <TableCell classes={{ root: classes.tableHeader }}>
+                  Date
+                </TableCell>
+                <TableCell
+                  classes={{ root: classes.tableHeader }}
+                  align="center"
+                >
+                  Action
+                </TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHead>
+            <TableBody>
+              {transactions.map((transaction) => (
+                <TableRow
+                  key={transaction.id}
+                  hover
+                  classes={{ root: classes.hoverable }}
+                  onClick={(): void => {
+                    setSelectedTransaction(transaction);
+                  }}
+                  data-testid={`transaction-row-id-${transaction.id}`}
+                >
+                  <TableCell component="th" scope="row" />
+                  <TableCell>{typeDescription[transaction.type]}</TableCell>
+                  <TableCell>{transaction.category.name}</TableCell>
+                  <TableCell>{transaction.amount}</TableCell>
+                  <TableCell>{transaction.description}</TableCell>
+                  <TableCell>{transaction.date.toLocaleDateString()}</TableCell>
+                  <TableCell align="center">
+                    <div className={classes.actionButtonContainer}>
+                      <IconButton>
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton onClick={handleOpenDeleteTransactionDialog}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       ) : (
         <Empty
           label={
@@ -170,7 +236,12 @@ const TransactionList: React.FC<TransactionsPageState> = ({
           }
         />
       )}
-    </div>
+      <DeleteTransactionDialog
+        open={openDeleteDialog}
+        onClose={handleCloseDeleteDialog}
+        onProceed={handleProceedDeleteDialog}
+      />
+    </>
   );
 };
 
