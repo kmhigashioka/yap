@@ -1,23 +1,13 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { makeStyles, Snackbar } from '@material-ui/core';
+import { Snackbar } from '@material-ui/core';
 import TransactionsPageContext from './TransactionsPageContext';
 import { Transaction, Account } from '../HomePage/types';
-import TransactionForm, { TransactionFormPlaceholder } from './TransactionForm';
 import TransactionList from './TransactionList';
 import { useHomePageContext } from '../HomePage/HomePageContext';
 import useFetch from '../../utils/useFetch';
 
-const useStyle = makeStyles({
-  dataContainer: {},
-  transactionsContainer: {
-    display: 'flex',
-    height: 'inherit',
-  },
-});
-
 const TransactionsPage: React.FC = (): React.ReactElement => {
-  const classes = useStyle();
   const [
     selectedTransaction,
     setSelectedTransaction,
@@ -95,22 +85,11 @@ const TransactionsPage: React.FC = (): React.ReactElement => {
         <title>Transactions</title>
         <meta name="description" content="" />
       </Helmet>
-      <div className={classes.transactionsContainer}>
-        <TransactionList
-          selectedTransaction={selectedTransaction}
-          setSelectedTransaction={setSelectedTransaction}
-          setSnackbarMessage={setSnackbarMessage}
-        />
-        {selectedTransaction === null ? (
-          <TransactionFormPlaceholder />
-        ) : (
-          <TransactionForm
-            selectedTransaction={selectedTransaction}
-            setSelectedTransaction={setSelectedTransaction}
-            setSnackbarMessage={setSnackbarMessage}
-          />
-        )}
-      </div>
+      <TransactionList
+        selectedTransaction={selectedTransaction}
+        setSelectedTransaction={setSelectedTransaction}
+        setSnackbarMessage={setSnackbarMessage}
+      />
       <Snackbar
         autoHideDuration={6000}
         open={snackbarMessage !== ''}
