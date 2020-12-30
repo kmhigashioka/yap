@@ -1,5 +1,4 @@
 import React from 'react';
-import Dialog from '@material-ui/core/Dialog';
 import { FormState, StateErrors } from 'react-use-form-state';
 import useFetch from '../../utils/useFetch';
 import AccountDialogForm from '../../components/AccountDialogForm';
@@ -44,15 +43,14 @@ const EditAccountDialog: React.FC<EditAccountDialogProps> = ({
   };
 
   return (
-    <Dialog open={open} onClose={onClose}>
-      <AccountDialogForm
-        onClose={onClose}
-        onSubmit={handleSubmit}
-        title="Edit Account Information"
-        proceedButtonText="Save"
-        initialState={account}
-      />
-    </Dialog>
+    <AccountDialogForm
+      open={open}
+      onClose={onClose}
+      onSubmit={handleSubmit}
+      title="Edit Account Information"
+      proceedButtonText="Save"
+      initialState={account}
+    />
   );
 };
 
