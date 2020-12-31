@@ -99,20 +99,8 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     requestDeleteTransaction();
   };
 
-  const resetForm = React.useCallback(() => {
-    if (selectedTransaction === null) {
-      return;
-    }
-    const { setField } = formState;
-    setField('amount', selectedTransaction.amount);
-    setField('date', selectedTransaction.date);
-    setField('description', selectedTransaction.description);
-    setField('type', selectedTransaction.type);
-  }, [selectedTransaction, formState]);
-
   const handleOnCancelEdit = (event: React.MouseEvent): void => {
     onClose(event);
-    resetForm();
   };
 
   const handleFormSubmit = (event: React.SyntheticEvent): void => {
@@ -153,8 +141,15 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   };
 
   React.useEffect(() => {
-    resetForm();
-  }, [resetForm]);
+    if (selectedTransaction === null) {
+      return;
+    }
+    const { setField } = formState;
+    setField('amount', selectedTransaction.amount);
+    setField('date', selectedTransaction.date);
+    setField('description', selectedTransaction.description);
+    setField('type', selectedTransaction.type);
+  }, [selectedTransaction, formState]);
 
   return (
     <Drawer anchor="right" open={open} onClose={onClose}>

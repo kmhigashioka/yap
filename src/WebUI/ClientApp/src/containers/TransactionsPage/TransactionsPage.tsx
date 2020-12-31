@@ -16,6 +16,7 @@ const TransactionsPage: React.FC = (): React.ReactElement => {
   const [transactions, setTransactions] = React.useState<Transaction[]>([]);
   const [snackbarMessage, setSnackbarMessage] = React.useState('');
   const [openDrawer, setOpenDrawer] = React.useState(false);
+  const transactionFormKeyCounter = React.useRef(0);
   const { activeAccount } = useHomePageContext();
   const { requestWithToken } = useFetch();
 
@@ -41,6 +42,12 @@ const TransactionsPage: React.FC = (): React.ReactElement => {
 
     fetchTransactions(activeAccount);
   }, [activeAccount, requestWithToken]);
+
+  React.useEffect(() => {
+    if (!openDrawer) {
+      transactionFormKeyCounter.current += 1;
+    }
+  }, [openDrawer]);
 
   const addTransaction = (newTransaction: Transaction): void => {
     setTransactions([...transactions, newTransaction]);
@@ -107,6 +114,7 @@ const TransactionsPage: React.FC = (): React.ReactElement => {
         onItemClick={handleItemClick}
       />
       <TransactionForm
+        key={`TransactionFormKey${transactionFormKeyCounter.current}`}
         open={openDrawer}
         onClose={handleCloseDrawer}
         selectedTransaction={selectedTransaction}
