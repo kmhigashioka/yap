@@ -1,13 +1,12 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { FormState, StateErrors, useFormState } from 'react-use-form-state';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Account } from '../containers/HomePage/types';
+import Dialog from './Dialog';
 
 interface AccountDialogFormProps {
   open: boolean;
@@ -30,7 +29,6 @@ const AccountDialogForm: React.FC<AccountDialogFormProps> = ({
   initialState,
 }) => {
   const [formState, { text, number }] = useFormState(initialState);
-  const xsDeviceMatches = useMediaQuery('(max-width:320px)');
 
   const handleSubmit = (evt: React.FormEvent<EventTarget>): void => {
     evt.preventDefault();
@@ -38,7 +36,7 @@ const AccountDialogForm: React.FC<AccountDialogFormProps> = ({
   };
 
   return (
-    <Dialog open={open} onClose={onClose} fullScreen={xsDeviceMatches}>
+    <Dialog open={open} onClose={onClose}>
       <form onSubmit={handleSubmit}>
         <DialogTitle>{title}</DialogTitle>
         <DialogContent>
