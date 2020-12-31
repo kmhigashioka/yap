@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { Snackbar } from '@material-ui/core';
 import TransactionsPageContext from './TransactionsPageContext';
 import { Transaction, Account } from '../HomePage/types';
+import TransactionForm from './TransactionForm';
 import TransactionList from './TransactionList';
 import { useHomePageContext } from '../HomePage/HomePageContext';
 import useFetch from '../../utils/useFetch';
@@ -14,6 +15,7 @@ const TransactionsPage: React.FC = (): React.ReactElement => {
   ] = React.useState<Transaction | null>(null);
   const [transactions, setTransactions] = React.useState<Transaction[]>([]);
   const [snackbarMessage, setSnackbarMessage] = React.useState('');
+  const [openDrawer, setOpenDrawer] = React.useState(false);
   const { activeAccount } = useHomePageContext();
   const { requestWithToken } = useFetch();
 
@@ -71,6 +73,15 @@ const TransactionsPage: React.FC = (): React.ReactElement => {
     setSnackbarMessage('');
   };
 
+  const handleCloseDrawer = (): void => {
+    setOpenDrawer(false);
+  };
+
+  const handleItemClick = (transaction: Transaction | null): void => {
+    setSelectedTransaction(transaction);
+    setOpenDrawer(true);
+  };
+
   return (
     <TransactionsPageContext.Provider
       value={{
@@ -86,6 +97,13 @@ const TransactionsPage: React.FC = (): React.ReactElement => {
         <meta name="description" content="" />
       </Helmet>
       <TransactionList
+        selectedTransaction={selectedTransaction}
+        setSnackbarMessage={setSnackbarMessage}
+        onItemClick={handleItemClick}
+      />
+      <TransactionForm
+        open={openDrawer}
+        onClose={handleCloseDrawer}
         selectedTransaction={selectedTransaction}
         setSelectedTransaction={setSelectedTransaction}
         setSnackbarMessage={setSnackbarMessage}

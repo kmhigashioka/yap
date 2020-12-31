@@ -17,9 +17,9 @@ export interface DeleteTransactionDialogProps {
 }
 
 export interface TransactionsPageState {
-  setSelectedTransaction: (transaction: Transaction | null) => void;
   selectedTransaction: Transaction | null;
   setSnackbarMessage: (message: string) => void;
+  onItemClick: (transaction: Transaction | null) => void;
 }
 
 export interface AddTransactionDialogProps extends DialogProps {
@@ -40,6 +40,8 @@ export interface UpdateUserTransactionCommandVm {
 
 export interface TransactionFormProps {
   setSelectedTransaction: (transaction: Transaction | null) => void;
-  selectedTransaction: Transaction;
+  selectedTransaction: Transaction | null;
   setSnackbarMessage: (message: string) => void;
+  open: boolean;
+  onClose: () => void;
 }
