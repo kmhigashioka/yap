@@ -98,7 +98,7 @@ describe('Transactions', () => {
     cy.findByTestId('delete-transaction').click();
     cy.findByText('No').click();
     cy.findByText('Are you sure you want to delete this transaction?').should(
-      'not.be.visible',
+      'not.exist',
     );
   });
 
