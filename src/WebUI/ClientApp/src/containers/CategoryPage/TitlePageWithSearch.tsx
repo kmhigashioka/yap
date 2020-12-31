@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   searchContainer: {
     display: 'flex',
     flex: 1,
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
   },
   input: {
     '&::before, &::after': { display: 'none' },
