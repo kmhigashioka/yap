@@ -15,7 +15,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Drawer from '@material-ui/core/Drawer';
 
 import { TransactionFormProps, UpdateUserTransactionCommandVm } from './types';
-import DeleteTransactionDialog from './DeleteTransactionDialog';
+import PromptDialog from '../../components/PromptDialog';
 import { Account, TransactionType } from '../HomePage/types';
 import { useTransactionsPageContext } from './TransactionsPageContext';
 import useFetch from '../../utils/useFetch';
@@ -161,7 +161,9 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
             <div className={classes.transactionViewerBannerContainer}>
               <>
                 <div className={classes.actionsContainer}>
-                  <DeleteTransactionDialog
+                  <PromptDialog
+                    title="Delete Transaction"
+                    contentText="Are you sure you want to delete this transaction?"
                     open={openDeleteDialog}
                     onClose={handleCloseDeleteDialog}
                     onProceed={handleProceedDeleteDialog}
