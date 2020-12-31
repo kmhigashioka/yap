@@ -9,6 +9,7 @@ import {
 } from '@material-ui/core';
 import { useFormState } from 'react-use-form-state';
 import { Link, RouteComponentProps } from 'react-router-dom';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import LoginPageContext from './LoginPageContext';
 import Welcome from './Welcome';
 import request, { TokenResponse } from '../../utils/request';
@@ -19,6 +20,10 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     height: '100%',
   },
+  loginWrapperXsToMd: {
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
   formContainer: {
     alignItems: 'center',
     boxSizing: 'border-box',
@@ -27,6 +32,10 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     padding: '50px',
     width: '400px',
+  },
+  formContainerXsToMd: {
+    maxWidth: '400px',
+    width: '100%',
   },
   form: {
     margin: '40px 0',
@@ -52,6 +61,7 @@ const LoginPage: React.FC<RouteComponentProps> = ({
   const [snackbarMessage, setSnackbarMessage] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false);
   const [successfullyLoggedIn, setSuccessfullyLoggedIn] = React.useState(false);
+  const xsToMdDeviceMatches = useMediaQuery('(max-width: 960px)');
 
   React.useEffect(() => {
     if (successfullyLoggedIn) {
@@ -84,14 +94,22 @@ const LoginPage: React.FC<RouteComponentProps> = ({
   };
 
   return (
-    <div className={classes.loginWrapper}>
+    <div
+      className={`${classes.loginWrapper} ${
+        xsToMdDeviceMatches ? classes.loginWrapperXsToMd : ''
+      }`}
+    >
       <LoginPageContext.Provider value={{}}>
         <Helmet>
           <title>Login</title>
           <meta name="description" content="" />
         </Helmet>
-        <Welcome />
-        <div className={classes.formContainer}>
+        <Welcome xsToMdDeviceMatches={xsToMdDeviceMatches} />
+        <div
+          className={`${classes.formContainer} ${
+            xsToMdDeviceMatches ? classes.formContainerXsToMd : ''
+          }`}
+        >
           <Typography variant="h6">LOGIN TO YOUR ACCOUNT</Typography>
           <form className={classes.form} onSubmit={handleSubmit}>
             <TextField
