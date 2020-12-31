@@ -11,12 +11,6 @@ export type TTransactionPageContext = {
   editTransaction: (transactionId: number, newTransaction: Transaction) => void;
 };
 
-export interface DeleteTransactionDialogProps {
-  open: boolean;
-  onClose: () => void;
-  onProceed: () => void;
-}
-
 export interface TransactionsPageState {
   selectedTransaction: Transaction | null;
   setSnackbarMessage: (message: string) => void;
