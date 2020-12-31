@@ -1,5 +1,4 @@
 import React from 'react';
-import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -19,12 +18,14 @@ import {
 } from '../HomePage/types';
 import { useTransactionsPageContext } from './TransactionsPageContext';
 import useFetch from '../../utils/useFetch';
+import Dialog from '../../components/Dialog';
 
 const useStyles = makeStyles({
   fieldContainer: {
     display: 'flex',
     flexDirection: 'column',
     width: '400px',
+    maxWidth: '100%',
   },
   fieldRoot: {
     margin: '8px 0 4px 0',
