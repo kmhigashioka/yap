@@ -73,7 +73,12 @@ const TransactionsPage: React.FC = (): React.ReactElement => {
     setSnackbarMessage('');
   };
 
-  const handleCloseDrawer = (): void => {
+  const handleCloseDrawer = (
+    event: React.KeyboardEvent | React.MouseEvent,
+  ): void => {
+    if (event.currentTarget.className.indexOf('MuiBackdrop-root') > -1) {
+      return;
+    }
     setOpenDrawer(false);
   };
 

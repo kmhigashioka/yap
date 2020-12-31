@@ -2,7 +2,6 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteOutline from '@material-ui/icons/DeleteOutline';
-import EditOutlined from '@material-ui/icons/EditOutlined';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -38,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   },
   actionsContainer: {
     display: 'flex',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
   },
   transactionViewerDetailsContainer: {
     padding: '12px',
@@ -62,7 +61,6 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   const { updateAccountBalance } = useHomePageContext();
   const { deleteTransaction, editTransaction } = useTransactionsPageContext();
   const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
-  const [isEditing, setIsEditing] = React.useState(false);
   const [formState, { text, raw, select, number }] = useFormState({
     date: new Date(),
   });
@@ -101,10 +99,6 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     requestDeleteTransaction();
   };
 
-  const handleOnEdit = (): void => {
-    setIsEditing(true);
-  };
-
   const resetForm = React.useCallback(() => {
     if (selectedTransaction === null) {
       return;
@@ -116,8 +110,8 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     setField('type', selectedTransaction.type);
   }, [selectedTransaction, formState]);
 
-  const handleOnCancelEdit = (): void => {
-    setIsEditing(false);
+  const handleOnCancelEdit = (event: React.MouseEvent): void => {
+    onClose(event);
     resetForm();
   };
 
@@ -146,7 +140,6 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         );
         editTransaction(selectedTransaction.id, editedTransaction);
         setSnackbarMessage('Transaction successfully updated.');
-        setIsEditing(false);
         setSelectedTransaction(editedTransaction);
         data.forEach((d) => {
           updateAccountBalance(d.account.id, d.account.balance);
@@ -178,29 +171,18 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                     onClose={handleCloseDeleteDialog}
                     onProceed={handleProceedDeleteDialog}
                   />
-                  {isEditing ? (
-                    <IconButton
-                      onClick={handleOnCancelEdit}
-                      data-testid="cancel-edit-transaction"
-                    >
-                      <Close />
-                    </IconButton>
-                  ) : (
-                    <>
-                      <IconButton
-                        onClick={handleOnDelete}
-                        data-testid="delete-transaction"
-                      >
-                        <DeleteOutline />
-                      </IconButton>
-                      <IconButton
-                        onClick={handleOnEdit}
-                        data-testid="edit-transaction"
-                      >
-                        <EditOutlined />
-                      </IconButton>
-                    </>
-                  )}
+                  <IconButton
+                    onClick={handleOnCancelEdit}
+                    data-testid="cancel-edit-transaction"
+                  >
+                    <Close />
+                  </IconButton>
+                  <IconButton
+                    onClick={handleOnDelete}
+                    data-testid="delete-transaction"
+                  >
+                    <DeleteOutline />
+                  </IconButton>
                 </div>
                 <div>
                   <Typography>{selectedTransaction.category.name}</Typography>
@@ -213,7 +195,6 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                   <InputLabel>Type</InputLabel>
                   <Select
                     fullWidth
-                    disabled={!isEditing}
                     placeholder="Type"
                     {...select({
                       name: 'type',
@@ -234,7 +215,6 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                   margin="dense"
                   label="Amount"
                   fullWidth
-                  disabled={!isEditing}
                   placeholder="Amount"
                   {...number('amount')}
                 />
@@ -242,7 +222,6 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                   margin="dense"
                   label="Description"
                   fullWidth
-                  disabled={!isEditing}
                   placeholder="Description"
                   {...text('description')}
                 />
@@ -254,7 +233,6 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                   label="Date"
                   placeholder="Date"
                   fullWidth
-                  disabled={!isEditing}
                   autoOk
                   {...raw({
                     name: 'date',
@@ -262,17 +240,15 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                     validate: () => true,
                   })}
                 />
-                {isEditing ? (
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    fullWidth
-                    className={classes.submitEditButton}
-                    type="submit"
-                  >
-                    Save
-                  </Button>
-                ) : null}
+                <Button
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                  className={classes.submitEditButton}
+                  type="submit"
+                >
+                  Save
+                </Button>
               </>
             </div>
           </form>
