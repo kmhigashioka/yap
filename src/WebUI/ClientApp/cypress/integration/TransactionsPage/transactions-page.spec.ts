@@ -98,7 +98,7 @@ describe('Transactions', () => {
     cy.findByTestId('delete-transaction').click();
     cy.findByText('No').click();
     cy.findByText('Are you sure you want to delete this transaction?').should(
-      'not.be.visible',
+      'not.exist',
     );
   });
 
@@ -114,7 +114,6 @@ describe('Transactions', () => {
       category: 'Charges',
     };
     cy.findByTestId('transaction-row-id-1').click();
-    cy.findByTestId('edit-transaction').click();
     cy.findByTestId('select-transaction-type').click();
     cy.findByText('Income').click();
     cy.findByPlaceholderText('Amount').clear().type(newTransaction.amount);
@@ -243,11 +242,11 @@ describe('Transactions', () => {
       category: 'Charges',
     };
     cy.findByTestId('transaction-row-id-1').click();
-    cy.findByTestId('edit-transaction').click();
     cy.findByPlaceholderText('Amount').clear().type(newTransaction.amount);
     cy.findByPlaceholderText('Description').type(newTransaction.description);
     cy.findByPlaceholderText('Date').clear().type(newTransaction.date);
     cy.findByTestId('cancel-edit-transaction').click();
+    cy.findByTestId('transaction-row-id-1').click();
 
     const oldTransaction = {
       amount: 200,
@@ -292,7 +291,6 @@ describe('Transactions', () => {
       response: { message: 'Error message from API' },
     });
     cy.findByTestId('transaction-row-id-1').click();
-    cy.findByTestId('edit-transaction').click();
     cy.findByText('Save').click();
     cy.findByText('Error message from API').should('be.visible');
   });

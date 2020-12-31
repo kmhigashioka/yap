@@ -2,7 +2,6 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteOutline from '@material-ui/icons/DeleteOutline';
-import EditOutlined from '@material-ui/icons/EditOutlined';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -13,6 +12,7 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
+import Drawer from '@material-ui/core/Drawer';
 
 import { TransactionFormProps, UpdateUserTransactionCommandVm } from './types';
 import DeleteTransactionDialog from './DeleteTransactionDialog';
@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   },
   actionsContainer: {
     display: 'flex',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
   },
   transactionViewerDetailsContainer: {
     padding: '12px',
@@ -54,12 +54,13 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   selectedTransaction,
   setSelectedTransaction,
   setSnackbarMessage,
+  open,
+  onClose,
 }): React.ReactElement => {
   const classes = useStyles();
   const { updateAccountBalance } = useHomePageContext();
   const { deleteTransaction, editTransaction } = useTransactionsPageContext();
   const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
-  const [isEditing, setIsEditing] = React.useState(false);
   const [formState, { text, raw, select, number }] = useFormState({
     date: new Date(),
   });
@@ -74,6 +75,9 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   };
 
   const handleProceedDeleteDialog = (): void => {
+    if (selectedTransaction === null) {
+      return;
+    }
     const requestDeleteTransaction = async (): Promise<void> => {
       try {
         const data = await requestWithToken<Account>(
@@ -95,25 +99,15 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     requestDeleteTransaction();
   };
 
-  const handleOnEdit = (): void => {
-    setIsEditing(true);
-  };
-
-  const resetForm = React.useCallback(() => {
-    const { setField } = formState;
-    setField('amount', selectedTransaction.amount);
-    setField('date', selectedTransaction.date);
-    setField('description', selectedTransaction.description);
-    setField('type', selectedTransaction.type);
-  }, [selectedTransaction, formState]);
-
-  const handleOnCancelEdit = (): void => {
-    setIsEditing(false);
-    resetForm();
+  const handleOnCancelEdit = (event: React.MouseEvent): void => {
+    onClose(event);
   };
 
   const handleFormSubmit = (event: React.SyntheticEvent): void => {
     event.preventDefault();
+    if (selectedTransaction === null) {
+      return;
+    }
     const editedTransaction = {
       ...selectedTransaction,
       ...formState.values,
@@ -134,7 +128,6 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         );
         editTransaction(selectedTransaction.id, editedTransaction);
         setSnackbarMessage('Transaction successfully updated.');
-        setIsEditing(false);
         setSelectedTransaction(editedTransaction);
         data.forEach((d) => {
           updateAccountBalance(d.account.id, d.account.balance);
@@ -148,119 +141,115 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   };
 
   React.useEffect(() => {
-    resetForm();
-  }, [resetForm]);
+    if (selectedTransaction === null) {
+      return;
+    }
+    const { setField } = formState;
+    setField('amount', selectedTransaction.amount);
+    setField('date', selectedTransaction.date);
+    setField('description', selectedTransaction.description);
+    setField('type', selectedTransaction.type);
+  }, [selectedTransaction, formState]);
 
   return (
-    <div className={classes.transactionViewerContainer}>
-      <form onSubmit={handleFormSubmit}>
-        <div className={classes.transactionViewerBannerContainer}>
-          <>
-            <div className={classes.actionsContainer}>
-              <DeleteTransactionDialog
-                open={openDeleteDialog}
-                onClose={handleCloseDeleteDialog}
-                onProceed={handleProceedDeleteDialog}
-              />
-              {isEditing ? (
-                <IconButton
-                  onClick={handleOnCancelEdit}
-                  data-testid="cancel-edit-transaction"
-                >
-                  <Close />
-                </IconButton>
-              ) : (
-                <>
+    <Drawer anchor="right" open={open} onClose={onClose}>
+      {selectedTransaction === null ? (
+        <TransactionFormPlaceholder />
+      ) : (
+        <div className={classes.transactionViewerContainer}>
+          <form onSubmit={handleFormSubmit}>
+            <div className={classes.transactionViewerBannerContainer}>
+              <>
+                <div className={classes.actionsContainer}>
+                  <DeleteTransactionDialog
+                    open={openDeleteDialog}
+                    onClose={handleCloseDeleteDialog}
+                    onProceed={handleProceedDeleteDialog}
+                  />
+                  <IconButton
+                    onClick={handleOnCancelEdit}
+                    data-testid="cancel-edit-transaction"
+                  >
+                    <Close />
+                  </IconButton>
                   <IconButton
                     onClick={handleOnDelete}
                     data-testid="delete-transaction"
                   >
                     <DeleteOutline />
                   </IconButton>
-                  <IconButton
-                    onClick={handleOnEdit}
-                    data-testid="edit-transaction"
+                </div>
+                <div>
+                  <Typography>{selectedTransaction.category.name}</Typography>
+                </div>
+              </>
+            </div>
+            <div className={classes.transactionViewerDetailsContainer}>
+              <>
+                <FormControl fullWidth classes={{ root: classes.fieldRoot }}>
+                  <InputLabel>Type</InputLabel>
+                  <Select
+                    fullWidth
+                    placeholder="Type"
+                    {...select({
+                      name: 'type',
+                      onChange: (event) => event.target.value,
+                      validate: () => true,
+                    })}
+                    SelectDisplayProps={{
+                      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+                      // @ts-ignore
+                      'data-testid': 'select-transaction-type',
+                    }}
                   >
-                    <EditOutlined />
-                  </IconButton>
-                </>
-              )}
+                    <MenuItem value={TransactionType.Expense}>Expense</MenuItem>
+                    <MenuItem value={TransactionType.Income}>Income</MenuItem>
+                  </Select>
+                </FormControl>
+                <TextField
+                  margin="dense"
+                  label="Amount"
+                  fullWidth
+                  placeholder="Amount"
+                  {...number('amount')}
+                />
+                <TextField
+                  margin="dense"
+                  label="Description"
+                  fullWidth
+                  placeholder="Description"
+                  {...text('description')}
+                />
+                <KeyboardDatePicker
+                  className={classes.fieldRoot}
+                  disableToolbar
+                  variant="inline"
+                  format="MM/DD/YYYY"
+                  label="Date"
+                  placeholder="Date"
+                  fullWidth
+                  autoOk
+                  {...raw({
+                    name: 'date',
+                    onChange: (date) => date && date.toDate(),
+                    validate: () => true,
+                  })}
+                />
+                <Button
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                  className={classes.submitEditButton}
+                  type="submit"
+                >
+                  Save
+                </Button>
+              </>
             </div>
-            <div>
-              <Typography>{selectedTransaction.category.name}</Typography>
-            </div>
-          </>
+          </form>
         </div>
-        <div className={classes.transactionViewerDetailsContainer}>
-          <>
-            <FormControl fullWidth classes={{ root: classes.fieldRoot }}>
-              <InputLabel>Type</InputLabel>
-              <Select
-                fullWidth
-                disabled={!isEditing}
-                placeholder="Type"
-                {...select({
-                  name: 'type',
-                  onChange: (event) => event.target.value,
-                  validate: () => true,
-                })}
-                SelectDisplayProps={{
-                  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-                  // @ts-ignore
-                  'data-testid': 'select-transaction-type',
-                }}
-              >
-                <MenuItem value={TransactionType.Expense}>Expense</MenuItem>
-                <MenuItem value={TransactionType.Income}>Income</MenuItem>
-              </Select>
-            </FormControl>
-            <TextField
-              margin="dense"
-              label="Amount"
-              fullWidth
-              disabled={!isEditing}
-              placeholder="Amount"
-              {...number('amount')}
-            />
-            <TextField
-              margin="dense"
-              label="Description"
-              fullWidth
-              disabled={!isEditing}
-              placeholder="Description"
-              {...text('description')}
-            />
-            <KeyboardDatePicker
-              className={classes.fieldRoot}
-              disableToolbar
-              variant="inline"
-              format="MM/DD/YYYY"
-              label="Date"
-              placeholder="Date"
-              fullWidth
-              disabled={!isEditing}
-              autoOk
-              {...raw({
-                name: 'date',
-                onChange: (date) => date && date.toDate(),
-                validate: () => true,
-              })}
-            />
-            {isEditing ? (
-              <Button
-                variant="contained"
-                color="primary"
-                fullWidth
-                className={classes.submitEditButton}
-                type="submit"
-              >
-                Save
-              </Button>
-            ) : null}
-          </>
-        </div>
-      </form>
-    </div>
+      )}
+    </Drawer>
   );
 };
 

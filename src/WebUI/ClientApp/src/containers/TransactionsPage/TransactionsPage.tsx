@@ -1,29 +1,22 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { makeStyles, Snackbar } from '@material-ui/core';
+import { Snackbar } from '@material-ui/core';
 import TransactionsPageContext from './TransactionsPageContext';
 import { Transaction, Account } from '../HomePage/types';
-import TransactionForm, { TransactionFormPlaceholder } from './TransactionForm';
+import TransactionForm from './TransactionForm';
 import TransactionList from './TransactionList';
 import { useHomePageContext } from '../HomePage/HomePageContext';
 import useFetch from '../../utils/useFetch';
 
-const useStyle = makeStyles({
-  dataContainer: {},
-  transactionsContainer: {
-    display: 'flex',
-    height: 'inherit',
-  },
-});
-
 const TransactionsPage: React.FC = (): React.ReactElement => {
-  const classes = useStyle();
   const [
     selectedTransaction,
     setSelectedTransaction,
   ] = React.useState<Transaction | null>(null);
   const [transactions, setTransactions] = React.useState<Transaction[]>([]);
   const [snackbarMessage, setSnackbarMessage] = React.useState('');
+  const [openDrawer, setOpenDrawer] = React.useState(false);
+  const transactionFormKeyCounter = React.useRef(0);
   const { activeAccount } = useHomePageContext();
   const { requestWithToken } = useFetch();
 
@@ -49,6 +42,12 @@ const TransactionsPage: React.FC = (): React.ReactElement => {
 
     fetchTransactions(activeAccount);
   }, [activeAccount, requestWithToken]);
+
+  React.useEffect(() => {
+    if (!openDrawer) {
+      transactionFormKeyCounter.current += 1;
+    }
+  }, [openDrawer]);
 
   const addTransaction = (newTransaction: Transaction): void => {
     setTransactions([...transactions, newTransaction]);
@@ -81,6 +80,20 @@ const TransactionsPage: React.FC = (): React.ReactElement => {
     setSnackbarMessage('');
   };
 
+  const handleCloseDrawer = (
+    event: React.KeyboardEvent | React.MouseEvent,
+  ): void => {
+    if (event.currentTarget.className.indexOf('MuiBackdrop-root') > -1) {
+      return;
+    }
+    setOpenDrawer(false);
+  };
+
+  const handleItemClick = (transaction: Transaction | null): void => {
+    setSelectedTransaction(transaction);
+    setOpenDrawer(true);
+  };
+
   return (
     <TransactionsPageContext.Provider
       value={{
@@ -95,22 +108,19 @@ const TransactionsPage: React.FC = (): React.ReactElement => {
         <title>Transactions</title>
         <meta name="description" content="" />
       </Helmet>
-      <div className={classes.transactionsContainer}>
-        <TransactionList
-          selectedTransaction={selectedTransaction}
-          setSelectedTransaction={setSelectedTransaction}
-          setSnackbarMessage={setSnackbarMessage}
-        />
-        {selectedTransaction === null ? (
-          <TransactionFormPlaceholder />
-        ) : (
-          <TransactionForm
-            selectedTransaction={selectedTransaction}
-            setSelectedTransaction={setSelectedTransaction}
-            setSnackbarMessage={setSnackbarMessage}
-          />
-        )}
-      </div>
+      <TransactionList
+        selectedTransaction={selectedTransaction}
+        setSnackbarMessage={setSnackbarMessage}
+        onItemClick={handleItemClick}
+      />
+      <TransactionForm
+        key={`TransactionFormKey${transactionFormKeyCounter.current}`}
+        open={openDrawer}
+        onClose={handleCloseDrawer}
+        selectedTransaction={selectedTransaction}
+        setSelectedTransaction={setSelectedTransaction}
+        setSnackbarMessage={setSnackbarMessage}
+      />
       <Snackbar
         autoHideDuration={6000}
         open={snackbarMessage !== ''}
