@@ -48,7 +48,7 @@ describe('Dashboard', () => {
     const testid = 'account-1';
     cy.findByTestId(testid).findByTitle('More Actions').click();
     cy.findByText('Delete').type('{esc}');
-    cy.findByText('Delete').should('not.be.visible');
+    cy.findByText('Delete').should('not.exist');
   });
 
   it('should edit account successfully', () => {
@@ -105,5 +105,12 @@ describe('Dashboard', () => {
     cy.findByText('Delete').click();
     cy.findByText('Proceed').click();
     cy.findByText('ALL').should('be.visible');
+  });
+
+  it('should open Create New Account button from empty placeholder', () => {
+    cy.route('/api/users/accounts', []);
+    cy.findByLabelText('CREATE ONE HERE').click();
+    cy.findByText('CREATE NEW ACCOUNT').click();
+    cy.findByRole('dialog').should('be.exist');
   });
 });

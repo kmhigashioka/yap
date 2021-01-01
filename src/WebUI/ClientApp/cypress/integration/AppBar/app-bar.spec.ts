@@ -45,21 +45,25 @@ describe('AppBar', () => {
       .type(newAccount.balance.toString());
     cy.findByText('Create').click();
     cy.findByText('New Account').should('be.visible');
+    cy.findByText('New account successfully created.').should('be.exist');
   });
 
   it('should navigate to Dashboard page', () => {
-    cy.findByTestId('navigation-button-dashboard').click();
+    cy.findByTestId('navigation-menu-button').click();
+    cy.findByText('Dashboard').click();
     cy.title().should('contain', 'Dashboard');
   });
 
   it('should navigate to Transactions page', () => {
-    cy.findByTestId('navigation-button-transactions').click();
+    cy.findByTestId('navigation-menu-button').click();
+    cy.findByText('Transactions').click();
     cy.title().should('contain', 'Transactions');
   });
 
   it('should navigate to Category page', () => {
     cy.route('/api/usercategories?userId=1', 'fixture:usercategories.json');
-    cy.findByTestId('navigation-button-category').click();
+    cy.findByTestId('navigation-menu-button').click();
+    cy.findByText('Category').click();
     cy.title().should('contain', 'Category');
   });
 });
