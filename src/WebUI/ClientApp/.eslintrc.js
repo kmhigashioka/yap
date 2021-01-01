@@ -66,7 +66,6 @@ module.exports = {
     'newline-per-chained-call': 0,
     'no-confusing-arrow': 0,
     'no-console': 1,
-    'no-unused-vars': 2,
     'no-use-before-define': 0,
     'prefer-template': 2,
     'react/destructuring-assignment': 0,
@@ -86,6 +85,10 @@ module.exports = {
     'react/sort-comp': 0,
     'require-yield': 0,
     '@typescript-eslint/no-use-before-define': 0,
+    // Workaround while https://github.com/eslint/typescript-eslint-parser/issues/437 is open
+    '@typescript-eslint/no-unused-vars': 0,
+    'no-unused-vars': 0,
+    'no-undef': 0,
   },
   settings: {
     'import/resolver': {

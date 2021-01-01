@@ -25,6 +25,8 @@ export type Account = {
   transactions: Transaction[];
 };
 
+// Workaround while https://github.com/eslint/typescript-eslint-parser/issues/437 is open
+// eslint-disable-next-line no-shadow
 export enum TransactionType {
   Expense,
   Income,
