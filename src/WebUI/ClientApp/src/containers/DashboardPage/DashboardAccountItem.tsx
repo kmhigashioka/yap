@@ -19,7 +19,8 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '4px',
     border: `1px solid ${theme.palette.secondary.light}`,
     margin: '0 16px 16px 0',
-    minWidth: '300px',
+    maxWidth: '300px',
+    width: '100%',
   },
   header: {
     alignItems: 'center',
