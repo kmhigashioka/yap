@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { makeStyles } from '@material-ui/core';
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import Lottie from 'react-lottie-player';
 import animationData from './lottie-json/lf30_editor_yd2p1jqt.json';

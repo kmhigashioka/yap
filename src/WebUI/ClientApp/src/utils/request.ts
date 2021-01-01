@@ -84,6 +84,13 @@ function usualApiCall<T>(url: string, options?: any | undefined): Promise<T> {
   return request<T>(url, { headers: { Authorization: authorization } });
 }
 
+export interface TokenResponse {
+  // eslint-disable-next-line camelcase
+  access_token: string;
+  // eslint-disable-next-line camelcase
+  refresh_token: string;
+}
+
 async function requestForTokenRenewal(): Promise<void> {
   const body = `grant_type=refresh_token&client_id=mvc&refresh_token=${auth.refreshToken}`;
   try {
@@ -101,9 +108,4 @@ async function requestForTokenRenewal(): Promise<void> {
   } finally {
     currentRequestingTokenRenewal = null;
   }
-}
-
-export interface TokenResponse {
-  access_token: string;
-  refresh_token: string;
 }

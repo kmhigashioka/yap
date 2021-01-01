@@ -1,1 +1,1 @@
-export type TLoginPageContext = {};
+export type TLoginPageContext = unknown;

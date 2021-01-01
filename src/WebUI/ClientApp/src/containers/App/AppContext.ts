@@ -1,7 +1,6 @@
 import React from 'react';
-import { TAppContext } from './types';
 
-const AppContext = React.createContext<TAppContext>({});
+const AppContext = React.createContext({});
 
 AppContext.displayName = 'AppContext';
 

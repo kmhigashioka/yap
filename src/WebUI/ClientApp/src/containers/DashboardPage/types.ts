@@ -1,6 +1,6 @@
 import { Account } from '../HomePage/types';
 
-export type TDashboardPageContext = {};
+export type TDashboardPageContext = unknown;
 
 export interface DashboardAccountItemProps {
   account: Account;

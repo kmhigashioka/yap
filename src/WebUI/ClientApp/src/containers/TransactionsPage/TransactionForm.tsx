@@ -197,7 +197,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                       validate: () => true,
                     })}
                     SelectDisplayProps={{
-                      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+                      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                       // @ts-ignore
                       'data-testid': 'select-transaction-type',
                     }}

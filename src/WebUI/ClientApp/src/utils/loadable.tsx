@@ -14,7 +14,7 @@ const loadable = (
   | undefined => {
   const LazyComponent = lazy(importFunc);
 
-  return (props: {}): React.ReactElement => (
+  return (props: unknown): React.ReactElement => (
     <Suspense fallback={fallback}>
       <LazyComponent {...props} />
     </Suspense>

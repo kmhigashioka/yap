@@ -1,1 +1,1 @@
-export type TRegisterPageContext = {};
+export type TRegisterPageContext = unknown;

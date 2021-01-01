@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Welcome: React.FC<{}> = (): React.ReactElement => {
+const Welcome: React.FC = (): React.ReactElement => {
   const classes = useStyles();
 
   return (
