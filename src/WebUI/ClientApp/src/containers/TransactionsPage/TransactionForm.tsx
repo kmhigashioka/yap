@@ -102,7 +102,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         setSelectedTransaction(null);
         setSnackbarMessage('Transaction successfully deleted.');
         updateAccountBalance(data.id, data.balance);
-        onClose(null);
+        onClose();
       } catch (error) {
         const errorResponse = await error.response.json();
         setSnackbarMessage(errorResponse.message);
@@ -111,8 +111,8 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     requestDeleteTransaction();
   };
 
-  const handleOnCancelEdit = (event: React.MouseEvent): void => {
-    onClose(event);
+  const handleOnCancelEdit = (): void => {
+    onClose();
   };
 
   const handleFormSubmit = (event: React.SyntheticEvent): void => {
@@ -152,8 +152,14 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     updateTransaction();
   };
 
-  const handleClose = (event: React.KeyboardEvent | React.MouseEvent): void => {
-    onClose(event);
+  const handleClose = (
+    event: React.KeyboardEvent | React.MouseEvent,
+    reason: string,
+  ): void => {
+    if (reason === 'backdropClick') {
+      return;
+    }
+    onClose();
   };
 
   return (
