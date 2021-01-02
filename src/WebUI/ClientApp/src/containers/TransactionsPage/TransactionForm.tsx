@@ -13,6 +13,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Drawer from '@material-ui/core/Drawer';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import { TransactionFormProps, UpdateUserTransactionCommandVm } from './types';
 import DeleteTransactionDialog from './DeleteTransactionDialog';
@@ -177,18 +178,16 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                     onClose={handleCloseDeleteDialog}
                     onProceed={handleProceedDeleteDialog}
                   />
-                  <IconButton
-                    onClick={handleOnCancelEdit}
-                    data-testid="cancel-edit-transaction"
-                  >
-                    <Close />
-                  </IconButton>
-                  <IconButton
-                    onClick={handleOnDelete}
-                    data-testid="delete-transaction"
-                  >
-                    <DeleteOutline />
-                  </IconButton>
+                  <Tooltip title="Dismiss">
+                    <IconButton onClick={handleOnCancelEdit}>
+                      <Close />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Delete">
+                    <IconButton onClick={handleOnDelete}>
+                      <DeleteOutline />
+                    </IconButton>
+                  </Tooltip>
                 </div>
                 <div>
                   <Typography>{selectedTransaction.category.name}</Typography>
