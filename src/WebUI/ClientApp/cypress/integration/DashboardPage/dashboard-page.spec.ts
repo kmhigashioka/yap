@@ -61,13 +61,9 @@ describe('Dashboard', () => {
     const testid = 'account-1';
     cy.findByTestId(testid).findByTitle('More Actions').click();
     cy.findByText('Edit').click();
-    cy.findByPlaceholderText('Name').clear().type(newAccount.name);
-    cy.findByPlaceholderText(/Abbreviation/)
-      .clear()
-      .type(newAccount.abbreviation);
-    cy.findByPlaceholderText('Starting Balance')
-      .clear()
-      .type(newAccount.balance.toString());
+    cy.findByPlaceholderText('Savings').clear().type(newAccount.name);
+    cy.findByPlaceholderText('XYZ').clear().type(newAccount.abbreviation);
+    cy.findByPlaceholderText('0').clear().type(newAccount.balance.toString());
     cy.findByText('Save').click();
     cy.findByText('Account successfully updated.').should('be.visible');
   });
