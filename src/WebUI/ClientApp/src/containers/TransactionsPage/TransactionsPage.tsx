@@ -81,9 +81,12 @@ const TransactionsPage: React.FC = (): React.ReactElement => {
   };
 
   const handleCloseDrawer = (
-    event: React.KeyboardEvent | React.MouseEvent,
+    event: React.KeyboardEvent | React.MouseEvent | null,
   ): void => {
-    if (event.currentTarget.className.indexOf('MuiBackdrop-root') > -1) {
+    if (
+      !!event &&
+      event.currentTarget.className.indexOf('MuiBackdrop-root') > -1
+    ) {
       return;
     }
     setOpenDrawer(false);

@@ -66,6 +66,17 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   });
   const { requestWithToken } = useFetch();
 
+  React.useEffect(() => {
+    if (selectedTransaction === null) {
+      return;
+    }
+    const { setField } = formState;
+    setField('amount', selectedTransaction.amount);
+    setField('date', selectedTransaction.date);
+    setField('description', selectedTransaction.description);
+    setField('type', selectedTransaction.type);
+  }, [selectedTransaction, formState]);
+
   const handleOnDelete = (): void => {
     setOpenDeleteDialog(true);
   };
@@ -91,6 +102,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         setSelectedTransaction(null);
         setSnackbarMessage('Transaction successfully deleted.');
         updateAccountBalance(data.id, data.balance);
+        onClose(null);
       } catch (error) {
         const errorResponse = await error.response.json();
         setSnackbarMessage(errorResponse.message);
@@ -140,19 +152,12 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     updateTransaction();
   };
 
-  React.useEffect(() => {
-    if (selectedTransaction === null) {
-      return;
-    }
-    const { setField } = formState;
-    setField('amount', selectedTransaction.amount);
-    setField('date', selectedTransaction.date);
-    setField('description', selectedTransaction.description);
-    setField('type', selectedTransaction.type);
-  }, [selectedTransaction, formState]);
+  const handleClose = (event: React.KeyboardEvent | React.MouseEvent): void => {
+    onClose(event);
+  };
 
   return (
-    <Drawer anchor="right" open={open} onClose={onClose}>
+    <Drawer anchor="right" open={open} onClose={handleClose}>
       {selectedTransaction === null ? (
         <TransactionFormPlaceholder />
       ) : (

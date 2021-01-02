@@ -44,5 +44,5 @@ export interface TransactionFormProps {
   selectedTransaction: Transaction | null;
   setSnackbarMessage: (message: string) => void;
   open: boolean;
-  onClose: (event: React.KeyboardEvent | React.MouseEvent) => void;
+  onClose: (event: React.KeyboardEvent | React.MouseEvent | null) => void;
 }
