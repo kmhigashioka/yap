@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { DialogProps } from '@material-ui/core/Dialog';
 import { TransactionCategory } from '../CategoryPage/types';
 import { Account, Transaction, TransactionType } from '../HomePage/types';
