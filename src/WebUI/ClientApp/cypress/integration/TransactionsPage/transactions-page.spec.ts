@@ -115,6 +115,7 @@ describe('Transactions', () => {
       category: 'Charges',
     };
     cy.findByTestId('transaction-row-id-1').click();
+    cy.get('.MuiBackdrop-root').click();
     cy.findByTestId('select-transaction-type').click();
     cy.findByText('Income').click();
     cy.findByPlaceholderText('Amount').clear().type(newTransaction.amount);
