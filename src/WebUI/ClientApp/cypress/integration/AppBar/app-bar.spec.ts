@@ -38,11 +38,9 @@ describe('AppBar', () => {
     cy.route('POST', '/api/Accounts', newAccount);
     cy.findByText('ALL').click();
     cy.findByText('CREATE NEW ACCOUNT').click();
-    cy.findByPlaceholderText('Name').type(newAccount.name);
-    cy.findByPlaceholderText(/Abbreviation/).type(newAccount.abbreviation);
-    cy.findByPlaceholderText('Starting Balance')
-      .clear()
-      .type(newAccount.balance.toString());
+    cy.findByPlaceholderText('Savings').type(newAccount.name);
+    cy.findByPlaceholderText('XYZ').type(newAccount.abbreviation);
+    cy.findByPlaceholderText('0').clear().type(newAccount.balance.toString());
     cy.findByText('Create').click();
     cy.findByText('New Account').should('be.visible');
     cy.findByText('New account successfully created.').should('be.exist');
