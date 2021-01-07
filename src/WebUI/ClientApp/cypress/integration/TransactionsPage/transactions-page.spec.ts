@@ -86,16 +86,17 @@ describe('Transactions', () => {
   it('should delete first transaction', () => {
     cy.route('delete', '/api/users/transactions/1', {});
     cy.findByTestId('transaction-row-id-1').click();
-    cy.findByTestId('delete-transaction').click();
+    cy.findByTitle('Delete').click();
     cy.findByText('Yes').click();
     cy.findByText('Transaction successfully deleted.').should('be.visible');
     cy.findByTestId('transaction-row-id-1').should('not.exist');
+    cy.findByTitle('Delete').should('not.exist');
   });
 
   it('should dismiss delete dialog when No/Cancel is pressed', () => {
     cy.route('delete', '/api/users/transactions/1', {});
     cy.findByTestId('transaction-row-id-1').click();
-    cy.findByTestId('delete-transaction').click();
+    cy.findByTitle('Delete').click();
     cy.findByText('No').click();
     cy.findByText('Are you sure you want to delete this transaction?').should(
       'not.exist',
@@ -114,6 +115,7 @@ describe('Transactions', () => {
       category: 'Charges',
     };
     cy.findByTestId('transaction-row-id-1').click();
+    cy.get('.MuiBackdrop-root').click();
     cy.findByTestId('select-transaction-type').click();
     cy.findByText('Income').click();
     cy.findByPlaceholderText('Amount').clear().type(newTransaction.amount);
@@ -245,7 +247,7 @@ describe('Transactions', () => {
     cy.findByPlaceholderText('Amount').clear().type(newTransaction.amount);
     cy.findByPlaceholderText('Description').type(newTransaction.description);
     cy.findByPlaceholderText('Date').clear().type(newTransaction.date);
-    cy.findByTestId('cancel-edit-transaction').click();
+    cy.findByTitle('Dismiss').click();
     cy.findByTestId('transaction-row-id-1').click();
 
     const oldTransaction = {
@@ -278,7 +280,7 @@ describe('Transactions', () => {
       response: { message: 'Error message from API' },
     });
     cy.findByTestId('transaction-row-id-1').click();
-    cy.findByTestId('delete-transaction').click();
+    cy.findByTitle('Delete').click();
     cy.findByText('Yes').click();
     cy.findByText('Error message from API').should('be.visible');
   });
