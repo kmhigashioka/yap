@@ -38,6 +38,7 @@ const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
   setSnackbarMessage,
   categories,
 }): React.ReactElement => {
+  const shouldClose = React.useRef(false);
   const { activeAccount } = useHomePageContext();
   const { addTransaction } = useTransactionsPageContext();
   const [formState, { text, raw, select }] = useFormState({
@@ -100,7 +101,9 @@ const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
           },
         );
         setSnackbarMessage('Transaction successfully created.');
-        onClose();
+        if (shouldClose.current) {
+          onClose();
+        }
         formState.reset();
         data.transactions.forEach((d) => {
           addTransaction({
@@ -134,6 +137,10 @@ const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
     formState.setField('category', event.target.value);
   };
 
+  const handleSaveAndCloseClick = (): void => {
+    shouldClose.current = true;
+  };
+
   return (
     <Dialog open={open} onClose={onClose}>
       <form name="add-transaction-form" onSubmit={handleOnSubmit}>
@@ -159,9 +166,12 @@ const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
               <InputLabel>Category</InputLabel>
               <Select
                 placeholder="Category"
-                onChange={handleChangeCategory}
                 data-testid="select-category"
-                value={values.category}
+                {...select({
+                  name: 'category',
+                  onChange: handleChangeCategory,
+                  validate: () => true,
+                })}
               >
                 {categories.map((category) => (
                   <MenuItem key={category.name} value={category.id}>
@@ -215,6 +225,13 @@ const AddTransactionDialog: React.FC<AddTransactionDialogProps> = ({
         <DialogActions>
           <Button color="primary" onClick={handleCancel}>
             Cancel
+          </Button>
+          <Button
+            color="primary"
+            type="submit"
+            onClick={handleSaveAndCloseClick}
+          >
+            Save & Close
           </Button>
           <Button color="primary" type="submit">
             Save
