@@ -1,5 +1,4 @@
 import React from 'react';
-import Dialog from '@material-ui/core/Dialog';
 import Snackbar from '@material-ui/core/Snackbar';
 import { FormState, StateErrors } from 'react-use-form-state';
 import { FormDialogProps, Account } from './types';
@@ -45,9 +44,11 @@ const CreateNewAccountDialog: React.FC<FormDialogProps> = ({
 
   return (
     <>
-      <Dialog open={open} onClose={onClose}>
-        <AccountDialogForm onClose={onClose} onSubmit={handleSubmit} />
-      </Dialog>
+      <AccountDialogForm
+        open={open}
+        onClose={onClose}
+        onSubmit={handleSubmit}
+      />
       <Snackbar
         autoHideDuration={6000}
         open={snackbarMessage !== ''}

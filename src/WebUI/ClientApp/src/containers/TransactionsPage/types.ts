@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { DialogProps } from '@material-ui/core/Dialog';
 import { TransactionCategory } from '../CategoryPage/types';
 import { Account, Transaction, TransactionType } from '../HomePage/types';
@@ -38,5 +37,5 @@ export interface TransactionFormProps {
   selectedTransaction: Transaction | null;
   setSnackbarMessage: (message: string) => void;
   open: boolean;
-  onClose: (event: React.KeyboardEvent | React.MouseEvent) => void;
+  onClose: () => void;
 }

@@ -13,6 +13,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Drawer from '@material-ui/core/Drawer';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import { TransactionFormProps, UpdateUserTransactionCommandVm } from './types';
 import PromptDialog from '../../components/PromptDialog';
@@ -66,6 +67,17 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   });
   const { requestWithToken } = useFetch();
 
+  React.useEffect(() => {
+    if (selectedTransaction === null) {
+      return;
+    }
+    const { setField } = formState;
+    setField('amount', selectedTransaction.amount);
+    setField('date', selectedTransaction.date);
+    setField('description', selectedTransaction.description);
+    setField('type', selectedTransaction.type);
+  }, [selectedTransaction, formState]);
+
   const handleOnDelete = (): void => {
     setOpenDeleteDialog(true);
   };
@@ -91,6 +103,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         setSelectedTransaction(null);
         setSnackbarMessage('Transaction successfully deleted.');
         updateAccountBalance(data.id, data.balance);
+        onClose();
       } catch (error) {
         const errorResponse = await error.response.json();
         setSnackbarMessage(errorResponse.message);
@@ -99,8 +112,8 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     requestDeleteTransaction();
   };
 
-  const handleOnCancelEdit = (event: React.MouseEvent): void => {
-    onClose(event);
+  const handleOnCancelEdit = (): void => {
+    onClose();
   };
 
   const handleFormSubmit = (event: React.SyntheticEvent): void => {
@@ -140,19 +153,18 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     updateTransaction();
   };
 
-  React.useEffect(() => {
-    if (selectedTransaction === null) {
+  const handleClose = (
+    event: React.KeyboardEvent | React.MouseEvent,
+    reason: string,
+  ): void => {
+    if (reason === 'backdropClick') {
       return;
     }
-    const { setField } = formState;
-    setField('amount', selectedTransaction.amount);
-    setField('date', selectedTransaction.date);
-    setField('description', selectedTransaction.description);
-    setField('type', selectedTransaction.type);
-  }, [selectedTransaction, formState]);
+    onClose();
+  };
 
   return (
-    <Drawer anchor="right" open={open} onClose={onClose}>
+    <Drawer anchor="right" open={open} onClose={handleClose}>
       {selectedTransaction === null ? (
         <TransactionFormPlaceholder />
       ) : (
@@ -168,18 +180,16 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                     onClose={handleCloseDeleteDialog}
                     onProceed={handleProceedDeleteDialog}
                   />
-                  <IconButton
-                    onClick={handleOnCancelEdit}
-                    data-testid="cancel-edit-transaction"
-                  >
-                    <Close />
-                  </IconButton>
-                  <IconButton
-                    onClick={handleOnDelete}
-                    data-testid="delete-transaction"
-                  >
-                    <DeleteOutline />
-                  </IconButton>
+                  <Tooltip title="Dismiss">
+                    <IconButton onClick={handleOnCancelEdit}>
+                      <Close />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Delete">
+                    <IconButton onClick={handleOnDelete}>
+                      <DeleteOutline />
+                    </IconButton>
+                  </Tooltip>
                 </div>
                 <div>
                   <Typography>{selectedTransaction.category.name}</Typography>
