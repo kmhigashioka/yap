@@ -21,8 +21,8 @@ describe('Transactions', () => {
       amount: 200,
       type: 0,
     };
-    cy.route('post', '/api/users/transactions?accountId=*', [transaction]);
     cy.findByText('There are no transactions.').should('be.exist');
+    cy.route('post', '/api/users/transactions?accountId=*', [transaction]);
     cy.findByTestId('add-transaction').click();
     cy.findByTestId('select-category').click();
     cy.findAllByRole('option').contains(transaction.category.name).click();
@@ -87,7 +87,7 @@ describe('Transactions', () => {
     cy.route('delete', '/api/users/transactions/1', {});
     cy.findByTestId('transaction-row-id-1').click();
     cy.findByTitle('Delete').click();
-    cy.findByText('Yes').click();
+    cy.findByText('Proceed').click();
     cy.findByText('Transaction successfully deleted.').should('be.visible');
     cy.findByTestId('transaction-row-id-1').should('not.exist');
     cy.findByTitle('Delete').should('not.exist');
@@ -97,7 +97,7 @@ describe('Transactions', () => {
     cy.route('delete', '/api/users/transactions/1', {});
     cy.findByTestId('transaction-row-id-1').click();
     cy.findByTitle('Delete').click();
-    cy.findByText('No').click();
+    cy.findByText('Cancel').click();
     cy.findByText('Are you sure you want to delete this transaction?').should(
       'not.exist',
     );
@@ -281,7 +281,7 @@ describe('Transactions', () => {
     });
     cy.findByTestId('transaction-row-id-1').click();
     cy.findByTitle('Delete').click();
-    cy.findByText('Yes').click();
+    cy.findByText('Proceed').click();
     cy.findByText('Error message from API').should('be.visible');
   });
 
