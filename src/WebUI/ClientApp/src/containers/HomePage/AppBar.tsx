@@ -146,6 +146,7 @@ const AppBar: React.FC = () => {
   };
 
   const handleSignOut = (): void => {
+    handleProfileClose();
     localStorage.clear();
     history.push('/login');
   };

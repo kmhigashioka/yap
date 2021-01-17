@@ -64,4 +64,10 @@ describe('AppBar', () => {
     cy.findByText('Category').click();
     cy.title().should('contain', 'Category');
   });
+
+  it('should able to sign out', () => {
+    cy.findByTitle('User Profile').click();
+    cy.findByText('Sign Out').click();
+    cy.findByText('LOGIN TO YOUR ACCOUNT').should('be.exist');
+  });
 });

@@ -109,10 +109,4 @@ describe('Dashboard', () => {
     cy.findByText('CREATE NEW ACCOUNT').click();
     cy.findByRole('dialog').should('be.exist');
   });
-
-  it('should able to sign out', () => {
-    cy.findByTitle('User Profile').click();
-    cy.findByText('Sign Out').click();
-    cy.findByText('LOGIN TO YOUR ACCOUNT').should('be.exist');
-  });
 });
