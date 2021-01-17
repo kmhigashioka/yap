@@ -94,13 +94,13 @@ describe('Dashboard', () => {
 
   it('should set to ALL when active account is deleted', () => {
     cy.route('delete', '/api/Users/Accounts?accountId=*', {});
-    cy.findByText('ALL').click();
+    cy.findByTitle('Select Account').click();
     cy.findByText('BDO').click().type('{esc}');
     const testid = 'account-1';
     cy.findByTestId(testid).findByTitle('More Actions').click();
     cy.findByText('Delete').click();
     cy.findByText('Proceed').click();
-    cy.findByText('ALL').should('be.visible');
+    cy.findByTitle('Select Account').should('be.exist');
   });
 
   it('should open Create New Account button from empty placeholder', () => {
@@ -108,5 +108,11 @@ describe('Dashboard', () => {
     cy.findByLabelText('CREATE ONE HERE').click();
     cy.findByText('CREATE NEW ACCOUNT').click();
     cy.findByRole('dialog').should('be.exist');
+  });
+
+  it('should able to sign out', () => {
+    cy.findByTitle('User Profile').click();
+    cy.findByText('Sign Out').click();
+    cy.findByText('LOGIN TO YOUR ACCOUNT').should('be.exist');
   });
 });

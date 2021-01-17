@@ -175,11 +175,13 @@ const AppBar: React.FC = () => {
               </Avatar>
             </IconButton>
           </Tooltip>
-          <IconButton onClick={handleProfileClick}>
-            <Avatar>
-              <Person />
-            </Avatar>
-          </IconButton>
+          <Tooltip title="User Profile">
+            <IconButton onClick={handleProfileClick}>
+              <Avatar>
+                <Person />
+              </Avatar>
+            </IconButton>
+          </Tooltip>
           <Popover
             classes={{ paper: classes.accountSelectionContainer }}
             open={open}

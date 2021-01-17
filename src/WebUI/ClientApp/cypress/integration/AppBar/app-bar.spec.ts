@@ -12,7 +12,7 @@ describe('AppBar', () => {
 
   it("should able to select BPI account and display BPI's transaction", () => {
     cy.visit('/transactions');
-    cy.findByText('ALL').click();
+    cy.findByTitle('Select Account').click();
     cy.route('/api/transactions?accountId=2', [
       {
         amount: 1500,
@@ -36,7 +36,7 @@ describe('AppBar', () => {
       balance: 2501.49,
     };
     cy.route('POST', '/api/Accounts', newAccount);
-    cy.findByText('ALL').click();
+    cy.findByTitle('Select Account').click();
     cy.findByText('CREATE NEW ACCOUNT').click();
     cy.findByPlaceholderText('Savings').type(newAccount.name);
     cy.findByPlaceholderText('XYZ').type(newAccount.abbreviation);
