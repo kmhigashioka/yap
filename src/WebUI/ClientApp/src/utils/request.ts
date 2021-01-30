@@ -85,7 +85,9 @@ function usualApiCall<T>(url: string, options?: any | undefined): Promise<T> {
 }
 
 async function requestForTokenRenewal(): Promise<void> {
-  const body = `grant_type=refresh_token&client_id=mvc&refresh_token=${auth.refreshToken}`;
+  const body = `grant_type=refresh_token&client_id=mvc&refresh_token=${localStorage.getItem(
+    'refresh_token',
+  )}`;
   try {
     const data = await request<TokenResponse>('/connect/token', {
       method: 'post',
