@@ -70,4 +70,71 @@ describe('AppBar', () => {
     cy.findByText('Sign Out').click();
     cy.findByText('LOGIN TO YOUR ACCOUNT').should('be.exist');
   });
+
+  it('should able to convert guest user to end user', () => {
+    cy.intercept('GET', '/api/users/me', {
+      body: {
+        fullName: 'John Doe',
+        isGuest: true,
+      },
+    });
+    const newValues = {
+      name: 'Jane Doe',
+      email: 'janedoe@example.com',
+      password: 'password',
+      username: 'janedoe',
+    };
+    cy.intercept('PUT', '/api/guests', { body: {} });
+    cy.findByTitle('User Profile').click();
+    cy.findByText(/register user/i).click();
+    cy.findByPlaceholderText('John Doe').type(newValues.name);
+    cy.findByPlaceholderText('johndoe@example.com').type(newValues.email);
+    cy.findByPlaceholderText('johndoe').type(newValues.username);
+    cy.findByPlaceholderText('Password').type(newValues.password);
+    cy.findByPlaceholderText(/confirm password/i).type(newValues.password);
+    cy.findByRole('button', { name: /register/i }).click();
+    cy.findByText(newValues.name).should('be.visible');
+    cy.findByText(newValues.email).should('be.visible');
+    cy.findByText(/register user/i).should('not.exist');
+    cy.findByText(newValues.name).type('{esc}');
+    cy.findByRole('heading', { name: /welcome back, jane doe!/i }).should(
+      'be.visible',
+    );
+  });
+
+  it('should validate convert guest user to end user form', () => {
+    cy.intercept('GET', '/api/users/me', {
+      body: {
+        fullName: 'John Doe',
+        isGuest: true,
+      },
+    });
+    const newValues = {
+      name: 'Jane Doe',
+      email: 'janedoe@example.com',
+      password: 'password',
+      username: 'janedoe',
+    };
+    const errorMessage = 'Something went wrong.';
+    cy.intercept('PUT', '/api/guests', {
+      statusCode: 400,
+      body: { message: errorMessage },
+    });
+    cy.findByTitle('User Profile').click();
+    cy.findByText(/register user/i).click();
+    cy.findByPlaceholderText('John Doe').type(newValues.name);
+    cy.findByPlaceholderText('johndoe@example.com').type(newValues.email);
+    cy.findByPlaceholderText('johndoe').type(newValues.username);
+    cy.findByPlaceholderText('Password').type(newValues.password);
+    cy.findByPlaceholderText(/confirm password/i).type('abcde');
+    cy.findByRole('button', { name: /register/i }).click();
+    cy.findAllByText('Password and Confirm Password did not match.').should(
+      'be.visible',
+    );
+    cy.findByPlaceholderText(/confirm password/i)
+      .clear()
+      .type(newValues.password);
+    cy.findByRole('button', { name: /register/i }).click();
+    cy.findByRole('button', { name: /cancel/i }).click();
+  });
 });

@@ -33,6 +33,7 @@ const RegisterUserDialog: React.FC<RegisterUserDialogProps> = ({
   const [formState, { text, email, password }] = useFormState();
   const { requestWithToken } = useFetch();
   const { setCurrentUser, currentUser } = useHomePageContext();
+  const [isLoading, setIsLoading] = React.useState(false);
 
   function handleSubmit(evt: React.FormEvent<EventTarget>): void {
     evt.preventDefault();
@@ -46,6 +47,7 @@ const RegisterUserDialog: React.FC<RegisterUserDialogProps> = ({
 
     async function updateGuest(): Promise<void> {
       try {
+        setIsLoading(true);
         await requestWithToken('/api/guests', {
           method: 'put',
           body: JSON.stringify(values),
@@ -70,6 +72,8 @@ const RegisterUserDialog: React.FC<RegisterUserDialogProps> = ({
       } catch (error) {
         const errorResponse = await error.response.json();
         setSnackbarMessage(errorResponse.message);
+      } finally {
+        setIsLoading(false);
       }
     }
 
@@ -116,6 +120,7 @@ const RegisterUserDialog: React.FC<RegisterUserDialogProps> = ({
             required
             error={Boolean(formState.errors[fields.PASSWORD])}
             helperText={formState.errors[fields.PASSWORD]}
+            placeholder="Password"
           />
           <TextField
             {...password(fields.CONFIRMPASSWORD)}
@@ -125,13 +130,14 @@ const RegisterUserDialog: React.FC<RegisterUserDialogProps> = ({
             required
             error={Boolean(formState.errors[fields.PASSWORD])}
             helperText={formState.errors[fields.PASSWORD]}
+            placeholder="Confirm Password"
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose} color="primary">
+          <Button onClick={onClose} color="primary" disabled={isLoading}>
             Cancel
           </Button>
-          <Button type="submit" color="primary">
+          <Button type="submit" color="primary" disabled={isLoading}>
             Register
           </Button>
         </DialogActions>
