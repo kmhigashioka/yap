@@ -93,6 +93,57 @@ const LoginPage: React.FC<RouteComponentProps> = ({
     setSnackbarMessage('');
   };
 
+  const handleClickSkipAsGuest = (): void => {
+    const uuid = uuidv4();
+    const values = {
+      userName: `guest${uuid}@example.com`,
+      password: uuid,
+    };
+    const loginUser = async (): Promise<void> => {
+      try {
+        const { userName, password: userpassword } = values;
+        const body = `grant_type=password&client_id=mvc&username=${userName}&password=${userpassword}`;
+        const data = await request<TokenResponse>('/connect/token', {
+          method: 'post',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body,
+        });
+        localStorage.setItem('refresh_token', data.refresh_token);
+        auth.accessToken = data.access_token;
+        history.push('/');
+      } catch (error) {
+        const errorResponse = await error.response.json();
+        setSnackbarMessage(errorResponse.message);
+      }
+    };
+    const createUser = async (): Promise<void> => {
+      const body = JSON.stringify({
+        ...values,
+        fullName: 'Guest',
+        email: values.userName,
+      });
+      setIsLoading(true);
+      try {
+        await request('/api/guests', {
+          method: 'post',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body,
+        });
+        loginUser();
+      } catch (error) {
+        const errorResponse = await error.response.json();
+        setSnackbarMessage(errorResponse.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    createUser();
+  };
+
   return (
     <div
       className={`${classes.loginWrapper} ${
@@ -138,6 +189,16 @@ const LoginPage: React.FC<RouteComponentProps> = ({
             >
               Login
             </Button>
+            <Button
+              color="default"
+              variant="contained"
+              type="button"
+              fullWidth
+              onClick={handleClickSkipAsGuest}
+              disabled={isLoading}
+            >
+              Skip as Guest
+            </Button>
           </form>
           <Typography variant="body1">Don&#39;t have an account?</Typography>
           <Link className={classes.link} to="/register">
@@ -156,3 +217,13 @@ const LoginPage: React.FC<RouteComponentProps> = ({
 };
 
 export default LoginPage;
+
+function uuidv4(): string {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function s(c) {
+    // eslint-disable-next-line no-bitwise
+    const r = (Math.random() * 16) | 0;
+    // eslint-disable-next-line no-bitwise
+    const v = c === 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
