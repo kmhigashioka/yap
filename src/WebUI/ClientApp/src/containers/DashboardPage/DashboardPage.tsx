@@ -2,7 +2,6 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { makeStyles, Snackbar, Typography } from '@material-ui/core';
 
-import DashboardPageContext from './DashboardPageContext';
 import DashboardBanner from './DashboardBanner';
 import DashboardAccountList from './DashboardAccountList';
 import { useHomePageContext } from '../HomePage/HomePageContext';
@@ -35,7 +34,7 @@ const DashboardPage: React.FC = () => {
   const classes = useStyles();
 
   return (
-    <DashboardPageContext.Provider value={{}}>
+    <>
       <Helmet>
         <title>Dashboard</title>
         <meta name="description" content="Description of DashboardPage" />
@@ -72,7 +71,7 @@ const DashboardPage: React.FC = () => {
         message={snackbarMessage}
         onClose={handleCloseSnackbar}
       />
-    </DashboardPageContext.Provider>
+    </>
   );
 };
 
