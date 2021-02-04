@@ -1,7 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Snackbar } from '@material-ui/core';
-import CategoryPageContext from './CategoryPageContext';
+import { CategoryPageProvider } from './CategoryPageContext';
 import TitlePageWithSearch from './TitlePageWithSearch';
 import CategoryList from './CategoryList';
 import { TransactionCategory } from './types';
@@ -44,7 +44,7 @@ const CategoryPage = (): React.ReactElement => {
   };
 
   return (
-    <CategoryPageContext.Provider value={{}}>
+    <CategoryPageProvider>
       <Helmet>
         <title>CategoryPage</title>
         <meta name="description" content="Description of CategoryPage" />
@@ -57,7 +57,7 @@ const CategoryPage = (): React.ReactElement => {
         message={snackbarMessage}
         onClose={handleCloseSnackbar}
       />
-    </CategoryPageContext.Provider>
+    </CategoryPageProvider>
   );
 };
 
