@@ -19,9 +19,12 @@ import ListItemText from '@material-ui/core/ListItemText';
 import { useHistory } from 'react-router-dom';
 import { Person } from '@material-ui/icons';
 import ExitToApp from '@material-ui/icons/ExitToApp';
+import PersonAdd from '@material-ui/icons/PersonAdd';
+import Snackbar from '@material-ui/core/Snackbar';
 
 import CreateNewAccountDialog from './CreateNewAccountDialog';
 import { useHomePageContext } from './HomePageContext';
+import RegisterUserDialog from './RegisterUserDialog';
 
 const useStyle = makeStyles({
   toolbarContainer: {
@@ -66,8 +69,6 @@ const useStyle = makeStyles({
     display: 'flex',
     padding: '12px',
     maxWidth: '300px',
-    minWidth: '300px',
-    width: '300px',
   },
   profileAvatarContainer: {
     display: 'flex',
@@ -94,6 +95,10 @@ const AppBar: React.FC = () => {
     setOpenCreateNewAccountDialog,
   ] = React.useState<boolean>(false);
   const [openDrawer, setOpenDrawer] = React.useState<boolean>(false);
+  const [openRegisterUserDialog, setOpenRegisterUserDialog] = React.useState(
+    false,
+  );
+  const [snackbarMessage, setSnackbarMessage] = React.useState('');
   const {
     addAccount,
     setActiveAccount,
@@ -149,6 +154,18 @@ const AppBar: React.FC = () => {
     handleProfileClose();
     localStorage.clear();
     history.push('/login');
+  };
+
+  const handleCreateUser = (): void => {
+    setOpenRegisterUserDialog(true);
+  };
+
+  const handleCloseRegisterUserDialog = (): void => {
+    setOpenRegisterUserDialog(false);
+  };
+
+  const handleCloseSnackbar = (): void => {
+    setSnackbarMessage('');
   };
 
   return (
@@ -260,6 +277,14 @@ const AppBar: React.FC = () => {
             </div>
             <Divider />
             <List component="nav">
+              {currentUser?.isGuest ? (
+                <ListItem button onClick={handleCreateUser}>
+                  <ListItemIcon>
+                    <PersonAdd />
+                  </ListItemIcon>
+                  <ListItemText primary="Register User" />
+                </ListItem>
+              ) : null}
               <ListItem button onClick={handleSignOut}>
                 <ListItemIcon>
                   <ExitToApp />
@@ -274,6 +299,17 @@ const AppBar: React.FC = () => {
         open={openCreateNewAccountDialog}
         onClose={handleCloseDialog}
         addAccount={addAccount}
+      />
+      <RegisterUserDialog
+        open={openRegisterUserDialog}
+        onClose={handleCloseRegisterUserDialog}
+        setSnackbarMessage={setSnackbarMessage}
+      />
+      <Snackbar
+        autoHideDuration={6000}
+        open={snackbarMessage !== ''}
+        message={snackbarMessage}
+        onClose={handleCloseSnackbar}
       />
       <Drawer anchor="left" open={openDrawer} onClose={handleCloseDrawer}>
         <div className={classes.drawerListItemContainer}>

@@ -76,6 +76,7 @@ const HomePage = (): React.ReactElement => {
         deleteAccount,
         editAccount,
         currentUser,
+        setCurrentUser,
       }}
     >
       <Helmet>

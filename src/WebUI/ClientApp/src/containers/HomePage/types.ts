@@ -9,6 +9,7 @@ export type THomePageContext = {
   deleteAccount: (id: number) => void;
   editAccount: (id: number, account: Account) => void;
   currentUser: User | null;
+  setCurrentUser: (user: User) => void;
 };
 
 export interface FormDialogProps {
@@ -42,13 +43,13 @@ export type Transaction = {
 
 export type UseHomePageState = {
   setAccounts: (accounts: Account[]) => void;
-  setCurrentUser: (user: User) => void;
 } & THomePageContext;
 
 export interface User {
   id: string;
   fullName: string;
   email: string;
+  isGuest: boolean;
 }
 
 export interface NewUserTransactionCommandVm {
