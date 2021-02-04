@@ -38,7 +38,7 @@ const TransactionsPage: React.FC = (): React.ReactElement => {
 
   return (
     <TransactionsPageProvider
-      activeAccount={activeAccount}
+      activeAccountId={activeAccount ? activeAccount.id : null}
       setSnackbarMessage={setSnackbarMessage}
     >
       <Helmet>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { TTransactionPageContext } from './types';
-import { Account, Transaction } from '../HomePage/types';
+import { Transaction } from '../HomePage/types';
 import useFetch from '../../utils/useFetch';
 
 const TransactionsPageContext = React.createContext<
@@ -21,10 +21,10 @@ TransactionsPageContext.displayName = 'TransactionsPageContext';
 
 export function TransactionsPageProvider({
   children,
-  activeAccount,
+  activeAccountId,
   setSnackbarMessage,
 }: {
-  activeAccount: Account | null;
+  activeAccountId: number | null;
   children: React.ReactNode;
   setSnackbarMessage: (message: string) => void;
 }): React.ReactElement {
@@ -33,9 +33,8 @@ export function TransactionsPageProvider({
 
   React.useEffect(() => {
     const fetchTransactions = async (
-      account: Account | null,
+      accountId: number | null,
     ): Promise<void> => {
-      const accountId = account === null ? null : account.id;
       try {
         const data = await requestWithToken<Transaction[]>(
           `/api/users/transactions?accountId=${accountId}`,
@@ -51,8 +50,8 @@ export function TransactionsPageProvider({
       }
     };
 
-    fetchTransactions(activeAccount);
-  }, [activeAccount, requestWithToken, setSnackbarMessage]);
+    fetchTransactions(activeAccountId);
+  }, [activeAccountId, requestWithToken, setSnackbarMessage]);
 
   const addTransaction = (newTransaction: Transaction): void => {
     setTransactions([...transactions, newTransaction]);
