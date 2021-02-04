@@ -3,7 +3,6 @@ import { Route, Switch } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { makeStyles } from '@material-ui/styles';
 import { AppProps } from './types';
-import AppContext from './AppContext';
 
 import LoginPage from '../LoginPage';
 import RegisterPage from '../RegisterPage';
@@ -21,7 +20,7 @@ const App: React.FC<AppProps> = () => {
   const styles = useStyles();
 
   return (
-    <AppContext.Provider value={{}}>
+    <>
       <Helmet
         titleTemplate="%s - react-jump-start"
         defaultTitle="react-jump-start"
@@ -36,7 +35,7 @@ const App: React.FC<AppProps> = () => {
           <Route component={NotFoundPage} />
         </Switch>
       </div>
-    </AppContext.Provider>
+    </>
   );
 };
 
