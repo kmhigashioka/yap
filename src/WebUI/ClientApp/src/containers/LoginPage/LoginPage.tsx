@@ -1,18 +1,13 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import {
-  Typography,
-  makeStyles,
-  TextField,
-  Button,
-  Snackbar,
-} from '@material-ui/core';
+import { Typography, makeStyles, TextField, Button } from '@material-ui/core';
 import { useFormState } from 'react-use-form-state';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Welcome from './Welcome';
 import request, { TokenResponse } from '../../utils/request';
 import auth from '../../utils/auth';
+import { useNotificationContext } from '../Notification/NotificationContext';
 
 const useStyles = makeStyles((theme) => ({
   loginWrapper: {
@@ -57,7 +52,7 @@ const LoginPage: React.FC<RouteComponentProps> = ({
 }): React.ReactElement => {
   const classes = useStyles();
   const [formState, { text, password }] = useFormState();
-  const [snackbarMessage, setSnackbarMessage] = React.useState('');
+  const { setSnackbarMessage } = useNotificationContext();
   const [isLoading, setIsLoading] = React.useState(false);
   const [successfullyLoggedIn, setSuccessfullyLoggedIn] = React.useState(false);
   const xsToMdDeviceMatches = useMediaQuery('(max-width: 960px)');
@@ -86,10 +81,6 @@ const LoginPage: React.FC<RouteComponentProps> = ({
       })
       .catch(() => setSnackbarMessage('Invalid username or password.'))
       .finally(() => setIsLoading(false));
-  };
-
-  const handleCloseSnackbar = (): void => {
-    setSnackbarMessage('');
   };
 
   const handleClickSkipAsGuest = (): void => {
@@ -203,12 +194,6 @@ const LoginPage: React.FC<RouteComponentProps> = ({
           <Typography variant="body2">Create Account</Typography>
         </Link>
       </div>
-      <Snackbar
-        autoHideDuration={6000}
-        message={snackbarMessage}
-        open={snackbarMessage !== ''}
-        onClose={handleCloseSnackbar}
-      />
     </div>
   );
 };

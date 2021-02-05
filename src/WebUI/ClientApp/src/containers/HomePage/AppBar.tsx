@@ -20,11 +20,11 @@ import { useHistory } from 'react-router-dom';
 import { Person } from '@material-ui/icons';
 import ExitToApp from '@material-ui/icons/ExitToApp';
 import PersonAdd from '@material-ui/icons/PersonAdd';
-import Snackbar from '@material-ui/core/Snackbar';
 
 import CreateNewAccountDialog from './CreateNewAccountDialog';
 import { useHomePageContext } from './HomePageContext';
 import RegisterUserDialog from './RegisterUserDialog';
+import { useNotificationContext } from '../Notification/NotificationContext';
 
 const useStyle = makeStyles({
   toolbarContainer: {
@@ -98,7 +98,7 @@ const AppBar: React.FC = () => {
   const [openRegisterUserDialog, setOpenRegisterUserDialog] = React.useState(
     false,
   );
-  const [snackbarMessage, setSnackbarMessage] = React.useState('');
+  const { setSnackbarMessage } = useNotificationContext();
   const {
     addAccount,
     setActiveAccount,
@@ -162,10 +162,6 @@ const AppBar: React.FC = () => {
 
   const handleCloseRegisterUserDialog = (): void => {
     setOpenRegisterUserDialog(false);
-  };
-
-  const handleCloseSnackbar = (): void => {
-    setSnackbarMessage('');
   };
 
   return (
@@ -304,12 +300,6 @@ const AppBar: React.FC = () => {
         open={openRegisterUserDialog}
         onClose={handleCloseRegisterUserDialog}
         setSnackbarMessage={setSnackbarMessage}
-      />
-      <Snackbar
-        autoHideDuration={6000}
-        open={snackbarMessage !== ''}
-        message={snackbarMessage}
-        onClose={handleCloseSnackbar}
       />
       <Drawer anchor="left" open={openDrawer} onClose={handleCloseDrawer}>
         <div className={classes.drawerListItemContainer}>
