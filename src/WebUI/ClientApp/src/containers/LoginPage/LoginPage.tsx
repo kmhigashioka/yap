@@ -10,7 +10,6 @@ import {
 import { useFormState } from 'react-use-form-state';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import LoginPageContext from './LoginPageContext';
 import Welcome from './Welcome';
 import request, { TokenResponse } from '../../utils/request';
 import auth from '../../utils/auth';
@@ -150,68 +149,66 @@ const LoginPage: React.FC<RouteComponentProps> = ({
         xsToMdDeviceMatches ? classes.loginWrapperXsToMd : ''
       }`}
     >
-      <LoginPageContext.Provider value={{}}>
-        <Helmet>
-          <title>Login</title>
-          <meta name="description" content="" />
-        </Helmet>
-        <Welcome xsToMdDeviceMatches={xsToMdDeviceMatches} />
-        <div
-          className={`${classes.formContainer} ${
-            xsToMdDeviceMatches ? classes.formContainerXsToMd : ''
-          }`}
-        >
-          <Typography variant="h6">LOGIN TO YOUR ACCOUNT</Typography>
-          <form className={classes.form} onSubmit={handleSubmit}>
-            <TextField
-              label="Username"
-              placeholder="Username"
-              margin="dense"
-              variant="outlined"
-              fullWidth
-              {...text('username')}
-            />
-            <TextField
-              label="Password"
-              placeholder="Password"
-              margin="dense"
-              variant="outlined"
-              fullWidth
-              {...password('password')}
-            />
-            <Button
-              className={classes.submitButton}
-              color="primary"
-              variant="contained"
-              type="submit"
-              fullWidth
-              disabled={isLoading}
-            >
-              Login
-            </Button>
-            <Button
-              color="default"
-              variant="contained"
-              type="button"
-              fullWidth
-              onClick={handleClickSkipAsGuest}
-              disabled={isLoading}
-            >
-              Skip as Guest
-            </Button>
-          </form>
-          <Typography variant="body1">Don&#39;t have an account?</Typography>
-          <Link className={classes.link} to="/register">
-            <Typography variant="body2">Create Account</Typography>
-          </Link>
-        </div>
-        <Snackbar
-          autoHideDuration={6000}
-          message={snackbarMessage}
-          open={snackbarMessage !== ''}
-          onClose={handleCloseSnackbar}
-        />
-      </LoginPageContext.Provider>
+      <Helmet>
+        <title>Login</title>
+        <meta name="description" content="" />
+      </Helmet>
+      <Welcome xsToMdDeviceMatches={xsToMdDeviceMatches} />
+      <div
+        className={`${classes.formContainer} ${
+          xsToMdDeviceMatches ? classes.formContainerXsToMd : ''
+        }`}
+      >
+        <Typography variant="h6">LOGIN TO YOUR ACCOUNT</Typography>
+        <form className={classes.form} onSubmit={handleSubmit}>
+          <TextField
+            label="Username"
+            placeholder="Username"
+            margin="dense"
+            variant="outlined"
+            fullWidth
+            {...text('username')}
+          />
+          <TextField
+            label="Password"
+            placeholder="Password"
+            margin="dense"
+            variant="outlined"
+            fullWidth
+            {...password('password')}
+          />
+          <Button
+            className={classes.submitButton}
+            color="primary"
+            variant="contained"
+            type="submit"
+            fullWidth
+            disabled={isLoading}
+          >
+            Login
+          </Button>
+          <Button
+            color="default"
+            variant="contained"
+            type="button"
+            fullWidth
+            onClick={handleClickSkipAsGuest}
+            disabled={isLoading}
+          >
+            Skip as Guest
+          </Button>
+        </form>
+        <Typography variant="body1">Don&#39;t have an account?</Typography>
+        <Link className={classes.link} to="/register">
+          <Typography variant="body2">Create Account</Typography>
+        </Link>
+      </div>
+      <Snackbar
+        autoHideDuration={6000}
+        message={snackbarMessage}
+        open={snackbarMessage !== ''}
+        onClose={handleCloseSnackbar}
+      />
     </div>
   );
 };
