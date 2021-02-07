@@ -73,6 +73,7 @@ describe('AppBar', () => {
 
   it('should able to convert guest user to end user', () => {
     cy.intercept('GET', '/api/users/me', {
+      statusCode: 200,
       body: {
         fullName: 'John Doe',
         isGuest: true,
@@ -104,6 +105,7 @@ describe('AppBar', () => {
 
   it('should validate convert guest user to end user form', () => {
     cy.intercept('GET', '/api/users/me', {
+      statusCode: 200,
       body: {
         fullName: 'John Doe',
         isGuest: true,
