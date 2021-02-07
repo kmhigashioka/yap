@@ -8,6 +8,7 @@ import LoginPage from '../LoginPage';
 import RegisterPage from '../RegisterPage';
 import HomePage from '../HomePage/Loadable';
 import NotFoundPage from '../NotFoundPage/Loadable';
+import Notification from '../Notification';
 
 const useStyles = makeStyles({
   wrapper: {
@@ -28,12 +29,14 @@ const App: React.FC<AppProps> = () => {
         <meta name="description" content="" />
       </Helmet>
       <div className={styles.wrapper}>
-        <Switch>
-          <Route path="/login" exact component={LoginPage} />
-          <Route path="/register" exact component={RegisterPage} />
-          <Route path="/" component={HomePage} />
-          <Route component={NotFoundPage} />
-        </Switch>
+        <Notification>
+          <Switch>
+            <Route path="/login" exact component={LoginPage} />
+            <Route path="/register" exact component={RegisterPage} />
+            <Route path="/" component={HomePage} />
+            <Route component={NotFoundPage} />
+          </Switch>
+        </Notification>
       </div>
     </>
   );

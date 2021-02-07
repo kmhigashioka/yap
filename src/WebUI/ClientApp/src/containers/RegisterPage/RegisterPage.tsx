@@ -1,18 +1,13 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import {
-  makeStyles,
-  Typography,
-  TextField,
-  Button,
-  Snackbar,
-} from '@material-ui/core';
+import { makeStyles, Typography, TextField, Button } from '@material-ui/core';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { useFormState } from 'react-use-form-state';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Welcome from '../LoginPage/Welcome';
 import request, { TokenResponse } from '../../utils/request';
 import auth from '../../utils/auth';
+import { useNotificationContext } from '../Notification/NotificationContext';
 
 const useStyles = makeStyles((theme) => ({
   loginWrapper: {
@@ -57,7 +52,7 @@ const RegisterPage: React.FC<RouteComponentProps> = ({
 }): React.ReactElement => {
   const classes = useStyles();
   const [{ errors, values }, { text, password }] = useFormState();
-  const [snackbarMessage, setSnackbarMessage] = React.useState('');
+  const { setSnackbarMessage } = useNotificationContext();
   const [isLoading, setIsLoading] = React.useState(false);
   const xsToMdDeviceMatches = useMediaQuery('(max-width: 960px)');
 
@@ -101,10 +96,6 @@ const RegisterPage: React.FC<RouteComponentProps> = ({
       setIsLoading(false);
     };
     createUser();
-  };
-
-  const handleCloseSnackbar = (): void => {
-    setSnackbarMessage('');
   };
 
   return (
@@ -197,12 +188,6 @@ const RegisterPage: React.FC<RouteComponentProps> = ({
           <Typography variant="body2">Login</Typography>
         </Link>
       </div>
-      <Snackbar
-        autoHideDuration={6000}
-        open={snackbarMessage !== ''}
-        message={snackbarMessage}
-        onClose={handleCloseSnackbar}
-      />
     </div>
   );
 };

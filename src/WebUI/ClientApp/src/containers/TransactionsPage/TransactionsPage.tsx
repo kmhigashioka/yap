@@ -1,18 +1,18 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Snackbar } from '@material-ui/core';
 import { TransactionsPageProvider } from './TransactionsPageContext';
 import { Transaction } from '../HomePage/types';
 import TransactionForm from './TransactionForm';
 import TransactionList from './TransactionList';
 import { useHomePageContext } from '../HomePage/HomePageContext';
+import { useNotificationContext } from '../Notification/NotificationContext';
 
 const TransactionsPage: React.FC = (): React.ReactElement => {
   const [
     selectedTransaction,
     setSelectedTransaction,
   ] = React.useState<Transaction | null>(null);
-  const [snackbarMessage, setSnackbarMessage] = React.useState('');
+  const { setSnackbarMessage } = useNotificationContext();
   const [openDrawer, setOpenDrawer] = React.useState(false);
   const transactionFormKeyCounter = React.useRef(0);
   const { activeAccount } = useHomePageContext();
@@ -22,10 +22,6 @@ const TransactionsPage: React.FC = (): React.ReactElement => {
       transactionFormKeyCounter.current += 1;
     }
   }, [openDrawer]);
-
-  const handleCloseSnackbar = (): void => {
-    setSnackbarMessage('');
-  };
 
   const handleCloseDrawer = (): void => {
     setOpenDrawer(false);
@@ -57,12 +53,6 @@ const TransactionsPage: React.FC = (): React.ReactElement => {
         selectedTransaction={selectedTransaction}
         setSelectedTransaction={setSelectedTransaction}
         setSnackbarMessage={setSnackbarMessage}
-      />
-      <Snackbar
-        autoHideDuration={6000}
-        open={snackbarMessage !== ''}
-        message={snackbarMessage}
-        onClose={handleCloseSnackbar}
       />
     </TransactionsPageProvider>
   );
