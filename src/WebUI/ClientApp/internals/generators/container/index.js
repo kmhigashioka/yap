@@ -45,8 +45,8 @@ module.exports = {
       },
       {
         type: 'add',
-        path: `${containerDir}/{{name}}Context.ts`,
-        templateFile: './container/ContainerContext.ts.hbs',
+        path: `${containerDir}/{{name}}Context.tsx`,
+        templateFile: './container/ContainerContext.tsx.hbs',
       },
       {
         type: 'add',

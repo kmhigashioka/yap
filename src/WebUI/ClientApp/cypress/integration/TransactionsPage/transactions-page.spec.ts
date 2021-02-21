@@ -1,16 +1,16 @@
-describe('Transactions', () => {
-  beforeEach(() => {
-    cy.server();
-    cy.login();
-    cy.route('/api/users/accounts', 'fixture:accounts.json');
-    cy.route(
-      '/api/users/transactions?accountId=*',
-      'fixture:transactions.json',
-    );
-    cy.route('/api/TransactionCategories', 'fixture:usercategories.json');
-    cy.visit('/transactions');
-  });
+import { login } from '../../common';
 
+function loginOnTransactions(): void {
+  cy.intercept('GET', '/api/users/transactions?accountId=*', {
+    fixture: 'transactions.json',
+  });
+  cy.intercept('GET', '/api/TransactionCategories', {
+    fixture: 'usercategories.json',
+  });
+  login('/transactions');
+}
+
+describe('Transactions', () => {
   it('should add an expense', () => {
     const transaction = {
       description: 'Load',
@@ -21,11 +21,34 @@ describe('Transactions', () => {
       amount: 200,
       type: 0,
     };
+    let isError = true;
+    const errorMessage = 'Something went wrong';
+    cy.intercept('POST', '/api/users/transactions?accountId=*', (req) => {
+      if (isError) {
+        req.reply({
+          statusCode: 400,
+          body: {
+            message: errorMessage,
+          },
+        });
+        isError = false;
+        return;
+      }
+
+      req.reply({
+        statusCode: 201,
+        body: { transactions: [transaction], account: { id: 1, balance: 200 } },
+      });
+    });
+    loginOnTransactions();
     cy.findByText('There are no transactions.').should('be.exist');
-    cy.route('post', '/api/users/transactions?accountId=*', [transaction]);
     cy.findByTestId('add-transaction').click();
+    cy.findByText('Save').click();
+    cy.findByText('Please select a category.').should('be.visible');
     cy.findByTestId('select-category').click();
     cy.findAllByRole('option').contains(transaction.category.name).click();
+    cy.findByText('Save').click();
+    cy.findByText('Please select an account.').should('be.visible');
     cy.findByPlaceholderText('Amount')
       .clear()
       .type(transaction.amount.toString());
@@ -33,6 +56,8 @@ describe('Transactions', () => {
     cy.findByPlaceholderText('Date').type(transaction.date);
     cy.findByTestId('select-account').click();
     cy.findByText('Bank Developer Option').click();
+    cy.findByText('Save').click();
+    cy.findByText(errorMessage).should('be.visible');
     cy.findByText('Save').click();
     cy.findByText('Transaction successfully created.').should('be.visible');
   });
@@ -47,7 +72,12 @@ describe('Transactions', () => {
       amount: 20000,
       type: 1,
     };
-    cy.route('post', '/api/users/transactions?accountId=*', [transaction]);
+    cy.intercept('POST', '/api/users/transactions?accountId=*', {
+      statusCode: 201,
+      body: { transactions: [transaction], account: { id: 1, balance: 200 } },
+    });
+    loginOnTransactions();
+    login('/transactions');
     cy.findByTestId('add-transaction').click();
     cy.findByTestId('select-type').click();
     cy.findByText('Income').click();
@@ -65,6 +95,7 @@ describe('Transactions', () => {
   });
 
   it('should view first transaction', () => {
+    loginOnTransactions();
     cy.findByTestId('transaction-row-id-1').click();
     cy.get('form').then((subject) => {
       cy.findByText('Expense', { container: subject }).should('be.visible');
@@ -84,9 +115,21 @@ describe('Transactions', () => {
   });
 
   it('should delete first transaction', () => {
-    cy.route('delete', '/api/users/transactions/1', {});
+    let isError = true;
+    const errorMessage = 'Something went wrong';
+    cy.intercept('DELETE', '/api/users/transactions/1', (req) => {
+      if (isError) {
+        req.reply({ statusCode: 400, body: { message: errorMessage } });
+        isError = false;
+        return;
+      }
+      req.reply({ body: {} });
+    });
+    loginOnTransactions();
     cy.findByTestId('transaction-row-id-1').click();
     cy.findByTitle('Delete').click();
+    cy.findByText('Proceed').click();
+    cy.findByText(errorMessage).should('be.visible');
     cy.findByText('Proceed').click();
     cy.findByText('Transaction successfully deleted.').should('be.visible');
     cy.findByTestId('transaction-row-id-1').should('not.exist');
@@ -94,7 +137,7 @@ describe('Transactions', () => {
   });
 
   it('should dismiss delete dialog when No/Cancel is pressed', () => {
-    cy.route('delete', '/api/users/transactions/1', {});
+    loginOnTransactions();
     cy.findByTestId('transaction-row-id-1').click();
     cy.findByTitle('Delete').click();
     cy.findByText('Cancel').click();
@@ -104,9 +147,17 @@ describe('Transactions', () => {
   });
 
   it('should edit first transaction', () => {
-    cy.route('put', '/api/users/transactions', [
-      { account: { id: 1, balance: -5000 } },
-    ]);
+    let isError = true;
+    const errorMessage = 'Something went wrong';
+    cy.intercept('PUT', '/api/users/transactions', (req) => {
+      if (isError) {
+        req.reply({ statusCode: 400, body: { message: errorMessage } });
+        isError = false;
+        return;
+      }
+      req.reply([{ account: { id: 1, balance: -5000 } }]);
+    });
+    loginOnTransactions();
     const newTransaction = {
       type: 'Income',
       amount: '5000',
@@ -121,6 +172,8 @@ describe('Transactions', () => {
     cy.findByPlaceholderText('Amount').clear().type(newTransaction.amount);
     cy.findByPlaceholderText('Description').type(newTransaction.description);
     cy.findByPlaceholderText('Date').clear().type(newTransaction.date);
+    cy.findByText('Save').click();
+    cy.findByText(errorMessage).should('be.visible');
     cy.findByText('Save').click();
     cy.findByText('Transaction successfully updated.').should('be.visible');
     cy.get('[data-testid="transaction-row-id-1"]').then((subject) => {
@@ -142,70 +195,6 @@ describe('Transactions', () => {
     });
   });
 
-  it('should toast warning message when there is no category', () => {
-    const transaction = {
-      description: 'Load',
-      date: '11/22/2019',
-      category: {
-        name: 'Charges',
-      },
-      amount: 200,
-      type: 0,
-    };
-    cy.route('post', '/api/users/transactions?accountId=*', [transaction]);
-    cy.findByTestId('add-transaction').click();
-    cy.findByText('Save').click();
-    cy.findByText('Please select a category.').should('be.visible');
-  });
-
-  it('should toast warning message when there is no account', () => {
-    const transaction = {
-      description: 'Load',
-      date: '11/22/2019',
-      category: {
-        name: 'Charges',
-      },
-      amount: 200,
-      type: 0,
-    };
-    cy.route('post', '/api/users/transactions?accountId=*', [transaction]);
-    cy.findByTestId('add-transaction').click();
-    cy.findByTestId('select-category').click();
-    cy.findAllByRole('option').contains(transaction.category.name).click();
-    cy.findByText('Save').click();
-    cy.findByText('Please select an account.').should('be.visible');
-  });
-
-  it('should able to handle error provided by API when creating Transaction', () => {
-    const transaction = {
-      description: 'Load',
-      date: '11/22/2019',
-      category: {
-        name: 'Charges',
-      },
-      amount: 200,
-      type: 0,
-    };
-    cy.route({
-      method: 'POST',
-      url: '/api/users/transactions?accountId=*',
-      status: 400,
-      response: { message: 'Error message from API' },
-    });
-    cy.findByTestId('add-transaction').click();
-    cy.findByTestId('select-category').click();
-    cy.findAllByRole('option').contains(transaction.category.name).click();
-    cy.findByPlaceholderText('Amount')
-      .clear()
-      .type(transaction.amount.toString());
-    cy.findByPlaceholderText('Description').type(transaction.description);
-    cy.findByPlaceholderText('Date').type(transaction.date);
-    cy.findByTestId('select-account').click();
-    cy.findByText('Bank Developer Option').click();
-    cy.findByText('Save').click();
-    cy.findByText('Error message from API').should('be.visible');
-  });
-
   it('should reset form when Add transaction is closed', () => {
     const transaction = {
       description: 'Load',
@@ -216,12 +205,7 @@ describe('Transactions', () => {
       amount: 200,
       type: 0,
     };
-    cy.route({
-      method: 'POST',
-      url: '/api/users/transactions?accountId=*',
-      status: 400,
-      response: { message: 'Error message from API' },
-    });
+    loginOnTransactions();
     cy.findByTestId('add-transaction').click();
     cy.findByTestId('select-category').click();
     cy.findAllByRole('option').contains(transaction.category.name).click();
@@ -236,6 +220,7 @@ describe('Transactions', () => {
   });
 
   it('should reset form when Edit transaction is cancelled', () => {
+    loginOnTransactions();
     const newTransaction = {
       type: 'Expense',
       amount: '5000',
@@ -270,30 +255,5 @@ describe('Transactions', () => {
       oldTransaction.description,
     );
     cy.findByPlaceholderText('Date').should('have.value', oldTransaction.date);
-  });
-
-  it('should able to handle error provided by API when deleting Transaction', () => {
-    cy.route({
-      method: 'DELETE',
-      url: '/api/users/transactions/1',
-      status: 400,
-      response: { message: 'Error message from API' },
-    });
-    cy.findByTestId('transaction-row-id-1').click();
-    cy.findByTitle('Delete').click();
-    cy.findByText('Proceed').click();
-    cy.findByText('Error message from API').should('be.visible');
-  });
-
-  it('should able to handle error provided by API when editing Transaction', () => {
-    cy.route({
-      method: 'PUT',
-      url: '/api/users/transactions',
-      status: 400,
-      response: { message: 'Error message from API' },
-    });
-    cy.findByTestId('transaction-row-id-1').click();
-    cy.findByText('Save').click();
-    cy.findByText('Error message from API').should('be.visible');
   });
 });

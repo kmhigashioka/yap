@@ -9,5 +9,6 @@ namespace Application.Common.Interfaces
         Task<(Result Result, string UserId)> CreateUserAsync(ApplicationUserDto user, string password);
 
         Task<Result> DeleteUserAsync(string userId);
+        Task<Result> UpdateUserWithPasswordAsync(string userId, ApplicationUserDto userDto, string password);
     }
 }

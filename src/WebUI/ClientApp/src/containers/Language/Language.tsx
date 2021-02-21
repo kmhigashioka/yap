@@ -1,19 +1,18 @@
 import React from 'react';
 import { IntlProvider } from 'react-intl';
-import LanguageContext from './LanguageContext';
+import { LanguageContextProvider } from './LanguageContext';
 import { LanguageProps } from './types';
 
 const Language: React.FC<LanguageProps> = ({ children, messages }) => {
-  const localeLanguage = navigator.language.split('-')[0];
+  const [localeLanguage] = navigator.language.split('-');
   const [locale, setLocale] = React.useState(localeLanguage);
-  const languageState = { setLocale };
 
   return (
-    <LanguageContext.Provider value={languageState}>
+    <LanguageContextProvider setLocale={setLocale}>
       <IntlProvider locale={locale} messages={messages[locale]}>
         {children}
       </IntlProvider>
-    </LanguageContext.Provider>
+    </LanguageContextProvider>
   );
 };
 
