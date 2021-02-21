@@ -1,31 +1,18 @@
-function login({ overrides } = { overrides: {} }): void {
-  cy.intercept('POST', '/connect/token', {
-    access_token: 'SOME ACCESS TOKEN',
-    refresh_token: 'SOME_REFRESH_TOKEN',
-  });
-  let apiUsersMeResponse = {};
-  if (overrides['/api/users/me']) {
-    apiUsersMeResponse = overrides['/api/users/me'];
-  }
-  cy.intercept('GET', '/api/users/me', apiUsersMeResponse);
-  cy.intercept('GET', '/api/users/accounts', { fixture: 'accounts.json' });
-}
+import { login } from '../../common';
 
 describe('AppBar', () => {
   it("should able to select BPI account and display BPI's transaction", () => {
-    login();
     cy.intercept('GET', '/api/users/transactions?accountId=*', {
       fixture: 'transactions.json',
     });
     cy.intercept('GET', '/api/TransactionCategories', []);
-    cy.visit('/transactions');
+    login('/transactions');
     cy.findByTitle('Select Account').click();
     cy.findByText('Bank of the Personal Information').click();
     cy.findByTestId(/transaction-row-id/).should('have.length', 1);
   });
 
   it('should able to create new account', () => {
-    login();
     cy.intercept('GET', '/api/users/transactions?accountId=*', {
       fixture: 'transactions.json',
     });
@@ -37,7 +24,7 @@ describe('AppBar', () => {
       balance: 2501.49,
     };
     cy.intercept('POST', '/api/Accounts', newAccount);
-    cy.visit('/transactions');
+    login('/transactions');
     cy.findByTitle('Select Account').click();
     cy.findByText('CREATE NEW ACCOUNT').click();
     cy.findByPlaceholderText('Savings').type(newAccount.name);
@@ -51,19 +38,17 @@ describe('AppBar', () => {
 
   it('should navigate to Dashboard page', () => {
     login();
-    cy.visit('/');
     cy.findByTestId('navigation-menu-button').click();
     cy.findByText('Dashboard').click();
     cy.title().should('contain', 'Dashboard');
   });
 
   it('should navigate to Transactions page', () => {
-    login();
     cy.intercept('GET', '/api/users/transactions?accountId=*', {
       fixture: 'transactions.json',
     });
     cy.intercept('GET', '/api/TransactionCategories', []);
-    cy.visit('/');
+    login();
     cy.findByTestId('navigation-menu-button').click();
     cy.findByText('Transactions').click();
     cy.title().should('contain', 'Transactions');
@@ -71,11 +56,10 @@ describe('AppBar', () => {
   });
 
   it('should navigate to Category page', () => {
-    login();
     cy.intercept('GET', '/api/TransactionCategories', {
       fixture: 'usercategories.json',
     });
-    cy.visit('/');
+    login();
     cy.findByTestId('navigation-menu-button').click();
     cy.findByText('Category').click();
     cy.title().should('contain', 'Category');
@@ -83,24 +67,12 @@ describe('AppBar', () => {
 
   it('should able to sign out', () => {
     login();
-    cy.visit('/');
     cy.findByTitle('User Profile').click();
     cy.findByText('Sign Out').click();
     cy.findByText('LOGIN TO YOUR ACCOUNT').should('be.exist');
   });
 
   it('should able to convert guest user to end user', () => {
-    login({
-      overrides: {
-        '/api/users/me': {
-          statusCode: 200,
-          body: {
-            fullName: 'John Doe',
-            isGuest: true,
-          },
-        },
-      },
-    });
     const newValues = {
       name: 'Jane Doe',
       email: 'janedoe@example.com',
@@ -120,7 +92,17 @@ describe('AppBar', () => {
       }
       req.reply({ statusCode: 200, body: {} });
     });
-    cy.visit('/');
+    login('/', {
+      overrides: {
+        '/api/users/me': {
+          statusCode: 200,
+          body: {
+            fullName: 'John Doe',
+            isGuest: true,
+          },
+        },
+      },
+    });
     cy.findByTitle('User Profile').click();
     cy.findByText(/register user/i).click();
     cy.findByPlaceholderText('John Doe').type(newValues.name);

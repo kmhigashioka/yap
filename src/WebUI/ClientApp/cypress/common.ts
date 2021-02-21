@@ -12,17 +12,21 @@ const runOnSizes = (tests: () => void): void => {
   });
 };
 
-function login(visit: string, { overrides } = { overrides: {} }): void {
+function login(visit = '/', { overrides } = { overrides: {} }): void {
   cy.intercept('POST', '/connect/token', {
     access_token: 'SOME ACCESS TOKEN',
     refresh_token: 'SOME_REFRESH_TOKEN',
   });
-  let apiUsersMeResponse = {};
-  if (overrides['/api/users/me']) {
-    apiUsersMeResponse = overrides['/api/users/me'];
-  }
-  cy.intercept('GET', '/api/users/me', apiUsersMeResponse);
-  cy.intercept('GET', '/api/users/accounts', { fixture: 'accounts.json' });
+  [
+    { url: '/api/users/me', defaultResponse: {} },
+    {
+      url: '/api/users/accounts',
+      defaultResponse: { fixture: 'accounts.json' },
+    },
+  ].forEach(({ url, defaultResponse }) => {
+    const response = overrides[url] ? overrides[url] : defaultResponse;
+    cy.intercept('GET', url, response);
+  });
   cy.visit(visit);
 }
 
