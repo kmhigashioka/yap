@@ -27,7 +27,7 @@ export function HomePageProvider({
   accounts: Account[];
   children: React.ReactNode;
   currentUser: User | null;
-  setAccounts: (accounts: Account[]) => void;
+  setAccounts: (newAccounts: Account[]) => void;
   setCurrentUser: (user: User | null) => void;
 }): React.ReactElement {
   const [activeAccount, setActiveAccount] = React.useState<Account | null>(
