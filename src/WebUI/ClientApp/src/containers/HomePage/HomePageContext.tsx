@@ -1,9 +1,35 @@
 import React from 'react';
-import { UseHomePageState, Account, User } from './types';
+import { THomePageContext, Account, User } from './types';
 
-const useHomePageState = (): UseHomePageState => {
-  const [accounts, setAccounts] = React.useState<Account[]>([]);
-  const [currentUser, setCurrentUser] = React.useState<User | null>(null);
+export const HomePageContext = React.createContext<
+  THomePageContext | undefined
+>(undefined);
+
+HomePageContext.displayName = 'HomePageContext';
+
+export function useHomePageContext(): THomePageContext {
+  const context = React.useContext(HomePageContext);
+  if (context === undefined) {
+    throw new Error(
+      'useHomePageContext must be used within a HomePageContextProvider.',
+    );
+  }
+  return context;
+}
+
+export function HomePageProvider({
+  accounts,
+  children,
+  currentUser,
+  setAccounts,
+  setCurrentUser,
+}: {
+  accounts: Account[];
+  children: React.ReactNode;
+  currentUser: User | null;
+  setAccounts: (accounts: Account[]) => void;
+  setCurrentUser: (user: User | null) => void;
+}): React.ReactElement {
   const [activeAccount, setActiveAccount] = React.useState<Account | null>(
     null,
   );
@@ -62,18 +88,21 @@ const useHomePageState = (): UseHomePageState => {
     setActiveAccount(newAccount);
   }, [accounts, activeAccount]);
 
-  return {
+  const value = {
     addAccount,
     setActiveAccount,
     accounts,
     activeAccount,
-    setAccounts,
-    currentUser,
-    setCurrentUser,
     updateAccountBalance,
     deleteAccount,
     editAccount,
+    currentUser,
+    setCurrentUser,
   };
-};
 
-export default useHomePageState;
+  return (
+    <HomePageContext.Provider value={value}>
+      {children}
+    </HomePageContext.Provider>
+  );
+}

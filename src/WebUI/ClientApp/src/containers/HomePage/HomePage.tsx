@@ -2,10 +2,9 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Route, Switch } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core';
-import HomePageContext from './HomePageContext';
+import { HomePageProvider } from './HomePageContext';
 import AppBar from './AppBar';
 import TransactionsPage from '../TransactionsPage/Loadable';
-import useHomePageState from './useHomePageState';
 import CategoryPage from '../CategoryPage/Loadable';
 import { Account, User } from './types';
 import DashboardPage from '../DashboardPage/Loadable';
@@ -21,18 +20,8 @@ const useStyle = makeStyles({
 
 const HomePage = (): React.ReactElement => {
   const classes = useStyle();
-  const {
-    addAccount,
-    setActiveAccount,
-    accounts,
-    activeAccount,
-    setAccounts,
-    setCurrentUser,
-    updateAccountBalance,
-    deleteAccount,
-    editAccount,
-    currentUser,
-  } = useHomePageState();
+  const [accounts, setAccounts] = React.useState<Account[]>([]);
+  const [currentUser, setCurrentUser] = React.useState<User | null>(null);
   const [fetchingUser, setFetchingUser] = React.useState(false);
   const [, setError] = React.useState();
   const { requestWithToken } = useFetch();
@@ -66,17 +55,11 @@ const HomePage = (): React.ReactElement => {
   }
 
   return (
-    <HomePageContext.Provider
-      value={{
-        addAccount,
-        setActiveAccount,
-        accounts,
-        activeAccount,
-        updateAccountBalance,
-        deleteAccount,
-        editAccount,
-        currentUser,
-      }}
+    <HomePageProvider
+      accounts={accounts}
+      currentUser={currentUser}
+      setAccounts={setAccounts}
+      setCurrentUser={setCurrentUser}
     >
       <Helmet>
         <title>Home</title>
@@ -90,7 +73,7 @@ const HomePage = (): React.ReactElement => {
           <Route component={DashboardPage} />
         </Switch>
       </div>
-    </HomePageContext.Provider>
+    </HomePageProvider>
   );
 };
 

@@ -30,7 +30,8 @@ namespace Infrastructure.Services
             {
                 FullName = userDto.FullName,
                 Email = userDto.Email,
-                UserName = userDto.UserName
+                UserName = userDto.UserName,
+                IsGuest = userDto.IsGuest
             };
             var result = await _userManager.CreateAsync(user, password);
             return (result.ToApplicationResult(), user.Id);
@@ -39,6 +40,19 @@ namespace Infrastructure.Services
         public Task<Result> DeleteUserAsync(string userId)
         {
             throw new System.NotImplementedException();
+        }
+
+        public async Task<Result> UpdateUserWithPasswordAsync(string userId, ApplicationUserDto userDto, string password)
+        {
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            user.FullName = userDto.FullName;
+            user.Email = userDto.Email;
+            user.UserName = userDto.UserName;
+            user.IsGuest = false;
+            var result = await _userManager.UpdateAsync(user);
+            result = await _userManager.RemovePasswordAsync(user);
+            result = await _userManager.AddPasswordAsync(user, password);
+            return result.ToApplicationResult();
         }
     }
 }

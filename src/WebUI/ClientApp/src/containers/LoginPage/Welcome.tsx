@@ -8,8 +8,12 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    padding: '100px',
+    padding: '10vw',
     width: 'calc(100vw - 400px)',
+  },
+  welcomeContainerXsToMd: {
+    padding: '50px',
+    width: '100%',
   },
   welcomeText: {
     color: '#fff',
@@ -21,11 +25,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Welcome: React.FC = (): React.ReactElement => {
+interface WelcomeProps {
+  xsToMdDeviceMatches?: boolean;
+}
+
+const Welcome: React.FC<WelcomeProps> = ({
+  xsToMdDeviceMatches,
+}): React.ReactElement => {
   const classes = useStyles();
 
   return (
-    <div className={classes.welcomeContainer}>
+    <div
+      className={`${classes.welcomeContainer} ${
+        xsToMdDeviceMatches ? classes.welcomeContainerXsToMd : ''
+      }`}
+    >
       <Typography className={classes.welcomeText} variant="h3">
         Welcome!
       </Typography>

@@ -6,8 +6,7 @@ import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
-import { makeStyles, Typography, Popover } from '@material-ui/core';
-import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
+import { makeStyles, Typography, Popover, Tooltip } from '@material-ui/core';
 import LibraryBooks from '@material-ui/icons/LibraryBooks';
 import CategoryIcon from '@material-ui/icons/Category';
 import DashboardIcon from '@material-ui/icons/Dashboard';
@@ -18,9 +17,14 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import { useHistory } from 'react-router-dom';
+import { Person } from '@material-ui/icons';
+import ExitToApp from '@material-ui/icons/ExitToApp';
+import PersonAdd from '@material-ui/icons/PersonAdd';
 
 import CreateNewAccountDialog from './CreateNewAccountDialog';
 import { useHomePageContext } from './HomePageContext';
+import RegisterUserDialog from './RegisterUserDialog';
+import { useNotificationContext } from '../Notification/NotificationContext';
 
 const useStyle = makeStyles({
   toolbarContainer: {
@@ -36,8 +40,6 @@ const useStyle = makeStyles({
   toolbarAccountSelection: {
     color: '#fff',
     justifyContent: 'space-between',
-    maxWidth: '300px',
-    width: '100%',
   },
   avatarContainer: {
     margin: '0 10px 0 0',
@@ -63,6 +65,19 @@ const useStyle = makeStyles({
   drawerListItemContainer: {
     width: '250px',
   },
+  profileContainer: {
+    display: 'flex',
+    padding: '12px',
+    maxWidth: '300px',
+  },
+  profileAvatarContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    marginRight: '20px',
+  },
+  profileInfoContainer: {
+    width: 'calc(100% - 68px)',
+  },
 });
 
 const AppBar: React.FC = () => {
@@ -70,17 +85,26 @@ const AppBar: React.FC = () => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null,
   );
+  const [
+    profileAnchorEl,
+    setProfileAnchorEl,
+  ] = React.useState<HTMLButtonElement | null>(null);
   const open = Boolean(anchorEl);
   const [
     openCreateNewAccountDialog,
     setOpenCreateNewAccountDialog,
   ] = React.useState<boolean>(false);
   const [openDrawer, setOpenDrawer] = React.useState<boolean>(false);
+  const [openRegisterUserDialog, setOpenRegisterUserDialog] = React.useState(
+    false,
+  );
+  const { setSnackbarMessage } = useNotificationContext();
   const {
     addAccount,
     setActiveAccount,
     activeAccount,
     accounts,
+    currentUser,
   } = useHomePageContext();
   const history = useHistory();
 
@@ -97,6 +121,16 @@ const AppBar: React.FC = () => {
   const handleCreateNewAccount = (): void => {
     setAnchorEl(null);
     setOpenCreateNewAccountDialog(true);
+  };
+
+  const handleProfileClick = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ): void => {
+    setProfileAnchorEl(event.currentTarget);
+  };
+
+  const handleProfileClose = (): void => {
+    setProfileAnchorEl(null);
   };
 
   const handleCloseDialog = (): void => {
@@ -116,6 +150,20 @@ const AppBar: React.FC = () => {
     setOpenDrawer(false);
   };
 
+  const handleSignOut = (): void => {
+    handleProfileClose();
+    localStorage.clear();
+    history.push('/login');
+  };
+
+  const handleCreateUser = (): void => {
+    setOpenRegisterUserDialog(true);
+  };
+
+  const handleCloseRegisterUserDialog = (): void => {
+    setOpenRegisterUserDialog(false);
+  };
+
   return (
     <MuiAppBar position="sticky">
       <Toolbar classes={{ root: classes.toolbarContainer }}>
@@ -131,19 +179,23 @@ const AppBar: React.FC = () => {
           </IconButton>
         </div>
         <div className={classes.toolbarRightContent}>
-          <Button
-            id="appbar-toolbar-account-selection-button"
-            classes={{ root: classes.toolbarAccountSelection }}
-            onClick={handleClick}
-          >
-            <Avatar classes={{ root: classes.avatarContainer }}>
-              {activeAccount ? activeAccount.abbreviation : 'A'}
-            </Avatar>
-            <Typography noWrap variant="body1" color="inherit">
-              {activeAccount ? activeAccount.name : 'ALL'}
-            </Typography>
-            <KeyboardArrowDown />
-          </Button>
+          <Tooltip title="Select Account">
+            <IconButton
+              id="appbar-toolbar-account-selection-button"
+              onClick={handleClick}
+            >
+              <Avatar>
+                {activeAccount ? activeAccount.abbreviation : 'A'}
+              </Avatar>
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="User Profile">
+            <IconButton onClick={handleProfileClick}>
+              <Avatar>
+                <Person />
+              </Avatar>
+            </IconButton>
+          </Tooltip>
           <Popover
             classes={{ paper: classes.accountSelectionContainer }}
             open={open}
@@ -195,12 +247,59 @@ const AppBar: React.FC = () => {
               <Typography variant="subtitle2">CREATE NEW ACCOUNT</Typography>
             </Button>
           </Popover>
+          <Popover
+            open={Boolean(profileAnchorEl)}
+            onClose={handleProfileClose}
+            anchorEl={profileAnchorEl}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'center',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'center',
+            }}
+          >
+            <div className={classes.profileContainer}>
+              <div className={classes.profileAvatarContainer}>
+                <Avatar>
+                  <Person />
+                </Avatar>
+              </div>
+              <div className={classes.profileInfoContainer}>
+                <Typography noWrap>{currentUser?.fullName}</Typography>
+                <Typography noWrap>{currentUser?.email}</Typography>
+              </div>
+            </div>
+            <Divider />
+            <List component="nav">
+              {currentUser?.isGuest ? (
+                <ListItem button onClick={handleCreateUser}>
+                  <ListItemIcon>
+                    <PersonAdd />
+                  </ListItemIcon>
+                  <ListItemText primary="Register User" />
+                </ListItem>
+              ) : null}
+              <ListItem button onClick={handleSignOut}>
+                <ListItemIcon>
+                  <ExitToApp />
+                </ListItemIcon>
+                <ListItemText primary="Sign Out" />
+              </ListItem>
+            </List>
+          </Popover>
         </div>
       </Toolbar>
       <CreateNewAccountDialog
         open={openCreateNewAccountDialog}
         onClose={handleCloseDialog}
         addAccount={addAccount}
+      />
+      <RegisterUserDialog
+        open={openRegisterUserDialog}
+        onClose={handleCloseRegisterUserDialog}
+        setSnackbarMessage={setSnackbarMessage}
       />
       <Drawer anchor="left" open={openDrawer} onClose={handleCloseDrawer}>
         <div className={classes.drawerListItemContainer}>
