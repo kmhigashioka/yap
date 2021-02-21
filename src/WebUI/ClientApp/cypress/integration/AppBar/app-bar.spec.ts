@@ -1,114 +1,78 @@
-describe('AppBar', () => {
-  beforeEach(() => {
-    cy.server();
-    cy.route('/api/users/accounts', 'fixture:accounts.json');
-    cy.route(
-      '/api/users/transactions?accountId=*',
-      'fixture:transactions.json',
-    );
-    cy.login();
-    cy.visit('/');
-  });
+import { login } from '../../common';
 
+describe('AppBar', () => {
   it("should able to select BPI account and display BPI's transaction", () => {
-    cy.visit('/transactions');
+    cy.intercept('GET', '/api/users/transactions?accountId=*', {
+      fixture: 'transactions.json',
+    });
+    cy.intercept('GET', '/api/TransactionCategories', []);
+    login('/transactions');
     cy.findByTitle('Select Account').click();
-    cy.route('/api/transactions?accountId=2', [
-      {
-        amount: 1500,
-        id: 3,
-        category: 'Withdrawal',
-        description: '',
-        date: '11/2/2019',
-        accountId: 2,
-        type: 0,
-      },
-    ]);
     cy.findByText('Bank of the Personal Information').click();
     cy.findByTestId(/transaction-row-id/).should('have.length', 1);
   });
 
   it('should able to create new account', () => {
+    cy.intercept('GET', '/api/users/transactions?accountId=*', {
+      fixture: 'transactions.json',
+    });
+    cy.intercept('GET', '/api/TransactionCategories', []);
     const newAccount = {
       id: 1,
       name: 'New Account',
       abbreviation: 'NU',
       balance: 2501.49,
     };
-    cy.route('POST', '/api/Accounts', newAccount);
+    cy.intercept('POST', '/api/Accounts', newAccount);
+    login('/transactions');
     cy.findByTitle('Select Account').click();
     cy.findByText('CREATE NEW ACCOUNT').click();
     cy.findByPlaceholderText('Savings').type(newAccount.name);
     cy.findByPlaceholderText('XYZ').type(newAccount.abbreviation);
     cy.findByPlaceholderText('0').clear().type(newAccount.balance.toString());
     cy.findByText('Create').click();
-    cy.findByText('New Account').should('be.visible');
-    cy.findByText('New account successfully created.').should('be.exist');
+    cy.findByText(/new account successfully created./i).should('be.visible');
+    cy.findByRole('button', { name: 'A' }).click();
+    cy.findByText(newAccount.name).should('be.visible');
   });
 
   it('should navigate to Dashboard page', () => {
+    login();
     cy.findByTestId('navigation-menu-button').click();
     cy.findByText('Dashboard').click();
     cy.title().should('contain', 'Dashboard');
   });
 
   it('should navigate to Transactions page', () => {
+    cy.intercept('GET', '/api/users/transactions?accountId=*', {
+      fixture: 'transactions.json',
+    });
+    cy.intercept('GET', '/api/TransactionCategories', []);
+    login();
     cy.findByTestId('navigation-menu-button').click();
     cy.findByText('Transactions').click();
     cy.title().should('contain', 'Transactions');
+    cy.findAllByRole('row').should('have.length', 2);
   });
 
   it('should navigate to Category page', () => {
-    cy.route('/api/usercategories?userId=1', 'fixture:usercategories.json');
+    cy.intercept('GET', '/api/TransactionCategories', {
+      fixture: 'usercategories.json',
+    });
+    login();
     cy.findByTestId('navigation-menu-button').click();
     cy.findByText('Category').click();
     cy.title().should('contain', 'Category');
   });
 
   it('should able to sign out', () => {
+    login();
     cy.findByTitle('User Profile').click();
     cy.findByText('Sign Out').click();
     cy.findByText('LOGIN TO YOUR ACCOUNT').should('be.exist');
   });
 
   it('should able to convert guest user to end user', () => {
-    cy.intercept('GET', '/api/users/me', {
-      body: {
-        fullName: 'John Doe',
-        isGuest: true,
-      },
-    });
-    const newValues = {
-      name: 'Jane Doe',
-      email: 'janedoe@example.com',
-      password: 'password',
-      username: 'janedoe',
-    };
-    cy.intercept('PUT', '/api/guests', { body: {} });
-    cy.findByTitle('User Profile').click();
-    cy.findByText(/register user/i).click();
-    cy.findByPlaceholderText('John Doe').type(newValues.name);
-    cy.findByPlaceholderText('johndoe@example.com').type(newValues.email);
-    cy.findByPlaceholderText('johndoe').type(newValues.username);
-    cy.findByPlaceholderText('Password').type(newValues.password);
-    cy.findByPlaceholderText(/confirm password/i).type(newValues.password);
-    cy.findByRole('button', { name: /register/i }).click();
-    cy.findByText(newValues.name).should('be.visible');
-    cy.findByText(newValues.email).should('be.visible');
-    cy.findByText(/register user/i).should('not.exist');
-    cy.findByText(newValues.name).type('{esc}');
-    cy.findByRole('heading', { name: /welcome back, jane doe!/i }).should(
-      'be.visible',
-    );
-  });
-
-  it('should validate convert guest user to end user form', () => {
-    cy.intercept('GET', '/api/users/me', {
-      body: {
-        fullName: 'John Doe',
-        isGuest: true,
-      },
-    });
     const newValues = {
       name: 'Jane Doe',
       email: 'janedoe@example.com',
@@ -116,9 +80,28 @@ describe('AppBar', () => {
       username: 'janedoe',
     };
     const errorMessage = 'Something went wrong.';
-    cy.intercept('PUT', '/api/guests', {
-      statusCode: 400,
-      body: { message: errorMessage },
+    let isFailed = true;
+    cy.intercept('PUT', '/api/guests', (req) => {
+      if (isFailed) {
+        isFailed = false;
+        req.reply({
+          statusCode: 400,
+          body: { message: errorMessage },
+        });
+        return;
+      }
+      req.reply({ statusCode: 200, body: {} });
+    });
+    login('/', {
+      overrides: {
+        '/api/users/me': {
+          statusCode: 200,
+          body: {
+            fullName: 'John Doe',
+            isGuest: true,
+          },
+        },
+      },
     });
     cy.findByTitle('User Profile').click();
     cy.findByText(/register user/i).click();
@@ -135,6 +118,13 @@ describe('AppBar', () => {
       .clear()
       .type(newValues.password);
     cy.findByRole('button', { name: /register/i }).click();
-    cy.findByRole('button', { name: /cancel/i }).click();
+    cy.findByRole('button', { name: /register/i }).click();
+    cy.findByText(newValues.name).should('be.visible');
+    cy.findByText(newValues.email).should('be.visible');
+    cy.findByText(/register user/i).should('not.exist');
+    cy.findByText(newValues.name).type('{esc}');
+    cy.findByRole('heading', { name: /welcome back, jane doe!/i }).should(
+      'be.visible',
+    );
   });
 });
