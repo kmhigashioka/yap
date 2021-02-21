@@ -9,7 +9,16 @@ using Omu.ValueInjecter;
 
 namespace Application.Users.Commands
 {
-    public class NewUserCommand: IRequest<ApplicationUserDto>
+    public class NewUserCommand: IRequest<ApplicationUserDto>, IUserRegistrationForm
+    {
+        public string FullName { get; set; }
+        public string UserName { get; set; }
+        public string Password { get; set; }
+        public string Email { get; set; }
+        public bool IsGuest { get; set; }
+    }
+
+    interface IUserRegistrationForm
     {
         public string FullName { get; set; }
         public string UserName { get; set; }

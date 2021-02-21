@@ -1,15 +1,15 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import {{name}}Context from './{{name}}Context';
+import { {{name}}Provider } from './{{name}}Context';
 
 const {{name}} = (): React.ReactElement => (
-  <{{name}}Context.Provider value=\{{}}>
+  <{{name}}Provider>
     <Helmet>
       <title>{{name}}</title>
       <meta name="description" content="Description of {{name}}" />
     </Helmet>
     <div>{{name}}</div>
-  </{{name}}Context.Provider>
+  </{{name}}Provider>
 );
 
 export default {{name}};

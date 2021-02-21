@@ -22,12 +22,16 @@ const DashboardBanner: React.FC<DashboardBannerProps> = ({
   hasAccount,
 }) => {
   const classes = useStyles();
-  const [welcomeMessage] = React.useState(() => {
+  const hasAccountRef = React.useRef(hasAccount);
+  const welcomeMessage = hasAccountRef.current
+    ? `Welcome back, ${fullName}!`
+    : `Welcome, ${fullName}!`;
+
+  React.useEffect(() => {
     if (hasAccount) {
-      return `Welcome back, ${fullName}!`;
+      hasAccountRef.current = true;
     }
-    return `Welcome, ${fullName}!`;
-  });
+  }, [hasAccount]);
 
   return (
     <div className={classes.container}>

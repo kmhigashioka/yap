@@ -7,5 +7,6 @@ namespace Domain.Entities
     {
         public string FullName { get; set; }
         public List<Account> Accounts { get; set; }
+        public bool IsGuest { get; set; }
     }
 }

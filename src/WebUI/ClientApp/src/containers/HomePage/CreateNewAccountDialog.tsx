@@ -1,9 +1,9 @@
 import React from 'react';
-import Snackbar from '@material-ui/core/Snackbar';
 import { FormState, StateErrors } from 'react-use-form-state';
 import { FormDialogProps, Account } from './types';
 import useFetch from '../../utils/useFetch';
 import AccountDialogForm from '../../components/AccountDialogForm';
+import { useNotificationContext } from '../Notification/NotificationContext';
 
 const CreateNewAccountDialog: React.FC<FormDialogProps> = ({
   open,
@@ -11,7 +11,7 @@ const CreateNewAccountDialog: React.FC<FormDialogProps> = ({
   addAccount,
 }) => {
   const { requestWithToken } = useFetch();
-  const [snackbarMessage, setSnackbarMessage] = React.useState('');
+  const { setSnackbarMessage } = useNotificationContext();
 
   const handleSubmit = (
     evt: React.FormEvent<EventTarget>,
@@ -38,24 +38,8 @@ const CreateNewAccountDialog: React.FC<FormDialogProps> = ({
     newAccountRequest();
   };
 
-  const handleCloseSnackbar = (): void => {
-    setSnackbarMessage('');
-  };
-
   return (
-    <>
-      <AccountDialogForm
-        open={open}
-        onClose={onClose}
-        onSubmit={handleSubmit}
-      />
-      <Snackbar
-        autoHideDuration={6000}
-        open={snackbarMessage !== ''}
-        message={snackbarMessage}
-        onClose={handleCloseSnackbar}
-      />
-    </>
+    <AccountDialogForm open={open} onClose={onClose} onSubmit={handleSubmit} />
   );
 };
 

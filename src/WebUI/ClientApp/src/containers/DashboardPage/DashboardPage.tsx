@@ -1,12 +1,12 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { makeStyles, Snackbar, Typography } from '@material-ui/core';
+import { makeStyles, Typography } from '@material-ui/core';
 
-import DashboardPageContext from './DashboardPageContext';
 import DashboardBanner from './DashboardBanner';
 import DashboardAccountList from './DashboardAccountList';
 import { useHomePageContext } from '../HomePage/HomePageContext';
 import Empty from '../../components/Empty';
+import { useNotificationContext } from '../Notification/NotificationContext';
 
 const useStyles = makeStyles({
   placeholderContainer: {
@@ -27,15 +27,12 @@ const useStyles = makeStyles({
 });
 
 const DashboardPage: React.FC = () => {
-  const [snackbarMessage, setSnackbarMessage] = React.useState('');
-  const handleCloseSnackbar = (): void => {
-    setSnackbarMessage('');
-  };
+  const { setSnackbarMessage } = useNotificationContext();
   const { currentUser, accounts } = useHomePageContext();
   const classes = useStyles();
 
   return (
-    <DashboardPageContext.Provider value={{}}>
+    <>
       <Helmet>
         <title>Dashboard</title>
         <meta name="description" content="Description of DashboardPage" />
@@ -66,13 +63,7 @@ const DashboardPage: React.FC = () => {
           />
         </div>
       )}
-      <Snackbar
-        autoHideDuration={6000}
-        open={snackbarMessage !== ''}
-        message={snackbarMessage}
-        onClose={handleCloseSnackbar}
-      />
-    </DashboardPageContext.Provider>
+    </>
   );
 };
 
