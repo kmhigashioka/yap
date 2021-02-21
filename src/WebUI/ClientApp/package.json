@@ -14,7 +14,7 @@
     "react-intl": "5.12.4",
     "react-lottie-player": "1.1.1",
     "react-router-dom": "5.2.0",
-    "react-scripts": "3.4.1",
+    "react-scripts": "4.0.2",
     "react-use-form-state": "0.13.2"
   },
   "scripts": {
