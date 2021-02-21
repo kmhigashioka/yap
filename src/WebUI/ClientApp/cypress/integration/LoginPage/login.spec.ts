@@ -1,30 +1,21 @@
-/* eslint-disable @typescript-eslint/camelcase */
-import { runOnSizes } from '../../common';
+import { login, runOnSizes } from '../../common';
 
 describe('LoginPage', () => {
   runOnSizes(() => {
     it('should successfully login', () => {
-      cy.server();
-      cy.route('POST', '/connect/token', {
-        access_token: 'access_token',
-        refresh_token: 'refresh_token',
-      });
-      cy.visit('/login');
+      login('/login');
 
       cy.findByPlaceholderText('Username').type('m2m');
       cy.findByPlaceholderText('Password').type('secret');
       cy.findByText('Login').click();
 
-      cy.title().should('contain', 'Dashboard');
+      cy.findByText(/welcome/i, { timeout: 60000 }).should('be.visible');
     });
 
     it('should display error message when using invalid credential', () => {
-      cy.server();
-      cy.route({
-        url: '/connect/token',
-        method: 'POST',
-        status: 400,
-        response: {},
+      cy.intercept('POST', '/connect/token', {
+        statusCode: 400,
+        body: {},
       });
       cy.visit('/login');
 
@@ -39,21 +30,19 @@ describe('LoginPage', () => {
 
     it('should skip the login and use as guest', () => {
       cy.intercept('POST', '/api/guests', {
-        statusCode: 200,
+        statusCode: 201,
         body: {},
       });
-      cy.intercept('POST', '/connect/token', {
-        access_token: 'access_token',
-        refresh_token: 'refresh_token',
-      });
-      cy.intercept('GET', '/api/users/me', {
-        body: {
-          fullName: 'John Doe',
+      login('/login', {
+        overrides: {
+          '/api/users/me': { fullName: 'Guest' },
+          '/api/users/accounts': [],
         },
       });
-      cy.visit('/login');
       cy.findByText(/skip as guest/i).click();
-      cy.findByText(/welcome, john doe!/i).should('be.visible');
+      cy.findByText(/welcome, guest!/i, { timeout: 60000 }).should(
+        'be.visible',
+      );
     });
 
     it('should toast the error message when skip as guest button is clicked: part 1', () => {
@@ -82,6 +71,7 @@ describe('LoginPage', () => {
           message: errorMessage,
         },
       });
+      cy.visit('/login');
       cy.findByText(/skip as guest/i).click();
       cy.findByText(errorMessage).should('be.visible');
     });
