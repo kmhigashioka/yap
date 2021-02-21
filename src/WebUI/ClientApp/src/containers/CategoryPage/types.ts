@@ -1,4 +1,4 @@
-export type TCategoryPageContext = {};
+export type TCategoryPageContext = unknown;
 export interface TitlePageWithSearchProps {
   onSearch: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }

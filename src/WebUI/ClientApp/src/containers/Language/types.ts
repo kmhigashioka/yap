@@ -9,4 +9,6 @@ export type TLanguageContext = {
   setLocale: (locale: string) => void;
 };
 
-export type TTranslationMessages = { [language: string]: {} };
+export type TTranslationMessages = {
+  [language: string]: Record<string, string>;
+};

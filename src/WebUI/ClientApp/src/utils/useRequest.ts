@@ -10,7 +10,7 @@ interface UseRequest<T> {
 }
 
 const useRequest = <T>(
-  { url, options }: { url: string; options?: {} | undefined },
+  { url, options }: { url: string; options?: unknown | undefined },
   dependencies: any[],
 ): UseRequest<T> => {
   const [data, setData] = React.useState<T>();

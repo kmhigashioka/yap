@@ -1,5 +1,37 @@
 import { TransactionCategory } from '../CategoryPage/types';
 
+// Workaround while https://github.com/eslint/typescript-eslint-parser/issues/437 is open
+// eslint-disable-next-line no-shadow
+export enum TransactionType {
+  Expense,
+  Income,
+}
+
+export type Transaction = {
+  category: TransactionCategory;
+  amount: number;
+  description: string;
+  date: Date;
+  id: number;
+  accountId: number;
+  type: TransactionType;
+};
+
+export type Account = {
+  id: number;
+  name: string;
+  abbreviation: string;
+  balance: number;
+  transactions: Transaction[];
+};
+
+export interface User {
+  id: string;
+  fullName: string;
+  email: string;
+  isGuest: boolean;
+}
+
 export type THomePageContext = {
   addAccount: (account: Account) => void;
   setActiveAccount: (account: Account | null) => void;
@@ -18,39 +50,9 @@ export interface FormDialogProps {
   addAccount: (account: Account) => void;
 }
 
-export type Account = {
-  id: number;
-  name: string;
-  abbreviation: string;
-  balance: number;
-  transactions: Transaction[];
-};
-
-export enum TransactionType {
-  Expense,
-  Income,
-}
-
-export type Transaction = {
-  category: TransactionCategory;
-  amount: number;
-  description: string;
-  date: Date;
-  id: number;
-  accountId: number;
-  type: TransactionType;
-};
-
 export type UseHomePageState = {
   setAccounts: (accounts: Account[]) => void;
 } & THomePageContext;
-
-export interface User {
-  id: string;
-  fullName: string;
-  email: string;
-  isGuest: boolean;
-}
 
 export interface NewUserTransactionCommandVm {
   transactions: Transaction[];

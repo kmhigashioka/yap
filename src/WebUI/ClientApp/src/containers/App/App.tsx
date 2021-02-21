@@ -2,7 +2,6 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { makeStyles } from '@material-ui/styles';
-import { AppProps } from './types';
 
 import LoginPage from '../LoginPage';
 import RegisterPage from '../RegisterPage';
@@ -17,7 +16,7 @@ const useStyles = makeStyles({
   },
 });
 
-const App: React.FC<AppProps> = () => {
+const App: React.FC = () => {
   const styles = useStyles();
 
   return (
