@@ -1,0 +1,32 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/src/WebUI/ClientApp"
+  schedule:
+    interval: monthly
+    time: "23:45"
+    timezone: Asia/Manila
+  open-pull-requests-limit: 99
+  ignore:
+  - dependency-name: "@date-io/moment"
+    versions:
+    - ">= 2.a, < 3"
+  - dependency-name: react-scripts
+    versions:
+    - 4.0.1
+    - 4.0.2
+  - dependency-name: cypress
+    versions:
+    - 6.3.0
+  - dependency-name: "@types/node"
+    versions:
+    - 14.14.22
+  - dependency-name: eslint-plugin-prettier
+    versions:
+    - 3.3.1
+  - dependency-name: "@cypress/code-coverage"
+    versions:
+    - 3.9.2
+  - dependency-name: "@material-ui/core"
+    versions:
+    - 4.11.3
