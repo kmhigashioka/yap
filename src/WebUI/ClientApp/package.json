@@ -10,7 +10,7 @@
     "moment": "2.29.1",
     "react": "16.14.0",
     "react-dom": "16.14.0",
-    "react-helmet-async": "1.0.7",
+    "react-helmet-async": "1.0.9",
     "react-intl": "5.12.4",
     "react-lottie-player": "1.1.1",
     "react-router-dom": "5.2.0",
