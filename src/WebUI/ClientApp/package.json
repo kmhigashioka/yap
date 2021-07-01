@@ -41,7 +41,7 @@
     "@cypress/instrument-cra": "1.4.0",
     "@istanbuljs/nyc-config-typescript": "1.0.1",
     "@testing-library/cypress": "7.0.3",
-    "@types/node": "14.14.31",
+    "@types/node": "15.12.5",
     "@types/react": "17.0.0",
     "@types/react-dom": "17.0.0",
     "@types/react-router-dom": "5.1.7",
