@@ -37,7 +37,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "@cypress/code-coverage": "3.9.2",
+    "@cypress/code-coverage": "3.9.10",
     "@cypress/instrument-cra": "1.4.0",
     "@istanbuljs/nyc-config-typescript": "1.0.1",
     "@testing-library/cypress": "7.0.3",
